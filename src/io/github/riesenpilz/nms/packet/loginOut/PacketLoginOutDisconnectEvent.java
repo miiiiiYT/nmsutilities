@@ -20,18 +20,15 @@ import net.minecraft.server.v1_16_R3.PacketLoginOutListener;
  */
 public class PacketLoginOutDisconnectEvent extends PacketLoginOutEvent {
 
-	public static final String PROTOCOL_URL = "https://wiki.vg/Protocol#Disconnect_.28login.29";
-	public static final int PACKET_ID = 0;
-
 	private IChatBaseComponent reason;
 
 	public PacketLoginOutDisconnectEvent(Player injectedPlayer, IChatBaseComponent reason) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		this.reason = reason;
 	}
 
 	public PacketLoginOutDisconnectEvent(Player injectedPlayer, PacketLoginOutDisconnect packet) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		reason = (IChatBaseComponent) new Field(PacketLoginOutDisconnect.class, "a").get(packet);
 	}
 
@@ -42,6 +39,16 @@ public class PacketLoginOutDisconnectEvent extends PacketLoginOutEvent {
 	@Override
 	public Packet<PacketLoginOutListener> getNMS() {
 		return new PacketLoginOutDisconnect();
+	}
+
+	@Override
+	public int getPacketID() {
+		return 0;
+	}
+
+	@Override
+	public String getProtocolURLString() {
+		return "https://wiki.vg/Protocol#Disconnect_.28login.29";
 	}
 
 }

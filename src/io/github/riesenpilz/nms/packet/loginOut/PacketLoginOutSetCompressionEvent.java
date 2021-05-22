@@ -26,21 +26,18 @@ import net.minecraft.server.v1_16_R3.PacketLoginOutSetCompression;
  */
 public class PacketLoginOutSetCompressionEvent extends PacketLoginOutEvent {
 
-	public static final String PROTOCOL_URL = "https://wiki.vg/Protocol#Set_Compression";
-	public static final int PACKET_ID = 3;
-
 	/**
 	 * Maximum size of a packet before it is compressed.
 	 */
 	private int threshold;
 
 	public PacketLoginOutSetCompressionEvent(Player injectedPlayer, int threshold) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		this.threshold = threshold;
 	}
 
 	public PacketLoginOutSetCompressionEvent(Player injectedPlayer, PacketLoginOutSetCompression packet) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		threshold = (int) new Field(PacketLoginOutSetCompression.class, "a").get(packet);
 	}
 
@@ -51,6 +48,16 @@ public class PacketLoginOutSetCompressionEvent extends PacketLoginOutEvent {
 	@Override
 	public Packet<PacketLoginOutListener> getNMS() {
 		return new PacketLoginOutSetCompression(threshold);
+	}
+
+	@Override
+	public int getPacketID() {
+		return 3;
+	}
+
+	@Override
+	public String getProtocolURLString() {
+		return "https://wiki.vg/Protocol#Set_Compression";
 	}
 
 }

@@ -16,23 +16,29 @@ import net.minecraft.server.v1_16_R3.PacketStatusInStart;
  * @author Martin
  *
  */
-public class PacketStatusInReqestEvent extends PacketStatusInEvent{
+public class PacketStatusInReqestEvent extends PacketStatusInEvent {
 
-	public static final String PROTOCOL_URL = "https://wiki.vg/Protocol#Request";
-	public static final int PACKET_ID = 0;
-
-	
 	public PacketStatusInReqestEvent(Player injectedPlayer) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 	}
-	
+
 	public PacketStatusInReqestEvent(Player injectedPlayer, PacketStatusInStart packet) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 	}
 
 	@Override
 	public Packet<PacketStatusInListener> getNMS() {
 		return new PacketStatusInStart();
+	}
+
+	@Override
+	public int getPacketID() {
+		return 0;
+	}
+
+	@Override
+	public String getProtocolURLString() {
+		return "https://wiki.vg/Protocol#Request";
 	}
 
 }

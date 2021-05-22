@@ -22,9 +22,6 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutSpawnEntityExperienceOrb;
  */
 public class PacketPlayOutSpawnXpEvent extends PacketPlayOutEvent {
 
-	public static final String PROTOCOL_URL = "https://wiki.vg/Protocol#Spawn_Experience_Orb";
-	public static final int PACKET_ID = 1;
-
 	private int entityID;
 
 	private Location location;
@@ -35,14 +32,14 @@ public class PacketPlayOutSpawnXpEvent extends PacketPlayOutEvent {
 	private int count;
 
 	public PacketPlayOutSpawnXpEvent(Player injectedPlayer, int entityID, Location location, int count) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		this.entityID = entityID;
 		this.location = location;
 		this.count = count;
 	}
 
 	public PacketPlayOutSpawnXpEvent(Player injectedPlayer, PacketPlayOutSpawnEntityExperienceOrb packet) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		entityID = (int) new Field(PacketPlayOutSpawnEntityExperienceOrb.class, "a").get(packet);
 		location = new Location(injectedPlayer.getWorld(),
 				(double) new Field(PacketPlayOutSpawnEntityExperienceOrb.class, "b").get(packet),
@@ -72,5 +69,15 @@ public class PacketPlayOutSpawnXpEvent extends PacketPlayOutEvent {
 		new Field(PacketPlayOutSpawnEntityExperienceOrb.class, "d").set(packet, location.getZ());
 		new Field(PacketPlayOutSpawnEntityExperienceOrb.class, "e").set(packet, count);
 		return packet;
+	}
+
+	@Override
+	public int getPacketID() {
+		return 1;
+	}
+
+	@Override
+	public String getProtocolURLString() {
+		return "https://wiki.vg/Protocol#Spawn_Experience_Orb";
 	}
 }

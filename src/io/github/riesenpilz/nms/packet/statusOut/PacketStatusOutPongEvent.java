@@ -19,21 +19,18 @@ import net.minecraft.server.v1_16_R3.PacketStatusOutPong;
  */
 public class PacketStatusOutPongEvent extends PacketStatusOutEvent {
 
-	public static final String PROTOCOL_URL = "https://wiki.vg/Protocol#Pong";
-	public static final int PACKET_ID = 1;
-
 	/**
 	 * Should be the same as sent by the client.
 	 */
 	private long payload;
 
 	public PacketStatusOutPongEvent(Player injectedPlayer, long payload) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		this.payload = payload;
 	}
 
 	public PacketStatusOutPongEvent(Player injectedPlayer, PacketStatusOutPong packet) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		payload = (long) new Field(PacketStatusOutPong.class, "a").get(packet);
 	}
 
@@ -44,6 +41,16 @@ public class PacketStatusOutPongEvent extends PacketStatusOutEvent {
 	@Override
 	public Packet<PacketStatusOutListener> getNMS() {
 		return new PacketStatusOutPong(payload);
+	}
+
+	@Override
+	public int getPacketID() {
+		return 1;
+	}
+
+	@Override
+	public String getProtocolURLString() {
+		return "https://wiki.vg/Protocol#Pong";
 	}
 
 }

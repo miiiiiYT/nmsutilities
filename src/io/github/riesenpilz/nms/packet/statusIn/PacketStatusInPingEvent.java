@@ -19,9 +19,6 @@ import net.minecraft.server.v1_16_R3.PacketStatusInPing;
  */
 public class PacketStatusInPingEvent extends PacketStatusInEvent {
 
-	public static final String PROTOCOL_URL = "https://wiki.vg/Protocol#Ping";
-	public static final int PACKET_ID = 1;
-
 	/**
 	 * May be any number. Notchian clients use a system-dependent time value which
 	 * is counted in milliseconds.
@@ -29,12 +26,12 @@ public class PacketStatusInPingEvent extends PacketStatusInEvent {
 	private long payload;
 
 	public PacketStatusInPingEvent(Player injectedPlayer, int payload) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		this.payload = payload;
 	}
 
 	public PacketStatusInPingEvent(Player injectedPlayer, PacketStatusInPing packet) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		payload = packet.b();
 	}
 
@@ -47,6 +44,16 @@ public class PacketStatusInPingEvent extends PacketStatusInEvent {
 		final PacketStatusInPing packet = new PacketStatusInPing();
 		new Field(PacketStatusInPing.class, "a").set(packet, payload);
 		return packet;
+	}
+
+	@Override
+	public int getPacketID() {
+		return 1;
+	}
+
+	@Override
+	public String getProtocolURLString() {
+		return "https://wiki.vg/Protocol#Ping";
 	}
 
 }

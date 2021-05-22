@@ -21,9 +21,6 @@ import net.minecraft.server.v1_16_R3.PacketLoginOutListener;
  */
 public class PacketLoginOutEncryptionRequestEvent extends PacketLoginOutEvent {
 
-	public static final String PROTOCOL_URL = "https://wiki.vg/Protocol#Encryption_Request";
-	public static final int PACKET_ID = 1;
-
 	/**
 	 * Appears to be empty. (20 chars)
 	 */
@@ -41,14 +38,14 @@ public class PacketLoginOutEncryptionRequestEvent extends PacketLoginOutEvent {
 
 	public PacketLoginOutEncryptionRequestEvent(Player injectedPlayer, String serverID, byte[] publicKey,
 			byte[] verifyToken) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		this.serverID = serverID;
 		this.publicKey = publicKey;
 		this.verifyToken = verifyToken;
 	}
 
 	public PacketLoginOutEncryptionRequestEvent(Player injectedPlayer, PacketLoginOutEncryptionBegin packet) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		serverID = (String) new Field(PacketLoginOutEncryptionBegin.class, "a").get(packet);
 		publicKey = (byte[]) new Field(PacketLoginOutEncryptionBegin.class, "b").get(packet);
 		verifyToken = (byte[]) new Field(PacketLoginOutEncryptionBegin.class, "c").get(packet);
@@ -69,6 +66,16 @@ public class PacketLoginOutEncryptionRequestEvent extends PacketLoginOutEvent {
 	@Override
 	public Packet<PacketLoginOutListener> getNMS() {
 		return new PacketLoginOutEncryptionBegin(serverID, publicKey, verifyToken);
+	}
+
+	@Override
+	public int getPacketID() {
+		return 1;
+	}
+
+	@Override
+	public String getProtocolURLString() {
+		return "https://wiki.vg/Protocol#Encryption_Request";
 	}
 
 }

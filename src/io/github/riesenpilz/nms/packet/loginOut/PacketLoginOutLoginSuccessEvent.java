@@ -30,18 +30,15 @@ import net.minecraft.server.v1_16_R3.PacketLoginOutSuccess;
  */
 public class PacketLoginOutLoginSuccessEvent extends PacketLoginOutEvent {
 
-	public static final String PROTOCOL_URL = "https://wiki.vg/Protocol#Login_Success";
-	public static final int PACKET_ID = 2;
-
 	private GameProfile profile;
 
 	public PacketLoginOutLoginSuccessEvent(Player injectedPlayer, GameProfile profile) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		this.profile = profile;
 	}
 
 	public PacketLoginOutLoginSuccessEvent(Player injectedPlayer, PacketLoginOutSuccess packet) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		profile = (GameProfile) new Field(PacketLoginOutSuccess.class, "a").get(packet);
 	}
 
@@ -52,6 +49,16 @@ public class PacketLoginOutLoginSuccessEvent extends PacketLoginOutEvent {
 	@Override
 	public Packet<PacketLoginOutListener> getNMS() {
 		return new PacketLoginOutSuccess(profile);
+	}
+
+	@Override
+	public int getPacketID() {
+		return 2;
+	}
+
+	@Override
+	public String getProtocolURLString() {
+		return "https://wiki.vg/Protocol#Login_Success";
 	}
 
 }

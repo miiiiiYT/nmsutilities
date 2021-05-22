@@ -21,9 +21,6 @@ import net.minecraft.server.v1_16_R3.PacketLoginInListener;
  */
 public class PacketLoginInCustomPayloadEvent extends PacketLoginInEvent {
 
-	public static final String PROTOCOL_URL = "https://wiki.vg/Protocol#Login_Plugin_Response";
-	public static final int PACKET_ID = 2;
-
 	/**
 	 * Should match ID from server.
 	 */
@@ -36,13 +33,13 @@ public class PacketLoginInCustomPayloadEvent extends PacketLoginInEvent {
 	private PacketDataSerializer data;
 
 	public PacketLoginInCustomPayloadEvent(Player injectedPlayer, int messageID, PacketDataSerializer data) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		this.messageID = messageID;
 		this.data = data;
 	}
 
 	public PacketLoginInCustomPayloadEvent(Player injectedPlayer, PacketLoginInCustomPayload packet) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		messageID = (int) new Field(PacketLoginInEncryptionBegin.class, "a").get(packet);
 		data = (PacketDataSerializer) new Field(PacketLoginInEncryptionBegin.class, "b").get(packet);
 	}
@@ -61,6 +58,16 @@ public class PacketLoginInCustomPayloadEvent extends PacketLoginInEvent {
 		new Field(PacketLoginInEncryptionBegin.class, "a").set(packet, messageID);
 		new Field(PacketLoginInEncryptionBegin.class, "b").set(packet, data);
 		return packet;
+	}
+
+	@Override
+	public int getPacketID() {
+		return 2;
+	}
+
+	@Override
+	public String getProtocolURLString() {
+		return "https://wiki.vg/Protocol#Login_Plugin_Response";
 	}
 
 }

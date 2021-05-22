@@ -26,9 +26,6 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutSpawnEntityLiving;
  */
 public class PacketPlayOutSpawnLivingEntityEvent extends PacketPlayOutEvent {
 
-	public static final String PROTOCOL_URL = "https://wiki.vg/Protocol#Spawn_Living_Entity";
-	public static final int PACKET_ID = 2;
-
 	private int entityID;
 	private UUID uuid;
 	private Location location;
@@ -38,7 +35,7 @@ public class PacketPlayOutSpawnLivingEntityEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutSpawnLivingEntityEvent(Player injectedPlayer, int entityID, UUID uuid, Location location,
 			EntityType type, Vector velocity, float headPitch) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		this.entityID = entityID;
 		this.uuid = uuid;
 		this.location = location;
@@ -49,7 +46,7 @@ public class PacketPlayOutSpawnLivingEntityEvent extends PacketPlayOutEvent {
 
 	@SuppressWarnings("deprecation")
 	public PacketPlayOutSpawnLivingEntityEvent(Player injectedPlayer, PacketPlayOutSpawnEntityLiving packet) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		entityID = (int) new Field(PacketPlayOutSpawnEntityLiving.class, "a").get(packet);
 		uuid = (UUID) new Field(PacketPlayOutSpawnEntityLiving.class, "b").get(packet);
 		type = EntityType.fromId((int) new Field(PacketPlayOutSpawnEntityLiving.class, "c").get(packet));
@@ -106,5 +103,15 @@ public class PacketPlayOutSpawnLivingEntityEvent extends PacketPlayOutEvent {
 		new Field(PacketPlayOutSpawnEntityLiving.class, "k").set(packet, location.getPitch() * 256 / 360);
 		new Field(PacketPlayOutSpawnEntityLiving.class, "l").set(packet, headPitch * 256 / 360);
 		return packet;
+	}
+
+	@Override
+	public int getPacketID() {
+		return 2;
+	}
+
+	@Override
+	public String getProtocolURLString() {
+		return "https://wiki.vg/Protocol#Spawn_Living_Entity";
 	}
 }

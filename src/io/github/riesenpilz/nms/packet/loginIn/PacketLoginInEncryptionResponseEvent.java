@@ -20,10 +20,6 @@ import net.minecraft.server.v1_16_R3.PacketLoginInListener;
  *
  */
 public class PacketLoginInEncryptionResponseEvent extends PacketLoginInEvent {
-
-	public static final String PROTOCOL_URL = "https://wiki.vg/Protocol#Encryption_Response";
-	public static final int PACKET_ID = 1;
-
 	/**
 	 * Shared Secret value, encrypted with the server's public key.
 	 */
@@ -35,13 +31,13 @@ public class PacketLoginInEncryptionResponseEvent extends PacketLoginInEvent {
 	private byte[] verifyToken;
 
 	public PacketLoginInEncryptionResponseEvent(Player injectedPlayer, byte[] sharedSecret, byte[] verifyToken) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		this.sharedSecret = sharedSecret;
 		this.verifyToken = verifyToken;
 	}
 
 	public PacketLoginInEncryptionResponseEvent(Player injectedPlayer, PacketLoginInEncryptionBegin packet) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		sharedSecret = (byte[]) new Field(PacketLoginInEncryptionBegin.class, "a").get(packet);
 		verifyToken = (byte[]) new Field(PacketLoginInEncryptionBegin.class, "b").get(packet);
 	}
@@ -60,6 +56,16 @@ public class PacketLoginInEncryptionResponseEvent extends PacketLoginInEvent {
 		new Field(PacketLoginInEncryptionBegin.class, "a").set(packet, sharedSecret);
 		new Field(PacketLoginInEncryptionBegin.class, "b").set(packet, verifyToken);
 		return packet;
+	}
+
+	@Override
+	public int getPacketID() {
+		return 1;
+	}
+
+	@Override
+	public String getProtocolURLString() {
+		return "https://wiki.vg/Protocol#Encryption_Response";
 	}
 
 }

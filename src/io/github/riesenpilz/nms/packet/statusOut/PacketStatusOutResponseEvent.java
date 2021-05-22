@@ -21,10 +21,6 @@ import net.minecraft.server.v1_16_R3.PacketStatusOutServerInfo;
  */
 public class PacketStatusOutResponseEvent extends PacketStatusOutEvent {
 
-	public static final String PROTOCOL_URL = "https://wiki.vg/Protocol#Response";
-	public static final int PACKET_ID = 0;
-
-
 	/**
 	 * See Server List Ping#Response; as with all strings this is prefixed by its
 	 * length as a VarInt. ( 2767 chars)
@@ -33,11 +29,11 @@ public class PacketStatusOutResponseEvent extends PacketStatusOutEvent {
 	private static final Gson response = (Gson) new Field(PacketStatusOutServerInfo.class, "a").get(null);
 
 	public PacketStatusOutResponseEvent(Player injectedPlayer) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 	}
 
 	public PacketStatusOutResponseEvent(Player injectedPlayer, PacketStatusOutServerInfo packet) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 	}
 
 	public static Gson getResponse() {
@@ -47,6 +43,16 @@ public class PacketStatusOutResponseEvent extends PacketStatusOutEvent {
 	@Override
 	public Packet<PacketStatusOutListener> getNMS() {
 		return new PacketStatusOutServerInfo();
+	}
+
+	@Override
+	public int getPacketID() {
+		return 0;
+	}
+
+	@Override
+	public String getProtocolURLString() {
+		return "https://wiki.vg/Protocol#Response";
 	}
 
 }

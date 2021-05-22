@@ -28,9 +28,6 @@ import net.minecraft.server.v1_16_R3.Vec3D;
  */
 public class PacketPlayOutSpawnEntityEvent extends PacketPlayOutEvent {
 
-	public static final String PROTOCOL_URL = "https://wiki.vg/Protocol#Spawn_Entity";
-	public static final int PACKET_ID = 0;
-
 	private int entityID;
 	private UUID uuid;
 	private Location location;
@@ -50,7 +47,7 @@ public class PacketPlayOutSpawnEntityEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutSpawnEntityEvent(Player injectedPlayer, int entityID, UUID uuid, Location location,
 			EntityType type, Vector velocity, int data) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		this.entityID = entityID;
 		this.uuid = uuid;
 		this.location = location;
@@ -61,7 +58,7 @@ public class PacketPlayOutSpawnEntityEvent extends PacketPlayOutEvent {
 
 	@SuppressWarnings("deprecation")
 	public PacketPlayOutSpawnEntityEvent(Player injectedPlayer, PacketPlayOutSpawnEntity packet) {
-		super(injectedPlayer, PACKET_ID, PROTOCOL_URL);
+		super(injectedPlayer);
 		entityID = (int) new Field(PacketPlayOutSpawnEntity.class, "a").get(packet);
 		uuid = (UUID) new Field(PacketPlayOutSpawnEntity.class, "b").get(packet);
 		location = new Location(injectedPlayer.getWorld(),
@@ -107,5 +104,15 @@ public class PacketPlayOutSpawnEntityEvent extends PacketPlayOutEvent {
 		return new PacketPlayOutSpawnEntity(entityID, uuid, location.getX(), location.getY(), location.getZ(),
 				location.getYaw(), location.getPitch(), EntityTypes.a(type.getName()).get(), data,
 				new Vec3D(velocity.getX(), velocity.getY(), velocity.getZ()));
+	}
+
+	@Override
+	public int getPacketID() {
+		return 0;
+	}
+
+	@Override
+	public String getProtocolURLString() {
+		return "https://wiki.vg/Protocol#Spawn_Entity";
 	}
 }
