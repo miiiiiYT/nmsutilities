@@ -56,7 +56,7 @@ public class PacketPlayInVehicleMoveEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 22;
+		return 0x16;
 	}
 
 	@Override

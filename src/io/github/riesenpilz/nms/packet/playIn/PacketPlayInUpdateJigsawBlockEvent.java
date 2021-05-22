@@ -124,7 +124,7 @@ public class PacketPlayInUpdateJigsawBlockEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 41;
+		return 0x29;
 	}
 
 	@Override

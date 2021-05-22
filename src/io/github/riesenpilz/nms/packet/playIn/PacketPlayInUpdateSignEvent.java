@@ -66,7 +66,7 @@ public class PacketPlayInUpdateSignEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 43;
+		return 0x2B;
 	}
 
 	@Override

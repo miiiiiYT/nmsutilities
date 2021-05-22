@@ -71,7 +71,7 @@ public class PacketPlayInClientStatusEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 4;
+		return 0x04;
 	}
 
 	@Override

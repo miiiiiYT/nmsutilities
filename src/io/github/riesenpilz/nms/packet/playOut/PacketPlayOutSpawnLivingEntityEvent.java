@@ -54,9 +54,9 @@ public class PacketPlayOutSpawnLivingEntityEvent extends PacketPlayOutEvent {
 				(double) new Field(PacketPlayOutSpawnEntityLiving.class, "d").get(packet),
 				(double) new Field(PacketPlayOutSpawnEntityLiving.class, "e").get(packet),
 				(double) new Field(PacketPlayOutSpawnEntityLiving.class, "f").get(packet),
-				((float) (((int) new Field(PacketPlayOutSpawnEntityLiving.class, "j").get(packet)) / 256)) * 360,
-				((float) (((int) new Field(PacketPlayOutSpawnEntityLiving.class, "k").get(packet)) / 256)) * 360);
-		headPitch = ((float) (((int) new Field(PacketPlayOutSpawnEntityLiving.class, "l").get(packet)) / 256)) * 360;
+				((float) (((byte) new Field(PacketPlayOutSpawnEntityLiving.class, "j").get(packet)) / 256)) * 360,
+				((float) (((byte) new Field(PacketPlayOutSpawnEntityLiving.class, "k").get(packet)) / 256)) * 360);
+		headPitch = ((float) (((byte) new Field(PacketPlayOutSpawnEntityLiving.class, "l").get(packet)) / 256)) * 360;
 		velocity = new Vector((double) ((int) new Field(PacketPlayOutSpawnEntityLiving.class, "g").get(packet) / 8000),
 				(double) ((int) new Field(PacketPlayOutSpawnEntityLiving.class, "h").get(packet) / 8000),
 				(double) ((int) new Field(PacketPlayOutSpawnEntityLiving.class, "i").get(packet) / 8000));
@@ -99,15 +99,15 @@ public class PacketPlayOutSpawnLivingEntityEvent extends PacketPlayOutEvent {
 		new Field(PacketPlayOutSpawnEntityLiving.class, "g").set(packet, velocity.getX() * 8000);
 		new Field(PacketPlayOutSpawnEntityLiving.class, "h").set(packet, velocity.getY() * 8000);
 		new Field(PacketPlayOutSpawnEntityLiving.class, "i").set(packet, velocity.getZ() * 8000);
-		new Field(PacketPlayOutSpawnEntityLiving.class, "j").set(packet, location.getYaw() * 256 / 360);
-		new Field(PacketPlayOutSpawnEntityLiving.class, "k").set(packet, location.getPitch() * 256 / 360);
-		new Field(PacketPlayOutSpawnEntityLiving.class, "l").set(packet, headPitch * 256 / 360);
+		new Field(PacketPlayOutSpawnEntityLiving.class, "j").set(packet, (byte) location.getYaw() * 256 / 360);
+		new Field(PacketPlayOutSpawnEntityLiving.class, "k").set(packet, (byte) location.getPitch() * 256 / 360);
+		new Field(PacketPlayOutSpawnEntityLiving.class, "l").set(packet, (byte) headPitch * 256 / 360);
 		return packet;
 	}
 
 	@Override
 	public int getPacketID() {
-		return 2;
+		return 0x02;
 	}
 
 	@Override

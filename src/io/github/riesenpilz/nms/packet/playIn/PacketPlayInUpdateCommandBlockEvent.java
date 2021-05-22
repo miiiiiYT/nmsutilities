@@ -95,7 +95,7 @@ public class PacketPlayInUpdateCommandBlockEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 38;
+		return 0x26;
 	}
 
 	@Override

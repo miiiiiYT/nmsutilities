@@ -264,7 +264,7 @@ public class PacketPlayInUpdateStructureBlockEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 42;
+		return 0x2A;
 	}
 
 	@Override

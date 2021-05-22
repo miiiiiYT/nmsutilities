@@ -88,7 +88,7 @@ public class PacketPlayInEditBookEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 12;
+		return 0x0C;
 	}
 
 	@Override

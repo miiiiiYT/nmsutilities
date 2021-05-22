@@ -78,7 +78,7 @@ public class PacketPlayInSteerVehicleEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 29;
+		return 0x1D;
 	}
 
 	@Override

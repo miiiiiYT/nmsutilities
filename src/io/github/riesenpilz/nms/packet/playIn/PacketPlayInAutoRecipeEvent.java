@@ -71,7 +71,7 @@ public class PacketPlayInAutoRecipeEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 25;
+		return 0x19;
 	}
 
 	@Override

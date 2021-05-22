@@ -78,7 +78,7 @@ public class PacketPlayInSetCreativeSlotEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 40;
+		return 0x28;
 	}
 
 	@Override

@@ -51,7 +51,7 @@ public class PacketPlayInSteerBoatEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 23;
+		return 0x17;
 	}
 
 	@Override

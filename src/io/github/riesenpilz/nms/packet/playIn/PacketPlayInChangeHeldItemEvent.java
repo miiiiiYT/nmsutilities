@@ -49,7 +49,7 @@ public class PacketPlayInChangeHeldItemEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 37;
+		return 0x25;
 	}
 
 	@Override

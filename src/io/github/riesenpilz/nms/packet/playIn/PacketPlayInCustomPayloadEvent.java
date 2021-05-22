@@ -101,7 +101,7 @@ public class PacketPlayInCustomPayloadEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 12;
+		return 0x0B;
 	}
 
 	@Override

@@ -101,7 +101,7 @@ public class PacketPlayInEntityActionEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 28;
+		return 0x1C;
 	}
 
 	@Override

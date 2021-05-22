@@ -50,7 +50,7 @@ public class PacketPlayInItemNameEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 32;
+		return 0x20;
 	}
 
 	@Override

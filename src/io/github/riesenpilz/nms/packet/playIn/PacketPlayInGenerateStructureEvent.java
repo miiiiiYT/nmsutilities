@@ -71,7 +71,7 @@ public class PacketPlayInGenerateStructureEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 16;
+		return 0x0F;
 	}
 
 	@Override

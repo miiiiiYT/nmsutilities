@@ -108,7 +108,7 @@ public class PacketPlayOutSpawnEntityEvent extends PacketPlayOutEvent {
 
 	@Override
 	public int getPacketID() {
-		return 0;
+		return 0x00;
 	}
 
 	@Override

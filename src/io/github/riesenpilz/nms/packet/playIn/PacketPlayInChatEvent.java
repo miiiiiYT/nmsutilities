@@ -56,7 +56,7 @@ public class PacketPlayInChatEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 3;
+		return 0x03;
 	}
 
 	@Override

@@ -51,7 +51,7 @@ public class PacketPlayInCloseWindowEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 10;
+		return 0x0A;
 	}
 
 	@Override

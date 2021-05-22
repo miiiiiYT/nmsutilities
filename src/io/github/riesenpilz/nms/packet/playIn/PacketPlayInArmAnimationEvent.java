@@ -62,7 +62,7 @@ public class PacketPlayInArmAnimationEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 43;
+		return 0x2C;
 	}
 
 	@Override

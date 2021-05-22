@@ -62,7 +62,7 @@ public class PacketPlayInClickWindowButtonEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 8;
+		return 0x08;
 	}
 
 	@Override

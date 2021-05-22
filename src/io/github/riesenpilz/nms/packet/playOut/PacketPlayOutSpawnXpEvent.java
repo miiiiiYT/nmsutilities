@@ -73,7 +73,7 @@ public class PacketPlayOutSpawnXpEvent extends PacketPlayOutEvent {
 
 	@Override
 	public int getPacketID() {
-		return 1;
+		return 0x01;
 	}
 
 	@Override

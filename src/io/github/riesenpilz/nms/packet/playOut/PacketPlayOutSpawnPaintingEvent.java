@@ -62,7 +62,7 @@ public class PacketPlayOutSpawnPaintingEvent extends PacketPlayOutEvent {
 		location = new Location(injectedPlayer.getWorld(), pos.getX(), pos.getY(), pos.getZ());
 		facing = BlockFace
 				.valueOf(((EnumDirection) new Field(PacketPlayOutSpawnEntityPainting.class, "d").get(packet)).name());
-		art = Art.getById((int) new Field(PacketPlayOutSpawnEntityPainting.class, "e").get(pos));
+		art = Art.getById((int) new Field(PacketPlayOutSpawnEntityPainting.class, "e").get(packet));
 	}
 
 	public int getEntityID() {
@@ -100,7 +100,7 @@ public class PacketPlayOutSpawnPaintingEvent extends PacketPlayOutEvent {
 
 	@Override
 	public int getPacketID() {
-		return 3;
+		return 0x03;
 	}
 
 	@Override

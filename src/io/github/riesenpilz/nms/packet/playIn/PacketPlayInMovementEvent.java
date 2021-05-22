@@ -62,7 +62,7 @@ public class PacketPlayInMovementEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 21;
+		return 0x15;
 	}
 
 	@Override
@@ -151,7 +151,7 @@ public class PacketPlayInMovementEvent extends PacketPlayInEvent {
 
 		@Override
 		public int getPacketID() {
-			return 20;
+			return 0x14;
 		}
 
 		@Override
@@ -243,7 +243,7 @@ public class PacketPlayInMovementEvent extends PacketPlayInEvent {
 
 		@Override
 		public int getPacketID() {
-			return 18;
+			return 0x12;
 		}
 
 		@Override

@@ -50,7 +50,7 @@ public class PacketPlayInTeleportAcceptEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 0;
+		return 0x00;
 	}
 
 	@Override

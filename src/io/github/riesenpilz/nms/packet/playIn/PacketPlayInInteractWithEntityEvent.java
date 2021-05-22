@@ -1,5 +1,7 @@
 package io.github.riesenpilz.nms.packet.playIn;
 
+import javax.annotation.Nullable;
+
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -8,7 +10,6 @@ import io.github.riesenpilz.nms.entity.player.Hand;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
-import net.minecraft.server.v1_16_R3.PacketPlayInSetCommandMinecart;
 import net.minecraft.server.v1_16_R3.PacketPlayInUseEntity;
 import net.minecraft.server.v1_16_R3.PacketPlayInUseEntity.EnumEntityUseAction;
 import net.minecraft.server.v1_16_R3.Vec3D;
@@ -36,29 +37,25 @@ public class PacketPlayInInteractWithEntityEvent extends PacketPlayInEvent {
 
 	private Entity clickedEntity;
 	private EntityUseAction action;
-
-	/**
-	 * Only if Type is interact at.
-	 */
 	private Vector velocity;
 
 	/**
 	 * Only if Type is interact or interact at.
 	 */
+	@Nullable
 	private Hand hand;
-
-	/**
-	 * If the client is sneaking.
-	 */
 	private boolean sneaking;
 
 	public PacketPlayInInteractWithEntityEvent(Player injectedPlayer, PacketPlayInUseEntity packet) {
 		super(injectedPlayer);
-		final int entityID = (int) new Field(PacketPlayInSetCommandMinecart.class, "a").get(packet);
+		final int entityID = (int) new Field(PacketPlayInUseEntity.class, "a").get(packet);
 		clickedEntity = new Entity(entityID, injectedPlayer.getWorld());
 		action = EntityUseAction.getEntityUseAction(packet.b());
-		velocity = new Vector(packet.d().getX(), packet.d().getY(), packet.d().getZ());
-		hand = Hand.getHand(packet.c());
+		velocity = !action.equals(EntityUseAction.INTERACT_AT) ? new Vector()
+				: new Vector(packet.d().getX(), packet.d().getY(), packet.d().getZ());
+		hand = action.equals(EntityUseAction.INTERACT_AT) && !action.equals(EntityUseAction.INTERACT)
+				? Hand.getHand(packet.c())
+				: null;
 		sneaking = packet.e();
 	}
 
@@ -129,7 +126,7 @@ public class PacketPlayInInteractWithEntityEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 14;
+		return 0x0E;
 	}
 
 	@Override

@@ -62,7 +62,7 @@ public class PacketPlayInRecipeSettingsEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 30;
+		return 0x1E;
 	}
 
 	@Override

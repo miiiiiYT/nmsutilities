@@ -58,7 +58,7 @@ public class PacketPlayInChangeBeaconEffectEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 36;
+		return 0x24;
 	}
 
 	@Override

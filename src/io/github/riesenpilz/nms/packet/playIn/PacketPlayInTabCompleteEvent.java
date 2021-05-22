@@ -65,7 +65,7 @@ public class PacketPlayInTabCompleteEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 6;
+		return 0x06;
 	}
 
 	@Override

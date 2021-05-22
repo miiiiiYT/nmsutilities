@@ -50,7 +50,7 @@ public class PacketPlayInTradeSelectEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 35;
+		return 0x23;
 	}
 
 	@Override

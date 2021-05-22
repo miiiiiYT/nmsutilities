@@ -79,7 +79,7 @@ public class PacketPlayInPickItemEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 24;
+		return 0x18;
 	}
 
 	@Override

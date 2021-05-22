@@ -10,9 +10,39 @@ import org.bukkit.event.HandlerList;
 import net.minecraft.server.v1_16_R3.Packet;
 
 public abstract class PacketEvent extends Event {
-	
+
+	public enum PacketType {
+		HANDSHAKING_IN("handshaking", "server"), LOGIN_IN("login", "server"), LOGIN_OUT("login", "client"),
+		PLAY_IN("play", "server"), PLAY_OUT("play", "client"), STATUS_IN("status", "server"),
+		STATUS_OUT("status", "client");
+
+		private final String boundTo;
+		private final String state;
+
+		PacketType(String state, String boundTo) {
+			this.state = state;
+			this.boundTo = boundTo;
+		}
+
+		public String getBoundTo() {
+			return boundTo;
+		}
+
+		public String getState() {
+			return state;
+		}
+	}
+
+	private static HandlerList handlers = new HandlerList();
+
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
+
 	private boolean canceled = false;
+
 	private final Player injectedPlayer;
+
 	private final PacketType packetType;
 
 	public PacketEvent(Player injectedPlayer, PacketType packetType) {
@@ -21,14 +51,12 @@ public abstract class PacketEvent extends Event {
 		this.packetType = packetType;
 	}
 
-	private static HandlerList handlers = new HandlerList();
+	public String getBoundTo() {
+		return packetType.getBoundTo();
+	}
 
 	@Override
 	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 
@@ -36,55 +64,32 @@ public abstract class PacketEvent extends Event {
 		return injectedPlayer;
 	}
 
+	public abstract Packet<?> getNMS();
+
+	public abstract int getPacketID();
+
+	public String getPacketIDBinary() {
+		return Integer.toHexString(getPacketID());
+	}
+
 	public PacketType getPacketType() {
 		return packetType;
 	}
 
-	public abstract int getPacketID();
-
-	
-	public abstract String getProtocolURLString();
-	
 	public URL getProtocolURL() {
 		try {
 			return new URL(getProtocolURLString());
-		} catch (MalformedURLException e) {
+		} catch (final MalformedURLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
-	public String getPacketIDBinary() {
-		String s = "0x" + getPacketID() / 16;
-		if (getPacketID() % 16 < 10)
-			return s + getPacketID() % 16;
-		switch (getPacketID() % 16) {
-		case 10:
-			return s + "A";
-		case 11:
-			return s + "B";
-		case 12:
-			return s + "C";
-		case 13:
-			return s + "D";
-		case 14:
-			return s + "E";
-		case 15:
-			return s + "F";
-		default:
-			return null;
-		}
-	}
+
+	public abstract String getProtocolURLString();
 
 	public String getState() {
 		return packetType.getState();
 	}
-
-	public String getBoundTo() {
-		return packetType.getBoundTo();
-	}
-
-	public abstract Packet<?> getNMS();
 
 	public boolean isCanceled() {
 		return canceled;
@@ -92,26 +97,5 @@ public abstract class PacketEvent extends Event {
 
 	public void setCanceled(boolean canceled) {
 		this.canceled = canceled;
-	}
-
-	public static enum PacketType {
-		PLAY_IN("play", "server"), PLAY_OUT("play", "client"), HANDSHAKING_IN("handshaking", "server"),
-		STATUS_IN("status", "server"), STATUS_OUT("status", "client"), LOGIN_IN("login", "server"), LOGIN_OUT("login", "client");
-
-		private final String state;
-		private final String boundTo;
-
-		PacketType(String state, String boundTo) {
-			this.state = state;
-			this.boundTo = boundTo;
-		}
-
-		public String getState() {
-			return state;
-		}
-
-		public String getBoundTo() {
-			return boundTo;
-		}
 	}
 }

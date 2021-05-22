@@ -79,7 +79,7 @@ public class PacketPlayInWindowConfirmationEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 7;
+		return 0x07;
 	}
 
 	@Override

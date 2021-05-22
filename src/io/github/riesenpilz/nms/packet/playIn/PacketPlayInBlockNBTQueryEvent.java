@@ -62,7 +62,7 @@ public class PacketPlayInBlockNBTQueryEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 1;
+		return 0x01;
 	}
 
 	@Override

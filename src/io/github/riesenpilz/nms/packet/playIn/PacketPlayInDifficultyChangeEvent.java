@@ -51,7 +51,7 @@ public class PacketPlayInDifficultyChangeEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 2;
+		return 0x02;
 	}
 
 	@Override

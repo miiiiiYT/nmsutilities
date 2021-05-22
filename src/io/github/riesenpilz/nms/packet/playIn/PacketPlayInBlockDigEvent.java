@@ -35,10 +35,10 @@ public class PacketPlayInBlockDigEvent extends PacketPlayInEvent {
 	 */
 	private BlockFace blockFace;
 
-	private PlayerDigType digType;
+	private DigType digType;
 
 	public PacketPlayInBlockDigEvent(Player injectedPlayer, Location blockLocation, BlockFace blockFace,
-			PlayerDigType digType) {
+			DigType digType) {
 		super(injectedPlayer);
 		this.blockLocation = blockLocation;
 		this.blockFace = blockFace;
@@ -69,7 +69,7 @@ public class PacketPlayInBlockDigEvent extends PacketPlayInEvent {
 			blockFace = BlockFace.WEST;
 			break;
 		}
-		digType = PlayerDigType.getPlayerDigType(packet.d());
+		digType = DigType.getPlayerDigType(packet.d());
 	}
 
 	public BlockFace getBlockFace() {
@@ -80,7 +80,7 @@ public class PacketPlayInBlockDigEvent extends PacketPlayInEvent {
 		return blockLocation;
 	}
 
-	public PlayerDigType getDigType() {
+	public DigType getDigType() {
 		return digType;
 	}
 
@@ -113,17 +113,17 @@ public class PacketPlayInBlockDigEvent extends PacketPlayInEvent {
 		}
 	}
 
-	public static enum PlayerDigType {
+	public static enum DigType {
 
 		START_DESTROY_BLOCK(EnumPlayerDigType.START_DESTROY_BLOCK),
 		/**
 		 * Sent when the player lets go of the Mine Block key (default: left click).
 		 */
-		ABORT_DESTROY_BLOCK(EnumPlayerDigType.ABORT_DESTROY_BLOCK),
+		CANCEL_DESTROY_BLOCK(EnumPlayerDigType.ABORT_DESTROY_BLOCK),
 		/**
 		 * Sent when the client thinks it is finished.
 		 */
-		STOP_DESTROY_BLOCK(EnumPlayerDigType.STOP_DESTROY_BLOCK),
+		FINISH_DESTROY_BLOCK(EnumPlayerDigType.STOP_DESTROY_BLOCK),
 		/**
 		 * Triggered by using the Drop Item key (default: Q) with the modifier to drop
 		 * the entire selected stack (default: depends on OS). Location is always set to
@@ -150,7 +150,7 @@ public class PacketPlayInBlockDigEvent extends PacketPlayInEvent {
 
 		private EnumPlayerDigType nms;
 
-		private PlayerDigType(EnumPlayerDigType nms) {
+		private DigType(EnumPlayerDigType nms) {
 			this.nms = nms;
 		}
 
@@ -158,8 +158,8 @@ public class PacketPlayInBlockDigEvent extends PacketPlayInEvent {
 			return nms;
 		}
 
-		public static PlayerDigType getPlayerDigType(EnumPlayerDigType nms) {
-			for (PlayerDigType clickType : PlayerDigType.values())
+		public static DigType getPlayerDigType(EnumPlayerDigType nms) {
+			for (DigType clickType : DigType.values())
 				if (clickType.getNMS().equals(nms))
 					return clickType;
 			return null;
@@ -168,7 +168,7 @@ public class PacketPlayInBlockDigEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 27;
+		return 0x1B;
 	}
 
 	@Override

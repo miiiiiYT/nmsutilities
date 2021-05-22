@@ -52,7 +52,7 @@ public class PacketPlayInUseItemEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 46;
+		return 0x2E;
 	}
 
 	@Override

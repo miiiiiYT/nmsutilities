@@ -47,7 +47,7 @@ public class PacketPlayInDifficultyLockEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 17;
+		return 0x11;
 	}
 
 	@Override

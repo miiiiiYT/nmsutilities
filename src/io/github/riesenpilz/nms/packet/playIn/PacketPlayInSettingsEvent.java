@@ -167,7 +167,7 @@ public class PacketPlayInSettingsEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 5;
+		return 0x05;
 	}
 
 	@Override

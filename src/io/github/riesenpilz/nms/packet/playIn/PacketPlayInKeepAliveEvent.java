@@ -47,7 +47,7 @@ public class PacketPlayInKeepAliveEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 16;
+		return 0x10;
 	}
 
 	@Override

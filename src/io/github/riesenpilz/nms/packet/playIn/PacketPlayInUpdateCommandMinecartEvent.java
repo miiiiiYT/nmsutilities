@@ -70,7 +70,7 @@ public class PacketPlayInUpdateCommandMinecartEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 39;
+		return 0x27;
 	}
 
 	@Override

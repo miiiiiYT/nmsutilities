@@ -59,7 +59,7 @@ public class PacketPlayInSpectateEvent extends PacketPlayInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 45;
+		return 0x2D;
 	}
 
 	@Override
