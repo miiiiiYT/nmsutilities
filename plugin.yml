@@ -1,0 +1,4 @@
+name: nms
+version: 1.0
+main: io.github.riesenpilz.nms.Main
+api-version: 1.13
