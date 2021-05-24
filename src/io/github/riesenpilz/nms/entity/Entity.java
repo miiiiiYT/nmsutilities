@@ -37,7 +37,7 @@ public class Entity {
 	}
 
 	public void setNBTTag(NBTTag nbtTag) {
-		getNMS().load(nbtTag.getNBTTagCompound());
+		getNMS().load(nbtTag.getNMS());
 	}
 
 	public NBTTag getNBTTag() {

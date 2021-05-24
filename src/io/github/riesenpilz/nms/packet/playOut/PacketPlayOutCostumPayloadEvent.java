@@ -1,16 +1,26 @@
 package io.github.riesenpilz.nms.packet.playOut;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.reflections.Field;
+import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.Packet;
+import net.minecraft.server.v1_16_R3.PacketDataSerializer;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
+import net.minecraft.server.v1_16_R3.PacketPlayOutCustomPayload;
 
 /**
- * <br>
- * <br>
- * <br>
- * <br>
- * Packet ID: <br>
+ * https://wiki.vg/Protocol#Plugin_Message_.28clientbound.29
+ * <p>
+ * Mods and plugins can use this to send their data. Minecraft itself uses
+ * several plugin channels. These internal channels are in the minecraft
+ * namespace.
+ * <p>
+ * More documentation on this:
+ * http://dinnerbone.com/blog/2012/01/13/minecraft-plugin-channels-messaging/
+ * <p>
+ * Packet ID: 0x17<br>
  * State: Play<br>
  * Bound To: Client
  * 
@@ -19,22 +29,43 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
  */
 public class PacketPlayOutCostumPayloadEvent extends PacketPlayOutEvent {
 
-	public PacketPlayOutCostumPayloadEvent(Player injectedPlayer) {
+	/**
+	 * Name of the plugin channel used to send the data.
+	 */
+	private NamespacedKey key;
+
+	/**
+	 * Any data, depending on the channel. minecraft: channels are documented here.
+	 */
+	private PacketDataSerializer data;
+
+	@SuppressWarnings("deprecation")
+	public PacketPlayOutCostumPayloadEvent(Player injectedPlayer, PacketPlayOutCustomPayload packet) {
 		super(injectedPlayer);
+		final MinecraftKey minecraftKey = Field.get(packet, "r", MinecraftKey.class);
+		key = new NamespacedKey(minecraftKey.getNamespace(), minecraftKey.getKey());
+	}
+
+	public NamespacedKey getKey() {
+		return key;
+	}
+
+	public PacketDataSerializer getData() {
+		return data;
 	}
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return null;
+		return new PacketPlayOutCustomPayload(new MinecraftKey(key.getNamespace(), key.getKey()), data);
 	}
 
 	@Override
 	public int getPacketID() {
-		return 0;
+		return 0x17;
 	}
 
 	@Override
 	public String getProtocolURLString() {
-		return null;
+		return "https://wiki.vg/Protocol#Plugin_Message_.28clientbound.29";
 	}
 }

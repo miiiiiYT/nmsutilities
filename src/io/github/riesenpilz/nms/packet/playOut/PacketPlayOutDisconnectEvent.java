@@ -2,15 +2,19 @@ package io.github.riesenpilz.nms.packet.playOut;
 
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.reflections.Field;
+import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
+import net.minecraft.server.v1_16_R3.PacketPlayOutKickDisconnect;
 
 /**
- * <br>
- * <br>
- * <br>
- * <br>
- * Packet ID: <br>
+ * https://wiki.vg/Protocol#Disconnect_.28play.29
+ * <p>
+ * Sent by the server before it disconnects a client. The client assumes that
+ * the server has already closed the connection by the time the packet arrives.
+ * <p>
+ * Packet ID: 0x19<br>
  * State: Play<br>
  * Bound To: Client
  * 
@@ -19,22 +23,37 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
  */
 public class PacketPlayOutDisconnectEvent extends PacketPlayOutEvent {
 
-	public PacketPlayOutDisconnectEvent(Player injectedPlayer) {
+	/**
+	 * Displayed to the client when the connection terminates.
+	 */
+	private IChatBaseComponent reason;
+
+	public PacketPlayOutDisconnectEvent(Player injectedPlayer, PacketPlayOutKickDisconnect packet) {
 		super(injectedPlayer);
+		reason = Field.get(packet, "a", IChatBaseComponent.class);
+	}
+
+	public PacketPlayOutDisconnectEvent(Player injectedPlayer, IChatBaseComponent reason) {
+		super(injectedPlayer);
+		this.reason = reason;
+	}
+
+	public IChatBaseComponent getReason() {
+		return reason;
 	}
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return null;
+		return new PacketPlayOutKickDisconnect(reason);
 	}
 
 	@Override
 	public int getPacketID() {
-		return 0;
+		return 0x19;
 	}
 
 	@Override
 	public String getProtocolURLString() {
-		return null;
+		return "https://wiki.vg/Protocol#Disconnect_.28play.29";
 	}
 }

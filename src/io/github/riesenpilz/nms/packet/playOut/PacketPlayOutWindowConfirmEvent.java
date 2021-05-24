@@ -6,13 +6,13 @@ import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
 
 /**
- * https://wiki.vg/Protocol#Window_Confirmation_.28clientbound.29<br>
- * <br>
+ * https://wiki.vg/Protocol#Window_Confirmation_.28clientbound.29
+ * <p>
  * A packet from the server indicating whether a request from the client was
  * accepted, or whether there was a conflict (due to lag). If the packet was not
  * accepted, the client must respond with a serverbound window confirmation
- * packet.<br>
- * <br>
+ * packet.
+ * <p>
  * Packet ID: 0x11<br>
  * State: Play<br>
  * Bound To: Client

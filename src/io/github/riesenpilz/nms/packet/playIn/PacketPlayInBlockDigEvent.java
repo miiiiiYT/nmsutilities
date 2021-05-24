@@ -2,11 +2,11 @@ package io.github.riesenpilz.nms.packet.playIn;
 
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
+import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.BlockPosition;
-import net.minecraft.server.v1_16_R3.EnumDirection;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInBlockDig;
@@ -49,26 +49,7 @@ public class PacketPlayInBlockDigEvent extends PacketPlayInEvent {
 		super(injectedPlayer);
 		blockLocation = new Location(injectedPlayer.getWorld(), packet.b().getX(), packet.b().getY(),
 				packet.b().getZ());
-		switch (packet.c()) {
-		case DOWN:
-			blockFace = BlockFace.DOWN;
-			break;
-		case EAST:
-			blockFace = BlockFace.EAST;
-			break;
-		case NORTH:
-			blockFace = BlockFace.NORTH;
-			break;
-		case SOUTH:
-			blockFace = BlockFace.SOUTH;
-			break;
-		case UP:
-			blockFace = BlockFace.UP;
-			break;
-		case WEST:
-			blockFace = BlockFace.WEST;
-			break;
-		}
+		blockFace = CraftBlock.notchToBlockFace(packet.c());
 		digType = DigType.getPlayerDigType(packet.d());
 	}
 
@@ -89,28 +70,9 @@ public class PacketPlayInBlockDigEvent extends PacketPlayInEvent {
 		final PacketPlayInBlockDig packet = new PacketPlayInBlockDig();
 		new Field(PacketPlayInBlockDig.class, "a").set(packet,
 				new BlockPosition(blockLocation.getX(), blockLocation.getY(), blockLocation.getZ()));
-		new Field(PacketPlayInBlockDig.class, "b").set(packet, getDirection());
+		new Field(PacketPlayInBlockDig.class, "b").set(packet, CraftBlock.blockFaceToNotch(blockFace));
 		new Field(PacketPlayInBlockDig.class, "c").set(packet, digType.getNMS());
 		return packet;
-	}
-
-	private EnumDirection getDirection() {
-		switch (blockFace) {
-		case DOWN:
-			return EnumDirection.DOWN;
-		case EAST:
-			return EnumDirection.EAST;
-		case NORTH:
-			return EnumDirection.NORTH;
-		case SOUTH:
-			return EnumDirection.SOUTH;
-		case UP:
-			return EnumDirection.UP;
-		case WEST:
-			return EnumDirection.WEST;
-		default:
-			return EnumDirection.NORTH;
-		}
 	}
 
 	public static enum DigType {

@@ -28,7 +28,7 @@ public class NBTTag implements Iterable<String> {
         this.nbtTagCompound = new NBTTagCompound();
     }
 
-    public NBTTagCompound getNBTTagCompound() {
+    public NBTTagCompound getNMS() {
         return nbtTagCompound;
     }
 
@@ -73,7 +73,7 @@ public class NBTTag implements Iterable<String> {
     }
 
     public void setNBTTag(String key, NBTTag value) {
-        nbtTagCompound.set(key, value.getNBTTagCompound());
+        nbtTagCompound.set(key, value.getNMS());
     }
 
     public NBTTag getNBTTag(String key) {
@@ -82,7 +82,7 @@ public class NBTTag implements Iterable<String> {
     }
 
     public void setNBTTagList(String key, NBTTagList value) {
-        nbtTagCompound.set(key, value.getNBTTagList());
+        nbtTagCompound.set(key, value.getNMS());
     }
 
     public NBTTagList getNBTTagList(String key) {

@@ -1,9 +1,16 @@
 package io.github.riesenpilz.nms.packet.playOut;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.block.BlockData;
+import io.github.riesenpilz.nms.packet.PacketUtils;
+import io.github.riesenpilz.nms.reflections.Field;
+import net.minecraft.server.v1_16_R3.BlockPosition;
+import net.minecraft.server.v1_16_R3.IBlockData;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
+import net.minecraft.server.v1_16_R3.PacketPlayOutBlockChange;
 
 /**
  * https://wiki.vg/Protocol#Block_Change<br>
@@ -20,19 +27,33 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
  * Packet ID: <br>
  * State: Play<br>
  * Bound To: Client
- * 
+ *
  * @author Martin
  *
  */
 public class PacketPlayOutBlockChangeEvent extends PacketPlayOutEvent {
 
-	public PacketPlayOutBlockChangeEvent(Player injectedPlayer) {
+	private Location blockLocation;
+	private BlockData blockData;
+
+	public PacketPlayOutBlockChangeEvent(Player injectedPlayer, PacketPlayOutBlockChange packet) {
 		super(injectedPlayer);
+		blockLocation = PacketUtils.toLocation(Field.get(packet, "a", BlockPosition.class), injectedPlayer.getWorld());
+		blockData = new BlockData(Field.get(packet, "b", IBlockData.class));
+	}
+
+	public Location getBlockLocation() {
+		return blockLocation;
+	}
+
+	public BlockData getBlockData() {
+		return blockData;
 	}
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return null;
+		return new PacketPlayOutBlockChange(PacketUtils.toBlockPosition(blockLocation),
+				blockData.getNMS().getBlockData());
 	}
 
 	@Override

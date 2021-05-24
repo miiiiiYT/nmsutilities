@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Container;
 import org.bukkit.block.data.Directional;
+import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
 import org.bukkit.inventory.ItemStack;
 
 import com.google.gson.JsonArray;
@@ -16,6 +17,7 @@ import com.google.gson.JsonObject;
 
 import io.github.riesenpilz.nms.nbt.NBTTag;
 import io.github.riesenpilz.nms.world.World;
+import net.minecraft.server.v1_16_R3.IBlockData;
 
 public class Block {
 	private final org.bukkit.block.Block block;
@@ -28,6 +30,10 @@ public class Block {
 		this.block = block;
 	}
 
+	public BlockData getBlockData() {
+		return new BlockData(block);
+	}
+	
 	public List<ItemStack> getDrops() {
 		final List<ItemStack> drops = new ArrayList<>();
 		if (getTags().has("drops"))
@@ -107,5 +113,7 @@ public class Block {
 		jsonObject.add(path, config);
 		world.setConfig("BlockData", jsonObject);
 	}
-
+	public IBlockData getNMS() {
+		return ((CraftBlock)block).getNMS();
+	}
 }

@@ -1,34 +1,71 @@
 package io.github.riesenpilz.nms.packet.playOut;
 
+import java.util.List;
+
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.inventory.ItemStack;
+import io.github.riesenpilz.nms.reflections.Field;
+import net.minecraft.server.v1_16_R3.NonNullList;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
+import net.minecraft.server.v1_16_R3.PacketPlayOutWindowItems;
 
 /**
- * https://wiki.vg/Protocol#Window_Items<br>
- * <br>
+ * https://wiki.vg/Protocol#Window_Items
+ * <p>
  * Sent by the server when items in multiple slots (in a window) are
  * added/removed. This includes the main inventory, equipped armour and crafting
  * slots. This packet with Window ID set to "0" is sent during the player
- * joining sequence to initialise the player's inventory.<br>
- * <br>
+ * joining sequence to initialise the player's inventory.
+ * <p>
+ * See inventory windows for further information about how slots are indexed.
+ * <p>
  * Packet ID: 0x13<br>
  * State: Play<br>
  * Bound To: Client
- * 
+ *
  * @author Martin
  *
  */
 public class PacketPlayOutWindowItemsEvent extends PacketPlayOutEvent {
 
-	public PacketPlayOutWindowItemsEvent(Player injectedPlayer) {
+	private int windowID;
+	private List<ItemStack> itemStacks;
+
+	public PacketPlayOutWindowItemsEvent(Player injectedPlayer, PacketPlayOutWindowItems packet) {
 		super(injectedPlayer);
+		windowID = Field.get(packet, "a", int.class);
+		@SuppressWarnings("unchecked")
+		List<net.minecraft.server.v1_16_R3.ItemStack> itemStacks2 = Field.get(packet, "a", List.class);
+		for (net.minecraft.server.v1_16_R3.ItemStack itemStack : itemStacks2)
+			itemStacks.add(new ItemStack(itemStack));
+	}
+
+	public PacketPlayOutWindowItemsEvent(Player injectedPlayer, int windowID, List<ItemStack> itemStacks) {
+		super(injectedPlayer);
+		this.windowID = windowID;
+		this.itemStacks = itemStacks;
+	}
+
+	public int getWindowID() {
+		return windowID;
+	}
+
+	public List<ItemStack> getItemStacks() {
+		return itemStacks;
 	}
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return null;
+		NonNullList<net.minecraft.server.v1_16_R3.ItemStack> itemStacks2 = NonNullList.a(itemStacks.size(),
+				net.minecraft.server.v1_16_R3.ItemStack.b);
+		for (int i = 0; i < itemStacks.size(); i++) {
+			ItemStack itemStack = itemStacks.get(i);
+			itemStacks2.set(i, itemStack == null ? new ItemStack(Material.AIR).getNMS() : itemStack.getNMS());
+		}
+		return new PacketPlayOutWindowItems(windowID, itemStacks2);
 	}
 
 	@Override

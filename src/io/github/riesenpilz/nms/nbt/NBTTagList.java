@@ -22,7 +22,7 @@ public class NBTTagList implements Iterable<NBTBase> {
         this.nbtTagList = new net.minecraft.server.v1_16_R3.NBTTagList();
     }
 
-    public net.minecraft.server.v1_16_R3.NBTTagList getNBTTagList() {
+    public net.minecraft.server.v1_16_R3.NBTTagList getNMS() {
         return nbtTagList;
     }
 
@@ -84,11 +84,11 @@ public class NBTTagList implements Iterable<NBTBase> {
     }
 
     public void addNBTTag(NBTTag nbtTag) {
-        nbtTagList.add(nbtTag.getNBTTagCompound());
+        nbtTagList.add(nbtTag.getNMS());
     }
 
     public void addNBTTagList(NBTTagList nbtTagList) {
-        this.nbtTagList.add(nbtTagList.getNBTTagList());
+        this.nbtTagList.add(nbtTagList.getNMS());
     }
 
     public float getFloat(int position) {
@@ -96,7 +96,7 @@ public class NBTTagList implements Iterable<NBTBase> {
     }
 
     public void setNBTTag(int position, NBTTag value) {
-        nbtTagList.set(position, value.getNBTTagCompound());
+        nbtTagList.set(position, value.getNMS());
     }
 
     public NBTTag getNBTTag(int position) {
@@ -106,7 +106,7 @@ public class NBTTagList implements Iterable<NBTBase> {
     }
 
     public void setNBTTagList(int position, NBTTagList value) {
-        nbtTagList.set(position, value.getNBTTagList());
+        nbtTagList.set(position, value.getNMS());
     }
 
     public NBTTagList getNBTTagList(int position) {
