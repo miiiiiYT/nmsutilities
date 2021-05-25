@@ -8,10 +8,10 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInTeleportAccept;
 
 /**
- * https://wiki.vg/Protocol#Teleport_Confirm<br>
- * <br>
- * Sent by client as confirmation of Player Position And Look.<br>
- * <br>
+ * https://wiki.vg/Protocol#Teleport_Confirm
+ * <p>
+ * Sent by client as confirmation of Player Position And Look.
+ * <p>
  * Packet ID: 0x00<br>
  * State: Play<br>
  * Bound To: Server
@@ -44,7 +44,7 @@ public class PacketPlayInTeleportAcceptEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInTeleportAccept packet = new PacketPlayInTeleportAccept();
-		new Field(PacketPlayInTeleportAccept.class, "a").set(packet, teleportID);
+		Field.set(packet, "a", teleportID);
 		return packet;
 	}
 

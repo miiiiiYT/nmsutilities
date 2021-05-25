@@ -9,10 +9,10 @@ import net.minecraft.server.v1_16_R3.PacketHandshakingInListener;
 import net.minecraft.server.v1_16_R3.PacketHandshakingInSetProtocol;
 
 /**
- * https://wiki.vg/Protocol#Handshake<br>
- * <br>
- * This causes the server to switch into the target state.<br>
- * <br>
+ * https://wiki.vg/Protocol#Handshake
+ * <p>
+ * This causes the server to switch into the target state.
+ * <p>
  * Packet ID: 0x00<br>
  * State: Handshaking<br>
  * Bound To: Server
@@ -78,10 +78,10 @@ public class PacketHandshakingInHandshakeEvent extends PacketHandshakingInEvent 
 	@Override
 	public Packet<PacketHandshakingInListener> getNMS() {
 		final PacketHandshakingInSetProtocol packet = new PacketHandshakingInSetProtocol();
-		new Field(PacketHandshakingInSetProtocol.class, "a").set(packet, protocolVersion);
+		Field.set(packet, "a", protocolVersion);
 		packet.hostname = serverAddress;
 		packet.port = serverPort;
-		new Field(PacketHandshakingInSetProtocol.class, "d").set(packet, nextState.getNMS());
+		Field.set(packet, "d", nextState.getNMS());
 		return packet;
 	}
 
@@ -109,7 +109,7 @@ public class PacketHandshakingInHandshakeEvent extends PacketHandshakingInEvent 
 
 	@Override
 	public int getPacketID() {
-		return 0;
+		return 0x00;
 	}
 
 	@Override

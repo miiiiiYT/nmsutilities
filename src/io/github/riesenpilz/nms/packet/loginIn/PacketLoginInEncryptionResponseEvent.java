@@ -8,14 +8,14 @@ import net.minecraft.server.v1_16_R3.PacketLoginInEncryptionBegin;
 import net.minecraft.server.v1_16_R3.PacketLoginInListener;
 
 /**
- * https://wiki.vg/Protocol#Encryption_Response<br>
- * <br>
- * See Protocol Encryption for details.<br>
- * <br>
+ * https://wiki.vg/Protocol#Encryption_Response
+ * <p>
+ * See Protocol Encryption for details.
+ * <p>
  * Packet ID: 0x01<br>
  * State: Login<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
@@ -38,8 +38,8 @@ public class PacketLoginInEncryptionResponseEvent extends PacketLoginInEvent {
 
 	public PacketLoginInEncryptionResponseEvent(Player injectedPlayer, PacketLoginInEncryptionBegin packet) {
 		super(injectedPlayer);
-		sharedSecret = (byte[]) new Field(PacketLoginInEncryptionBegin.class, "a").get(packet);
-		verifyToken = (byte[]) new Field(PacketLoginInEncryptionBegin.class, "b").get(packet);
+		sharedSecret = Field.get(packet, "a", byte[].class);
+		verifyToken = Field.get(packet, "b", byte[].class);
 	}
 
 	public byte[] getSharedSecret() {
@@ -53,14 +53,14 @@ public class PacketLoginInEncryptionResponseEvent extends PacketLoginInEvent {
 	@Override
 	public Packet<PacketLoginInListener> getNMS() {
 		final PacketLoginInEncryptionBegin packet = new PacketLoginInEncryptionBegin();
-		new Field(PacketLoginInEncryptionBegin.class, "a").set(packet, sharedSecret);
-		new Field(PacketLoginInEncryptionBegin.class, "b").set(packet, verifyToken);
+		Field.set(packet, "a", sharedSecret);
+		Field.set(packet, "b", verifyToken);
 		return packet;
 	}
 
 	@Override
 	public int getPacketID() {
-		return 1;
+		return 0x01;
 	}
 
 	@Override

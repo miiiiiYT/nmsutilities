@@ -3,7 +3,7 @@ package io.github.riesenpilz.nms.packet.playOut;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import io.github.riesenpilz.nms.packet.playIn.PacketPlayInBlockDigEvent.DigType;
+import io.github.riesenpilz.nms.entity.player.DigType;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.IBlockData;

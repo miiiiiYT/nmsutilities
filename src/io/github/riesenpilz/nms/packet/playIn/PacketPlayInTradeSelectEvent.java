@@ -8,14 +8,14 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInTrSel;
 
 /**
- * https://wiki.vg/Protocol#Select_Trade<br>
- * <br>
- * When a player selects a specific trade offered by a villager NPC.<br>
- * <br>
+ * https://wiki.vg/Protocol#Select_Trade
+ * <p>
+ * When a player selects a specific trade offered by a villager NPC.
+ * <p>
  * Packet ID: 0x23<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
@@ -44,7 +44,7 @@ public class PacketPlayInTradeSelectEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInTrSel packet = new PacketPlayInTrSel();
-		new Field(PacketPlayInTrSel.class, "a").set(packet, slot);
+		Field.set(packet, "a", slot);
 		return packet;
 	}
 

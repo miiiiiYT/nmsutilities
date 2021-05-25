@@ -18,7 +18,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayInAutoRecipe;
  * Packet ID: 0x19<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
@@ -62,10 +62,9 @@ public class PacketPlayInAutoRecipeEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInAutoRecipe packet = new PacketPlayInAutoRecipe();
-		new Field(PacketPlayInAutoRecipe.class, "a").set(packet, windowID);
-		new Field(PacketPlayInAutoRecipe.class, "b").set(packet,
-				new MinecraftKey(recipeID.getNamespace(), recipeID.getKey()));
-		new Field(PacketPlayInAutoRecipe.class, "c").set(packet, makeAll);
+		Field.set(packet, "a", windowID);
+		Field.set(packet, "b", new MinecraftKey(recipeID.getNamespace(), recipeID.getKey()));
+		Field.set(packet, "c", makeAll);
 		return packet;
 	}
 

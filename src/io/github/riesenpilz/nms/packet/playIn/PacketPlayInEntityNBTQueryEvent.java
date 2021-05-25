@@ -2,21 +2,20 @@ package io.github.riesenpilz.nms.packet.playIn;
 
 import org.bukkit.entity.Player;
 
-import io.github.riesenpilz.nms.entity.Entity;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInEntityNBTQuery;
 
 /**
- * https://wiki.vg/Protocol#Query_Entity_NBT<br>
- * <br>
- * Used when Shift+F3+I is pressed while looking at an entity.<br>
- * <br>
+ * https://wiki.vg/Protocol#Query_Entity_NBT
+ * <p>
+ * Used when Shift+F3+I is pressed while looking at an entity.
+ * <p>
  * Packet ID: 0x0D<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
@@ -28,35 +27,35 @@ public class PacketPlayInEntityNBTQueryEvent extends PacketPlayInEvent {
 	private int transactionID;
 
 	/**
-	 * The Entity to query.
+	 * The ID of the entity to query.
 	 */
-	private Entity entity;
+	private int entityID;
 
 	public PacketPlayInEntityNBTQueryEvent(Player injectedPlayer, PacketPlayInEntityNBTQuery packet) {
 		super(injectedPlayer);
 		transactionID = packet.b();
-		entity = new Entity(packet.c(), injectedPlayer.getWorld());
+		entityID = packet.c();
 	}
 
-	public PacketPlayInEntityNBTQueryEvent(Player injectedPlayer, int transactionID, org.bukkit.entity.Entity entity) {
+	public PacketPlayInEntityNBTQueryEvent(Player injectedPlayer, int transactionID, int entityID) {
 		super(injectedPlayer);
 		this.transactionID = transactionID;
-		this.entity = new Entity(entity);
+		this.entityID = entityID;
 	}
 
 	public int getTransactionID() {
 		return transactionID;
 	}
 
-	public Entity getEntity() {
-		return entity;
+	public int getEntityID() {
+		return entityID;
 	}
 
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInEntityNBTQuery packet = new PacketPlayInEntityNBTQuery();
-		new Field(PacketPlayInEntityNBTQuery.class, "a").set(packet, transactionID);
-		new Field(PacketPlayInEntityNBTQuery.class, "b").set(packet, entity.getID());
+		Field.set(packet, "a", transactionID);
+		Field.set(packet, "b", entityID);
 		return packet;
 	}
 

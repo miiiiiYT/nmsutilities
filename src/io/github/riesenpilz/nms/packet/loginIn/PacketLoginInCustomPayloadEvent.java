@@ -2,20 +2,20 @@ package io.github.riesenpilz.nms.packet.loginIn;
 
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.PacketDataSerializer;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
-import net.minecraft.server.v1_16_R3.PacketDataSerializer;
 import net.minecraft.server.v1_16_R3.PacketLoginInCustomPayload;
 import net.minecraft.server.v1_16_R3.PacketLoginInEncryptionBegin;
 import net.minecraft.server.v1_16_R3.PacketLoginInListener;
 
 /**
- * https://wiki.vg/Protocol#Login_Plugin_Response<br>
- * <br>
+ * https://wiki.vg/Protocol#Login_Plugin_Response
+ * <p>
  * Packet ID: 0x02<br>
  * State: Login<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
@@ -40,8 +40,9 @@ public class PacketLoginInCustomPayloadEvent extends PacketLoginInEvent {
 
 	public PacketLoginInCustomPayloadEvent(Player injectedPlayer, PacketLoginInCustomPayload packet) {
 		super(injectedPlayer);
-		messageID = (int) new Field(PacketLoginInEncryptionBegin.class, "a").get(packet);
-		data = (PacketDataSerializer) new Field(PacketLoginInEncryptionBegin.class, "b").get(packet);
+		messageID = Field.get(packet, "a", int.class);
+		data = new PacketDataSerializer(
+				Field.get(packet, "a", net.minecraft.server.v1_16_R3.PacketDataSerializer.class));
 	}
 
 	public int getMessageID() {
@@ -55,14 +56,14 @@ public class PacketLoginInCustomPayloadEvent extends PacketLoginInEvent {
 	@Override
 	public Packet<PacketLoginInListener> getNMS() {
 		final PacketLoginInEncryptionBegin packet = new PacketLoginInEncryptionBegin();
-		new Field(PacketLoginInEncryptionBegin.class, "a").set(packet, messageID);
-		new Field(PacketLoginInEncryptionBegin.class, "b").set(packet, data);
+		Field.set(packet, "a", messageID);
+		Field.set(packet, "b", data.getNMS());
 		return packet;
 	}
 
 	@Override
 	public int getPacketID() {
-		return 2;
+		return 0x02;
 	}
 
 	@Override

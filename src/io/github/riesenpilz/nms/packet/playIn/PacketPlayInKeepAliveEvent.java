@@ -8,11 +8,11 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInKeepAlive;
 
 /**
- * https://wiki.vg/Protocol#Keep_Alive_.28serverbound.29<br>
- * <br>
+ * https://wiki.vg/Protocol#Keep_Alive_.28serverbound.29
+ * <p>
  * The server will frequently send out a keep-alive, each containing a random
- * ID. The client must respond with the same packet.<br>
- * <br>
+ * ID. The client must respond with the same packet.
+ * <p>
  * Packet ID: 0x10<br>
  * State: Play<br>
  * Bound To: Server
@@ -41,7 +41,7 @@ public class PacketPlayInKeepAliveEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInKeepAlive packet = new PacketPlayInKeepAlive();
-		new Field(PacketPlayInKeepAlive.class, "a").set(packet, keepAliveID);
+		Field.set(packet, "a", keepAliveID);
 		return packet;
 	}
 

@@ -21,9 +21,9 @@ public enum InventoryClickType {
 	}
 
 	public static InventoryClickType getInventoryClickType(net.minecraft.server.v1_16_R3.InventoryClickType nms) {
-		for (InventoryClickType clickType : InventoryClickType.values())
-			if (clickType.getNMS().equals(nms))
-				return clickType;
+		for (InventoryClickType type : values())
+			if (type.getNMS().equals(nms))
+				return type;
 		return null;
 	}
 }

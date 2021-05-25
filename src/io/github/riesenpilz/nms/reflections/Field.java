@@ -17,9 +17,16 @@ public class Field {
 	public static <T> T get(Object instaceAndClass, String fieldName, Class<T> type) {
 		return (T) new Field(instaceAndClass.getClass(), fieldName).get(instaceAndClass);
 	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T getConstant(Class<?> clazz, String fieldName, Class<T> type) {
+		return (T) new Field(clazz, fieldName).get(null);
+	}
+
 	public static void set(Object instaceAndClass, String fieldName, Object value) {
 		new Field(instaceAndClass.getClass(), fieldName).set(instaceAndClass, value);
 	}
+
 	public void set(Object instance, Object value) {
 		try {
 			field.set(instance, value);

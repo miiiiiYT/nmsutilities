@@ -9,8 +9,8 @@ import net.minecraft.server.v1_16_R3.PacketLoginInListener;
 import net.minecraft.server.v1_16_R3.PacketLoginInStart;
 
 /**
- * https://wiki.vg/Protocol#Login_Start<br>
- * <br>
+ * https://wiki.vg/Protocol#Login_Start
+ * <p>
  * Packet ID: 0x00<br>
  * State: Login<br>
  * Bound To: Server
@@ -43,7 +43,7 @@ public class PacketLoginInStartEvent extends PacketLoginInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 0;
+		return 0x00;
 	}
 
 	@Override

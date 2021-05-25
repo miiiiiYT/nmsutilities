@@ -38,7 +38,7 @@ public class PacketLoginOutSetCompressionEvent extends PacketLoginOutEvent {
 
 	public PacketLoginOutSetCompressionEvent(Player injectedPlayer, PacketLoginOutSetCompression packet) {
 		super(injectedPlayer);
-		threshold = (int) new Field(PacketLoginOutSetCompression.class, "a").get(packet);
+		threshold = Field.get(packet, "a", int.class);
 	}
 
 	public int getThreshold() {

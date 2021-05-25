@@ -8,10 +8,10 @@ import net.minecraft.server.v1_16_R3.PacketLoginOutEncryptionBegin;
 import net.minecraft.server.v1_16_R3.PacketLoginOutListener;
 
 /**
- * https://wiki.vg/Protocol#Encryption_Request<br>
- * <br>
- * See Protocol Encryption for details.<br>
- * <br>
+ * https://wiki.vg/Protocol#Encryption_Request
+ * <p>
+ * See Protocol Encryption for details.
+ * <p>
  * Packet ID: 0x01<br>
  * State: Login<br>
  * Bound To: Client
@@ -22,7 +22,7 @@ import net.minecraft.server.v1_16_R3.PacketLoginOutListener;
 public class PacketLoginOutEncryptionRequestEvent extends PacketLoginOutEvent {
 
 	/**
-	 * Appears to be empty. (20 chars)
+	 * Appears to be empty. (20 chars max)
 	 */
 	private String serverID;
 
@@ -46,9 +46,9 @@ public class PacketLoginOutEncryptionRequestEvent extends PacketLoginOutEvent {
 
 	public PacketLoginOutEncryptionRequestEvent(Player injectedPlayer, PacketLoginOutEncryptionBegin packet) {
 		super(injectedPlayer);
-		serverID = (String) new Field(PacketLoginOutEncryptionBegin.class, "a").get(packet);
-		publicKey = (byte[]) new Field(PacketLoginOutEncryptionBegin.class, "b").get(packet);
-		verifyToken = (byte[]) new Field(PacketLoginOutEncryptionBegin.class, "c").get(packet);
+		serverID = Field.get(packet, "a", String.class);
+		publicKey = Field.get(packet, "b", byte[].class);
+		verifyToken = Field.get(packet, "c", byte[].class);
 	}
 
 	public String getServerID() {
@@ -70,7 +70,7 @@ public class PacketLoginOutEncryptionRequestEvent extends PacketLoginOutEvent {
 
 	@Override
 	public int getPacketID() {
-		return 1;
+		return 0x01;
 	}
 
 	@Override

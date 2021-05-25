@@ -12,17 +12,19 @@ import net.minecraft.server.v1_16_R3.PacketStatusInStart;
  * Packet ID: 0x00<br>
  * State: Status<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
 public class PacketStatusInReqestEvent extends PacketStatusInEvent {
 
-	public PacketStatusInReqestEvent(Player injectedPlayer) {
+	// No fields
+
+	public PacketStatusInReqestEvent(Player injectedPlayer, PacketStatusInStart packet) {
 		super(injectedPlayer);
 	}
 
-	public PacketStatusInReqestEvent(Player injectedPlayer, PacketStatusInStart packet) {
+	public PacketStatusInReqestEvent(Player injectedPlayer) {
 		super(injectedPlayer);
 	}
 
@@ -33,7 +35,7 @@ public class PacketStatusInReqestEvent extends PacketStatusInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 0;
+		return 0x00;
 	}
 
 	@Override

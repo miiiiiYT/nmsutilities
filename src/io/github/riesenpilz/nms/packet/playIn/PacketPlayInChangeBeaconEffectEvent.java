@@ -9,10 +9,10 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInBeacon;
 
 /**
- * https://wiki.vg/Protocol#Set_Beacon_Effect<br>
- * <br>
- * Changes the effect of the current beacon.<br>
- * <br>
+ * https://wiki.vg/Protocol#Set_Beacon_Effect
+ * <p>
+ * Changes the effect of the current beacon.
+ * <p>
  * Packet ID: 0x24<br>
  * State: Play<br>
  * Bound To: Server
@@ -51,8 +51,8 @@ public class PacketPlayInChangeBeaconEffectEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInBeacon packet = new PacketPlayInBeacon();
-		new Field(PacketPlayInBeacon.class, "a").set(packet, primaryEffect.getId());
-		new Field(PacketPlayInBeacon.class, "b").set(packet, secondaryEffect.getId());
+		Field.set(packet, "a", primaryEffect.getId());
+		Field.set(packet, "b", secondaryEffect.getId());
 		return packet;
 	}
 

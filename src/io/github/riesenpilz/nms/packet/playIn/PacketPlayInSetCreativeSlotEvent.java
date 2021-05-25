@@ -9,11 +9,11 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInSetCreativeSlot;
 
 /**
- * https://wiki.vg/Protocol#Creative_Inventory_Action<br>
- * <br>
+ * https://wiki.vg/Protocol#Creative_Inventory_Action
+ * <p>
  * While the user is in the standard inventory (i.e., not a crafting bench) in
- * Creative mode, the player will send this packet.<br>
- * <br>
+ * Creative mode, the player will send this packet.
+ * <p>
  * Clicking in the creative inventory menu is quite different from non-creative
  * inventory management. Picking up an item with the mouse actually deletes the
  * item from the server, and placing an item into a slot or dropping it out of
@@ -26,16 +26,16 @@ import net.minecraft.server.v1_16_R3.PacketPlayInSetCreativeSlot;
  * items (by category, etc.) are a client-side interface for choosing which item
  * to create. Picking up an item from such listings sends no packets to the
  * server; only when you put it somewhere does it tell the server to create the
- * item in that location.<br>
- * <br>
+ * item in that location.
+ * <p>
  * This action can be described as "set inventory slot". Picking up an item sets
  * the slot to item ID -1. Placing an item into an inventory slot sets the slot
  * to the specified item. Dropping an item (by clicking outside the window)
  * effectively sets slot -1 to the specified item, which causes the server to
  * spawn the item entity, etc.. All other inventory slots are numbered the same
  * as the non-creative inventory (including slots for the 2x2 crafting menu,
- * even though they aren't visible in the vanilla client).<br>
- * <br>
+ * even though they aren't visible in the vanilla client).
+ * <p>
  * Packet ID: 0x28<br>
  * State: Play<br>
  * Bound To: Server
@@ -71,8 +71,8 @@ public class PacketPlayInSetCreativeSlotEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInSetCreativeSlot packet = new PacketPlayInSetCreativeSlot();
-		new Field(PacketPlayInSetCreativeSlot.class, "slot").set(packet, slot);
-		new Field(PacketPlayInSetCreativeSlot.class, "b").set(packet, itemStack.getNMS());
+		Field.set(packet, "slot", slot);
+		Field.set(packet, "b", itemStack.getNMS());
 		return packet;
 	}
 

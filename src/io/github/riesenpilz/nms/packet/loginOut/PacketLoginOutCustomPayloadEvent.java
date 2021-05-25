@@ -3,27 +3,28 @@ package io.github.riesenpilz.nms.packet.loginOut;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.PacketDataSerializer;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.Packet;
-import net.minecraft.server.v1_16_R3.PacketDataSerializer;
 import net.minecraft.server.v1_16_R3.PacketLoginOutCustomPayload;
 import net.minecraft.server.v1_16_R3.PacketLoginOutListener;
 
 /**
- * https://wiki.vg/Protocol#Login_Plugin_Request<br>
+ * https://wiki.vg/Protocol#Login_Plugin_Request
+ * <p>
  * Used to implement a custom handshaking flow together with Login Plugin
- * Response.<br>
- * <br>
+ * Response.
+ * <p>
  * Unlike plugin messages in "play" mode, these messages follow a lock-step
  * request/response scheme, where the client is expected to respond to a request
  * indicating whether it understood. The notchian client always responds that it
- * hasn't understood, and sends an empty payload. <br>
- * <br>
+ * hasn't understood, and sends an empty payload.
+ * <p>
  * Packet ID: 0x04<br>
  * State: Login<br>
  * Bound To: Client
- * 
+ *
  * @author Martin
  *
  */
@@ -56,10 +57,11 @@ public class PacketLoginOutCustomPayloadEvent extends PacketLoginOutEvent {
 	@SuppressWarnings("deprecation")
 	public PacketLoginOutCustomPayloadEvent(Player injectedPlayer, PacketLoginOutCustomPayload packet) {
 		super(injectedPlayer);
-		messageID = (int) new Field(PacketLoginOutCustomPayload.class, "a").get(packet);
-		final MinecraftKey minecraftKey = (MinecraftKey) new Field(PacketLoginOutCustomPayload.class, "b").get(packet);
-		channel = new NamespacedKey(minecraftKey.getNamespace(), minecraftKey.getNamespace());
-		data = (PacketDataSerializer) new Field(PacketLoginOutCustomPayload.class, "c").get(packet);
+		messageID = Field.get(packet, "a", int.class);
+		final MinecraftKey nmsKey = Field.get(packet, "b", MinecraftKey.class);
+		channel = new NamespacedKey(nmsKey.getNamespace(), nmsKey.getNamespace());
+		data = new PacketDataSerializer(
+				Field.get(packet, "c", net.minecraft.server.v1_16_R3.PacketDataSerializer.class));
 	}
 
 	public int getMessageID() {
@@ -77,16 +79,15 @@ public class PacketLoginOutCustomPayloadEvent extends PacketLoginOutEvent {
 	@Override
 	public Packet<PacketLoginOutListener> getNMS() {
 		final PacketLoginOutCustomPayload packet = new PacketLoginOutCustomPayload();
-		new Field(PacketLoginOutCustomPayload.class, "a").set(packet, messageID);
-		new Field(PacketLoginOutCustomPayload.class, "b").set(packet,
-				new MinecraftKey(channel.getNamespace(), channel.getKey()));
-		new Field(PacketLoginOutCustomPayload.class, "c").set(packet, data);
+		Field.set(packet, "a", messageID);
+		Field.set(packet, "b", new MinecraftKey(channel.getNamespace(), channel.getKey()));
+		Field.set(packet, "c", data.getNMS());
 		return packet;
 	}
 
 	@Override
 	public int getPacketID() {
-		return 4;
+		return 0x04;
 	}
 
 	@Override

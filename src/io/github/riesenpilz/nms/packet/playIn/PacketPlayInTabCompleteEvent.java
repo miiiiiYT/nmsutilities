@@ -8,15 +8,15 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInTabComplete;
 
 /**
- * https://wiki.vg/Protocol#Tab-Complete_.28serverbound.29<br>
- * <br>
+ * https://wiki.vg/Protocol#Tab-Complete_.28serverbound.29
+ * <p>
  * Sent when the client needs to tab-complete a minecraft:ask_server suggestion
- * type.<br>
- * <br>
+ * type.
+ * <p>
  * Packet ID: 0x06<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
@@ -58,8 +58,8 @@ public class PacketPlayInTabCompleteEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInTabComplete packet = new PacketPlayInTabComplete();
-		new Field(PacketPlayInTabComplete.class, "a").set(packet, transactionId);
-		new Field(PacketPlayInTabComplete.class, "b").set(packet, toComplete);
+		Field.set(packet, "a", transactionId);
+		Field.set(packet, "b", toComplete);
 		return packet;
 	}
 

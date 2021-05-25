@@ -8,14 +8,14 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInTransaction;
 
 /**
- * https://wiki.vg/Protocol#Window_Confirmation_.28serverbound.29<br>
- * <br>
+ * https://wiki.vg/Protocol#Window_Confirmation_.28serverbound.29
+ * <p>
  * If a confirmation sent by the client was not accepted, the server will reply
  * with a Window Confirmation (clientbound) packet with the Accepted field set
  * to false. When this happens, the client must send this packet to apologize
  * (as with movement), otherwise the server ignores any successive
- * confirmations.<br>
- * <br>
+ * confirmations.
+ * <p>
  * Packet ID: 0x07<br>
  * State: Play<br>
  * Bound To: Server
@@ -23,7 +23,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayInTransaction;
  * @author Martin
  *
  */
-public class PacketPlayInWindowConfirmationEvent extends PacketPlayInEvent {
+public class PacketPlayInInventoryConfirmEvent extends PacketPlayInEvent {
 
 	/**
 	 * The ID of the window that the action occurred in.
@@ -41,14 +41,14 @@ public class PacketPlayInWindowConfirmationEvent extends PacketPlayInEvent {
 	 */
 	private boolean accepted;
 
-	public PacketPlayInWindowConfirmationEvent(Player injectedPlayer, PacketPlayInTransaction packet) {
+	public PacketPlayInInventoryConfirmEvent(Player injectedPlayer, PacketPlayInTransaction packet) {
 		super(injectedPlayer);
 		windowID = packet.b();
 		actionNumber = packet.c();
-		accepted = (boolean) new Field(PacketPlayInTransaction.class, "c").get(packet);
+		accepted = Field.get(packet, "c", boolean.class);
 	}
 
-	public PacketPlayInWindowConfirmationEvent(Player injectedPlayer, int windowID, short actionNumber,
+	public PacketPlayInInventoryConfirmEvent(Player injectedPlayer, int windowID, short actionNumber,
 			boolean accepted) {
 		super(injectedPlayer);
 		this.windowID = windowID;
@@ -71,9 +71,9 @@ public class PacketPlayInWindowConfirmationEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInTransaction packet = new PacketPlayInTransaction();
-		new Field(PacketPlayInTransaction.class, "a").set(packet, windowID);
-		new Field(PacketPlayInTransaction.class, "b").set(packet, actionNumber);
-		new Field(PacketPlayInTransaction.class, "c").set(packet, accepted);
+		Field.set(packet, "a", windowID);
+		Field.set(packet, "b", actionNumber);
+		Field.set(packet, "c", accepted);
 		return packet;
 	}
 

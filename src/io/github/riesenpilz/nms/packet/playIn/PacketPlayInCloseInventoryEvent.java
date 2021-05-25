@@ -8,13 +8,12 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInCloseWindow;
 
 /**
- * https://wiki.vg/Protocol#Close_Window_.28serverbound.29<br>
- * <br>
+ * https://wiki.vg/Protocol#Close_Window_.28serverbound.29
+ * <p>
  * This packet is sent by the client when closing a window.<br>
  * Notchian clients send a Close Window packet with Window ID 0 to close their
- * inventory even though there is never an Open Window packet for the
- * inventory.<br>
- * <br>
+ * inventory even though there is never an Open Window packet for the inventory.
+ * <p>
  * Packet ID: 0x0A<br>
  * State: Play<br>
  * Bound To: Server
@@ -22,20 +21,20 @@ import net.minecraft.server.v1_16_R3.PacketPlayInCloseWindow;
  * @author Martin
  *
  */
-public class PacketPlayInCloseWindowEvent extends PacketPlayInEvent {
+public class PacketPlayInCloseInventoryEvent extends PacketPlayInEvent {
 
 	/**
 	 * This is the ID of the window that was closed. 0 for player inventory.
 	 */
 	private int windowID;
 
-	public PacketPlayInCloseWindowEvent(Player injectedPlayer, PacketPlayInCloseWindow packet) {
+	public PacketPlayInCloseInventoryEvent(Player injectedPlayer, PacketPlayInCloseWindow packet) {
 		super(injectedPlayer);
-		windowID = (int) new Field(PacketPlayInCloseWindow.class, "id").get(packet);
+		windowID = Field.get(packet, "id", int.class);
 
 	}
 
-	public PacketPlayInCloseWindowEvent(Player injectedPlayer, int windowID) {
+	public PacketPlayInCloseInventoryEvent(Player injectedPlayer, int windowID) {
 		super(injectedPlayer);
 		this.windowID = windowID;
 	}

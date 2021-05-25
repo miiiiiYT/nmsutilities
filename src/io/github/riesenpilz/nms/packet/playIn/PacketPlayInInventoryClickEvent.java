@@ -10,18 +10,18 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInWindowClick;
 
 /**
- * https://wiki.vg/Protocol#Click_Window<br>
- * <br>
- * This packet is sent by the player when it clicks on a slot in a window.<br>
- * <br>
+ * https://wiki.vg/Protocol#Click_Window
+ * <p>
+ * This packet is sent by the player when it clicks on a slot in a window.
+ * <p>
  * Packet ID: 0x09<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
-public class PacketPlayInWindowClickEvent extends PacketPlayInEvent {
+public class PacketPlayInInventoryClickEvent extends PacketPlayInEvent {
 
 	public static final int OUT_OF_BOUND = -999;
 
@@ -51,7 +51,7 @@ public class PacketPlayInWindowClickEvent extends PacketPlayInEvent {
 
 	private InventoryClickType clickType;
 
-	public PacketPlayInWindowClickEvent(Player injectedPlayer, PacketPlayInWindowClick packet) {
+	public PacketPlayInInventoryClickEvent(Player injectedPlayer, PacketPlayInWindowClick packet) {
 		super(injectedPlayer);
 		clickType = InventoryClickType.getInventoryClickType(packet.g());
 		itemStack = new ItemStack(packet.f());
@@ -61,7 +61,7 @@ public class PacketPlayInWindowClickEvent extends PacketPlayInEvent {
 		button = packet.d();
 	}
 
-	public PacketPlayInWindowClickEvent(Player injectedPlayer, InventoryClickType clickType, ItemStack itemStack,
+	public PacketPlayInInventoryClickEvent(Player injectedPlayer, InventoryClickType clickType, ItemStack itemStack,
 			short action, int windowID, int slot, int button) {
 		super(injectedPlayer);
 		this.clickType = clickType;
@@ -99,12 +99,12 @@ public class PacketPlayInWindowClickEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInWindowClick packet = new PacketPlayInWindowClick();
-		new Field(PacketPlayInWindowClick.class, "a").set(packet, windowID);
-		new Field(PacketPlayInWindowClick.class, "slot").set(packet, slot);
-		new Field(PacketPlayInWindowClick.class, "button").set(packet, button);
-		new Field(PacketPlayInWindowClick.class, "d").set(packet, action);
-		new Field(PacketPlayInWindowClick.class, "item").set(packet, itemStack.getNMS());
-		new Field(PacketPlayInWindowClick.class, "shift").set(packet, clickType.getNMS());
+		Field.set(packet, "a", windowID);
+		Field.set(packet, "slot", slot);
+		Field.set(packet, "button", button);
+		Field.set(packet, "d", action);
+		Field.set(packet, "item", itemStack.getNMS());
+		Field.set(packet, "shift", clickType.getNMS());
 		return packet;
 	}
 

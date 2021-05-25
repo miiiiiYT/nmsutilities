@@ -2,16 +2,15 @@ package io.github.riesenpilz.nms.packet.statusOut;
 
 import org.bukkit.entity.Player;
 
-import com.google.gson.Gson;
-
+import io.github.riesenpilz.nms.packet.ServerPing;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketStatusOutListener;
 import net.minecraft.server.v1_16_R3.PacketStatusOutServerInfo;
 
 /**
- * https://wiki.vg/Protocol#Response<br>
- * <br>
+ * https://wiki.vg/Protocol#Response
+ * <p>
  * Packet ID: 0x00<br>
  * State: Status<br>
  * Bound To: Client
@@ -21,33 +20,30 @@ import net.minecraft.server.v1_16_R3.PacketStatusOutServerInfo;
  */
 public class PacketStatusOutResponseEvent extends PacketStatusOutEvent {
 
-	/**
-	 * See Server List Ping#Response; as with all strings this is prefixed by its
-	 * length as a VarInt. ( 2767 chars)
-	 * 
-	 */
-	private static final Gson response = (Gson) new Field(PacketStatusOutServerInfo.class, "a").get(null);
-
-	public PacketStatusOutResponseEvent(Player injectedPlayer) {
-		super(injectedPlayer);
-	}
+	 private ServerPing ping;
 
 	public PacketStatusOutResponseEvent(Player injectedPlayer, PacketStatusOutServerInfo packet) {
 		super(injectedPlayer);
+		ping = new ServerPing(Field.get(packet, "a", net.minecraft.server.v1_16_R3.ServerPing.class));
+	}
+	
+	public PacketStatusOutResponseEvent(Player injectedPlayer, ServerPing ping) {
+		super(injectedPlayer);
+		this.ping = ping;
 	}
 
-	public static Gson getResponse() {
-		return response;
+	public ServerPing getPing() {
+		return ping;
 	}
 
 	@Override
 	public Packet<PacketStatusOutListener> getNMS() {
-		return new PacketStatusOutServerInfo();
+		return new PacketStatusOutServerInfo(ping.getNMS());
 	}
 
 	@Override
 	public int getPacketID() {
-		return 0;
+		return 0x00;
 	}
 
 	@Override

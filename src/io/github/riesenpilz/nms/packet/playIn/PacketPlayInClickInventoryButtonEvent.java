@@ -8,11 +8,11 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInEnchantItem;
 
 /**
- * https://wiki.vg/Protocol#Click_Window_Button<br>
- * <br>
+ * https://wiki.vg/Protocol#Click_Window_Button
+ * <p>
  * Used when clicking on window buttons. Until 1.14, this was only used by
- * enchantment tables.<br>
- * <br>
+ * enchantment tables.
+ * <p>
  * Packet ID: 0x08<br>
  * State: Play<br>
  * Bound To: Server
@@ -20,7 +20,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayInEnchantItem;
  * @author Martin
  *
  */
-public class PacketPlayInClickWindowButtonEvent extends PacketPlayInEvent {
+public class PacketPlayInClickInventoryButtonEvent extends PacketPlayInEvent {
 
 	/**
 	 * The ID of the window sent by Open Window.
@@ -32,13 +32,13 @@ public class PacketPlayInClickWindowButtonEvent extends PacketPlayInEvent {
 	 */
 	private int buttonID;
 
-	public PacketPlayInClickWindowButtonEvent(Player injectedPlayer, PacketPlayInEnchantItem packet) {
+	public PacketPlayInClickInventoryButtonEvent(Player injectedPlayer, PacketPlayInEnchantItem packet) {
 		super(injectedPlayer);
 		windowID = packet.b();
 		buttonID = packet.c();
 	}
 
-	public PacketPlayInClickWindowButtonEvent(Player injectedPlayer, int windowID, int buttonID) {
+	public PacketPlayInClickInventoryButtonEvent(Player injectedPlayer, int windowID, int buttonID) {
 		super(injectedPlayer);
 		this.windowID = windowID;
 		this.buttonID = buttonID;
@@ -55,8 +55,8 @@ public class PacketPlayInClickWindowButtonEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInEnchantItem packet = new PacketPlayInEnchantItem();
-		new Field(PacketPlayInEnchantItem.class, "a").set(packet, windowID);
-		new Field(PacketPlayInEnchantItem.class, "b").set(packet, buttonID);
+		Field.set(packet, "a", windowID);
+		Field.set(packet, "b", buttonID);
 		return packet;
 	}
 

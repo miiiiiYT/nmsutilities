@@ -10,33 +10,12 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInBEdit;
 
 /**
- * https://wiki.vg/Protocol#Edit_Book<br>
- * <br>
- * When editing a draft, the NBT section of the Slot contains this:<br>
- * <code>TAG_Compound(''): 1 entry<br>
-{<br>
-  TAG_List('pages'): 2 entries<br>
-  {<br>
-    TAG_String(0): 'Something on Page 1'<br>
-    TAG_String(1): 'Something on Page 2'<br>
-  }<br>
-}</code> <br>
- * When signing the book, it instead looks like this:<br>
- * <code>TAG_Compound(''): 3 entires<br>
-{<br>
-  TAG_String('author'): 'Steve'<br>
-  TAG_String('title'): 'A Wonderful Book'<br>
-  TAG_List('pages'): 2 entries<br>
-  {<br>
-    TAG_String(0): 'Something on Page 1'<br>
-    TAG_String(1): 'Something on Page 2'<br>
-  }<br>
-}</code><br>
- * <br>
+ * https://wiki.vg/Protocol#Edit_Book
+ * <p>
  * Packet ID: 0x0C<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
@@ -80,9 +59,9 @@ public class PacketPlayInEditBookEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInBEdit packet = new PacketPlayInBEdit();
-		new Field(PacketPlayInBEdit.class, "a").set(packet, book.getNMS());
-		new Field(PacketPlayInBEdit.class, "b").set(packet, signing);
-		new Field(PacketPlayInBEdit.class, "c").set(packet, hand.getIndex());
+		Field.set(packet, "a", book.getNMS());
+		Field.set(packet, "b", signing);
+		Field.set(packet, "c", hand.getIndex());
 		return packet;
 	}
 

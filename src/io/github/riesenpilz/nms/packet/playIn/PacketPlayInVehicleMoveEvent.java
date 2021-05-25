@@ -9,15 +9,15 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInVehicleMove;
 
 /**
- * https://wiki.vg/Protocol#Vehicle_Move_.28serverbound.29<br>
- * <br>
+ * https://wiki.vg/Protocol#Vehicle_Move_.28serverbound.29
+ * <p>
  * Sent when a player moves in a vehicle. Note that all fields use absolute
- * positioning and do not allow for relative positioning.<br>
- * <br>
+ * positioning and do not allow for relative positioning.
+ * <p>
  * Packet ID: 0x16<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
@@ -46,11 +46,11 @@ public class PacketPlayInVehicleMoveEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInVehicleMove packet = new PacketPlayInVehicleMove();
-		new Field(PacketPlayInVehicleMove.class, "a").set(packet, locationTo.getX());
-		new Field(PacketPlayInVehicleMove.class, "b").set(packet, locationTo.getY());
-		new Field(PacketPlayInVehicleMove.class, "c").set(packet, locationTo.getZ());
-		new Field(PacketPlayInVehicleMove.class, "d").set(packet, locationTo.getYaw());
-		new Field(PacketPlayInVehicleMove.class, "e").set(packet, locationTo.getPitch());
+		Field.set(packet, "a", locationTo.getX());
+		Field.set(packet, "b", locationTo.getY());
+		Field.set(packet, "c", locationTo.getZ());
+		Field.set(packet, "d", locationTo.getYaw());
+		Field.set(packet, "e", locationTo.getPitch());
 		return packet;
 	}
 

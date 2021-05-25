@@ -8,8 +8,8 @@ import net.minecraft.server.v1_16_R3.PacketPlayInResourcePackStatus;
 import net.minecraft.server.v1_16_R3.PacketPlayInResourcePackStatus.EnumResourcePackStatus;
 
 /**
- * https://wiki.vg/Protocol#Resource_Pack_Status<br>
- * <br>
+ * https://wiki.vg/Protocol#Resource_Pack_Status
+ * <p>
  * Packet ID: 0x21<br>
  * State: Play<br>
  * Bound To: Server
@@ -19,25 +19,25 @@ import net.minecraft.server.v1_16_R3.PacketPlayInResourcePackStatus.EnumResource
  */
 public class PacketPlayInResourcePackStatusEvent extends PacketPlayInEvent {
 
-	private ResourcePackStatus resourcePackStatus;
+	private ResourcePackStatus status;
 
 	public PacketPlayInResourcePackStatusEvent(Player injectedPlayer, PacketPlayInResourcePackStatus packet) {
 		super(injectedPlayer);
-		resourcePackStatus = ResourcePackStatus.getResourcePackStatus(packet.status);
+		status = ResourcePackStatus.getResourcePackStatus(packet.status);
 	}
 
 	public PacketPlayInResourcePackStatusEvent(Player injectedPlayer, ResourcePackStatus resourcePackStatus) {
 		super(injectedPlayer);
-		this.resourcePackStatus = resourcePackStatus;
+		this.status = resourcePackStatus;
 	}
 
-	public ResourcePackStatus getResourcePackStatus() {
-		return resourcePackStatus;
+	public ResourcePackStatus getStatus() {
+		return status;
 	}
 
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
-		return new PacketPlayInResourcePackStatus(resourcePackStatus.getNMS());
+		return new PacketPlayInResourcePackStatus(status.getNMS());
 	}
 
 	public static enum ResourcePackStatus {
@@ -56,9 +56,9 @@ public class PacketPlayInResourcePackStatusEvent extends PacketPlayInEvent {
 		}
 
 		public static ResourcePackStatus getResourcePackStatus(EnumResourcePackStatus nms) {
-			for (ResourcePackStatus resourcePackStatus : ResourcePackStatus.values())
-				if (resourcePackStatus.getNMS().equals(nms))
-					return resourcePackStatus;
+			for (ResourcePackStatus status : values())
+				if (status.getNMS().equals(nms))
+					return status;
 			return null;
 		}
 	}

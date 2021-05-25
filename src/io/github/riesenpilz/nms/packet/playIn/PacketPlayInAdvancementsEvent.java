@@ -10,12 +10,12 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInAdvancements;
 
 /**
- * https://wiki.vg/Protocol#Advancement_Tab<br>
- * <br>
+ * https://wiki.vg/Protocol#Advancement_Tab
+ * <p>
  * Packet ID: 0x22<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
@@ -49,35 +49,11 @@ public class PacketPlayInAdvancementsEvent extends PacketPlayInEvent {
 		return status;
 	}
 
-	public static enum Status {
-		OPENED_TAB(PacketPlayInAdvancements.Status.OPENED_TAB),
-		CLOSED_SCREEN(PacketPlayInAdvancements.Status.CLOSED_SCREEN);
-
-		private PacketPlayInAdvancements.Status status;
-
-		private Status(PacketPlayInAdvancements.Status status) {
-			this.status = status;
-		}
-
-		public PacketPlayInAdvancements.Status getNMS() {
-			return status;
-		}
-
-		static Status getStatus(PacketPlayInAdvancements.Status status) {
-			for (Status status2 : Status.values())
-				if (status2.getNMS().equals(status))
-					return status2;
-			return null;
-		}
-
-	}
-
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInAdvancements packet = new PacketPlayInAdvancements();
-		new Field(PacketPlayInAdvancements.class, "a").set(packet, status.getNMS());
-		new Field(PacketPlayInAdvancements.class, "b").set(packet,
-				new MinecraftKey(tabID.getNamespace(), tabID.getKey()));
+		Field.set(packet, "a", status.getNMS());
+		Field.set(packet, "b", new MinecraftKey(tabID.getNamespace(), tabID.getKey()));
 		return packet;
 	}
 
@@ -89,5 +65,28 @@ public class PacketPlayInAdvancementsEvent extends PacketPlayInEvent {
 	@Override
 	public String getProtocolURLString() {
 		return "https://wiki.vg/Protocol#Advancement_Tab";
+	}
+
+	public enum Status {
+		OPENED_TAB(PacketPlayInAdvancements.Status.OPENED_TAB),
+		CLOSED_SCREEN(PacketPlayInAdvancements.Status.CLOSED_SCREEN);
+
+		private PacketPlayInAdvancements.Status nms;
+
+		Status(PacketPlayInAdvancements.Status nms) {
+			this.nms = nms;
+		}
+
+		public PacketPlayInAdvancements.Status getNMS() {
+			return nms;
+		}
+
+		static Status getStatus(PacketPlayInAdvancements.Status nms) {
+			for (Status status : values())
+				if (status.getNMS().equals(nms))
+					return status;
+			return null;
+		}
+
 	}
 }

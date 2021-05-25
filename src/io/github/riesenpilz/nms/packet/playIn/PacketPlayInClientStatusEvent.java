@@ -8,8 +8,8 @@ import net.minecraft.server.v1_16_R3.PacketPlayInClientCommand;
 import net.minecraft.server.v1_16_R3.PacketPlayInClientCommand.EnumClientCommand;
 
 /**
- * https://wiki.vg/Protocol#Client_Status<br>
- * <br>
+ * https://wiki.vg/Protocol#Client_Status
+ * <p>
  * Packet ID: 0x04<br>
  * State: Play<br>
  * Bound To: Server
@@ -40,6 +40,16 @@ public class PacketPlayInClientStatusEvent extends PacketPlayInEvent {
 		return new PacketPlayInClientCommand(status.getNMS());
 	}
 
+	@Override
+	public int getPacketID() {
+		return 0x04;
+	}
+
+	@Override
+	public String getProtocolURLString() {
+		return "https://wiki.vg/Protocol#Client_Status";
+	}
+
 	public static enum ClientStatus {
 		/**
 		 * Sent when the client is ready to complete login and when the client is ready
@@ -67,15 +77,5 @@ public class PacketPlayInClientStatusEvent extends PacketPlayInEvent {
 					return command2;
 			return null;
 		}
-	}
-
-	@Override
-	public int getPacketID() {
-		return 0x04;
-	}
-
-	@Override
-	public String getProtocolURLString() {
-		return "https://wiki.vg/Protocol#Client_Status";
 	}
 }

@@ -4,19 +4,19 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nms.block.CommandBlock.CommandBlockType;
+import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
-import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInSetCommandBlock;
 
 /**
- * https://wiki.vg/Protocol#Update_Command_Block<br>
- * <br>
+ * https://wiki.vg/Protocol#Update_Command_Block
+ * <p>
  * Packet ID: 0x26<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
@@ -36,8 +36,7 @@ public class PacketPlayInUpdateCommandBlockEvent extends PacketPlayInEvent {
 
 	public PacketPlayInUpdateCommandBlockEvent(Player injectedPlayer, PacketPlayInSetCommandBlock packet) {
 		super(injectedPlayer);
-		blockLocation = new Location(injectedPlayer.getWorld(), packet.b().getX(), packet.b().getY(),
-				packet.b().getZ());
+		blockLocation = PacketUtils.toLocation(packet.b(), injectedPlayer.getWorld());
 		command = packet.c();
 		trackOutput = packet.d();
 		conditional = packet.e();
@@ -83,13 +82,12 @@ public class PacketPlayInUpdateCommandBlockEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInSetCommandBlock packet = new PacketPlayInSetCommandBlock();
-		new Field(PacketPlayInSetCommandBlock.class, "a").set(packet,
-				new BlockPosition(blockLocation.getX(), blockLocation.getY(), blockLocation.getZ()));
-		new Field(PacketPlayInSetCommandBlock.class, "b").set(packet, command);
-		new Field(PacketPlayInSetCommandBlock.class, "c").set(packet, trackOutput);
-		new Field(PacketPlayInSetCommandBlock.class, "d").set(packet, conditional);
-		new Field(PacketPlayInSetCommandBlock.class, "e").set(packet, automatic);
-		new Field(PacketPlayInSetCommandBlock.class, "f").set(packet, commandBlockType);
+		Field.set(packet, "a", PacketUtils.toBlockPosition(blockLocation));
+		Field.set(packet, "b", command);
+		Field.set(packet, "c", trackOutput);
+		Field.set(packet, "d", conditional);
+		Field.set(packet, "e", automatic);
+		Field.set(packet, "f", commandBlockType);
 		return packet;
 	}
 

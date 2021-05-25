@@ -9,14 +9,14 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInRecipeSettings;
 
 /**
- * https://wiki.vg/Protocol#Set_Recipe_Book_State<br>
- * <br>
- * Replaces Recipe Book Data, type 1.<br>
- * <br>
+ * https://wiki.vg/Protocol#Set_Recipe_Book_State
+ * <p>
+ * Replaces Recipe Book Data, type 1.
+ * <p>
  * Packet ID: 0x1E<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
@@ -54,9 +54,9 @@ public class PacketPlayInRecipeSettingsEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInRecipeSettings packet = new PacketPlayInRecipeSettings();
-		new Field(PacketPlayInRecipeSettings.class, "a").set(packet, recipeBookType.getNMS());
-		new Field(PacketPlayInRecipeSettings.class, "b").set(packet, bookOpen);
-		new Field(PacketPlayInRecipeSettings.class, "c").set(packet, filterActive);
+		Field.set(packet, "a", recipeBookType.getNMS());
+		Field.set(packet, "b", bookOpen);
+		Field.set(packet, "c", filterActive);
 		return packet;
 	}
 

@@ -10,17 +10,17 @@ import net.minecraft.server.v1_16_R3.PacketLoginOutListener;
 import net.minecraft.server.v1_16_R3.PacketLoginOutSuccess;
 
 /**
- * https://wiki.vg/Protocol#Login_Success<br>
- * <br>
- * This packet switches the connection state to play.<br>
- * <br>
+ * https://wiki.vg/Protocol#Login_Success
+ * <p>
+ * This packet switches the connection state to play.
+ * <p>
  * <i>Note: The (notchian) server might take a bit to fully transition to the
  * Play state, so it's recommended to wait before sending Play packets, either
  * by setting a timeout, or waiting for Play packets from the server (usually
  * Player Info).<br>
  * The notchian client doesn't send any (non-keep alive) packets until the next
- * tick/time update packet.</i> <br>
- * <br>
+ * tick/time update packet.</i>
+ * <p>
  * Packet ID: 0x02<br>
  * State: Login<br>
  * Bound To: Client
@@ -39,7 +39,7 @@ public class PacketLoginOutLoginSuccessEvent extends PacketLoginOutEvent {
 
 	public PacketLoginOutLoginSuccessEvent(Player injectedPlayer, PacketLoginOutSuccess packet) {
 		super(injectedPlayer);
-		profile = (GameProfile) new Field(PacketLoginOutSuccess.class, "a").get(packet);
+		profile = Field.get(packet, "a", GameProfile.class);
 	}
 
 	public GameProfile getProfile() {
@@ -53,7 +53,7 @@ public class PacketLoginOutLoginSuccessEvent extends PacketLoginOutEvent {
 
 	@Override
 	public int getPacketID() {
-		return 2;
+		return 0x02;
 	}
 
 	@Override

@@ -4,22 +4,22 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
-import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInSetJigsaw;
 
 /**
- * https://wiki.vg/Protocol#Update_Jigsaw_Block<br>
- * <br>
- * Sent when Done is pressed on the Jigsaw Block interface.<br>
- * <br>
+ * https://wiki.vg/Protocol#Update_Jigsaw_Block
+ * <p>
+ * Sent when Done is pressed on the Jigsaw Block interface.
+ * <p>
  * Packet ID: 0x29<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
@@ -40,8 +40,7 @@ public class PacketPlayInUpdateJigsawBlockEvent extends PacketPlayInEvent {
 	@SuppressWarnings("deprecation")
 	public PacketPlayInUpdateJigsawBlockEvent(Player injectedPlayer, PacketPlayInSetJigsaw packet) {
 		super(injectedPlayer);
-		blockLocation = new Location(injectedPlayer.getWorld(), packet.b().getX(), packet.b().getY(),
-				packet.b().getZ());
+		blockLocation = PacketUtils.toLocation(packet.b(), injectedPlayer.getWorld());
 		name = new NamespacedKey(packet.c().getNamespace(), packet.c().getKey());
 		target = new NamespacedKey(packet.d().getNamespace(), packet.d().getKey());
 		pool = new NamespacedKey(packet.e().getNamespace(), packet.e().getKey());
@@ -87,39 +86,13 @@ public class PacketPlayInUpdateJigsawBlockEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInSetJigsaw packet = new PacketPlayInSetJigsaw();
-		new Field(PacketPlayInSetJigsaw.class, "a").set(packet,
-				new BlockPosition(blockLocation.getX(), blockLocation.getY(), blockLocation.getZ()));
-		new Field(PacketPlayInSetJigsaw.class, "b").set(packet, new MinecraftKey(name.getNamespace(), name.getKey()));
-		new Field(PacketPlayInSetJigsaw.class, "c").set(packet,
-				new MinecraftKey(target.getNamespace(), target.getKey()));
-		new Field(PacketPlayInSetJigsaw.class, "d").set(packet, new MinecraftKey(pool.getNamespace(), pool.getKey()));
-		new Field(PacketPlayInSetJigsaw.class, "e").set(packet, finalState);
-		new Field(PacketPlayInSetJigsaw.class, "f").set(packet, jointType.getNMS());
+		Field.set(packet, "a", PacketUtils.toBlockPosition(blockLocation));
+		Field.set(packet, "b", new MinecraftKey(name.getNamespace(), name.getKey()));
+		Field.set(packet, "c", new MinecraftKey(target.getNamespace(), target.getKey()));
+		Field.set(packet, "d", new MinecraftKey(pool.getNamespace(), pool.getKey()));
+		Field.set(packet, "e", finalState);
+		Field.set(packet, "f", jointType.getNMS());
 		return packet;
-	}
-
-	public static enum JointType {
-
-		ROTATABLE(net.minecraft.server.v1_16_R3.TileEntityJigsaw.JointType.ROLLABLE),
-		ALIGNED(net.minecraft.server.v1_16_R3.TileEntityJigsaw.JointType.ALIGNED);
-
-		private net.minecraft.server.v1_16_R3.TileEntityJigsaw.JointType nms;
-
-		private JointType(net.minecraft.server.v1_16_R3.TileEntityJigsaw.JointType nms) {
-			this.nms = nms;
-		}
-
-		public net.minecraft.server.v1_16_R3.TileEntityJigsaw.JointType getNMS() {
-			return nms;
-		}
-
-		public static JointType getJointType(net.minecraft.server.v1_16_R3.TileEntityJigsaw.JointType nms) {
-			for (JointType jointType : JointType.values())
-				if (jointType.getNMS().equals(nms))
-					return jointType;
-			return null;
-		}
-
 	}
 
 	@Override
@@ -130,5 +103,29 @@ public class PacketPlayInUpdateJigsawBlockEvent extends PacketPlayInEvent {
 	@Override
 	public String getProtocolURLString() {
 		return "https://wiki.vg/Protocol#Update_Jigsaw_Block";
+	}
+
+	public enum JointType {
+
+		ROTATABLE(net.minecraft.server.v1_16_R3.TileEntityJigsaw.JointType.ROLLABLE),
+		ALIGNED(net.minecraft.server.v1_16_R3.TileEntityJigsaw.JointType.ALIGNED);
+
+		private net.minecraft.server.v1_16_R3.TileEntityJigsaw.JointType nms;
+
+		JointType(net.minecraft.server.v1_16_R3.TileEntityJigsaw.JointType nms) {
+			this.nms = nms;
+		}
+
+		public net.minecraft.server.v1_16_R3.TileEntityJigsaw.JointType getNMS() {
+			return nms;
+		}
+
+		public static JointType getJointType(net.minecraft.server.v1_16_R3.TileEntityJigsaw.JointType nms) {
+			for (JointType type : values())
+				if (type.getNMS().equals(nms))
+					return type;
+			return null;
+		}
+
 	}
 }

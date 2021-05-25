@@ -10,21 +10,21 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInSettings;
 
 /**
- * https://wiki.vg/Protocol#Client_Settings<br>
- * <br>
- * Sent when the player connects, or when settings are changed.<br>
- * <br>
+ * https://wiki.vg/Protocol#Client_Settings
+ * <p>
+ * Sent when the player connects, or when settings are changed.
+ * <p>
  * Packet ID: 0x05<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
 public class PacketPlayInSettingsEvent extends PacketPlayInEvent {
 
 	/**
-	 * e.g. en_GB. (16 chars)
+	 * e.g. en_GB. (16 chars max)
 	 */
 	public String locale;
 
@@ -62,21 +62,16 @@ public class PacketPlayInSettingsEvent extends PacketPlayInEvent {
 		chatVisibility = ChatVisibilitySetting.getChatVisibility(packet.d());
 		chatColors = packet.e();
 
-		capeEnabled = isKthBitSet(packet.f(), 1);
-		jacketEnabled = isKthBitSet(packet.f(), 2);
-		leftSleeveEnabled = isKthBitSet(packet.f(), 3);
-		rightSleeveEnabled = isKthBitSet(packet.f(), 4);
-		leftPantsLegEnabled = isKthBitSet(packet.f(), 5);
-		rightPantsLegEnabled = isKthBitSet(packet.f(), 6);
-		capeEnabled = isKthBitSet(packet.f(), 7);
+		final int i = packet.f();
+		capeEnabled = (i & 1) == 1;
+		jacketEnabled = (i & 2) == 2;
+		leftSleeveEnabled = (i & 4) == 4;
+		rightSleeveEnabled = (i & 8) == 8;
+		leftPantsLegEnabled = (i & 16) == 16;
+		rightPantsLegEnabled = (i & 32) == 32;
+		capeEnabled = (i & 64) == 64;
 
 		mainHand = MainHandSetting.getMainHand(packet.getMainHand());
-	}
-
-	private boolean isKthBitSet(int n, int k) {
-		if ((n & (1 << (k - 1))) > 0)
-			return true;
-		return false;
 	}
 
 	public PacketPlayInSettingsEvent(Player injectedPlayer, String locale, int viewDistance,
@@ -151,8 +146,8 @@ public class PacketPlayInSettingsEvent extends PacketPlayInEvent {
 		final PacketPlayInSettings packet = new PacketPlayInSettings();
 		packet.viewDistance = viewDistance;
 		packet.locale = locale;
-		new Field(PacketPlayInSettings.class, "c").set(packet, chatVisibility.getNMS());
-		new Field(PacketPlayInSettings.class, "d").set(packet, chatColors);
+		Field.set(packet, "c", chatVisibility.getNMS());
+		Field.set(packet, "d", chatColors);
 		int e = capeEnabled ? 1 : 0;
 		e += jacketEnabled ? 2 : 0;
 		e += leftSleeveEnabled ? 4 : 0;
@@ -160,8 +155,8 @@ public class PacketPlayInSettingsEvent extends PacketPlayInEvent {
 		e += leftPantsLegEnabled ? 16 : 0;
 		e += rightPantsLegEnabled ? 32 : 0;
 		e += hatEnabled ? 64 : 0;
-		new Field(PacketPlayInSettings.class, "e").set(packet, e);
-		new Field(PacketPlayInSettings.class, "f").set(packet, mainHand.getNMS());
+		Field.set(packet, "e", e);
+		Field.set(packet, "f", mainHand.getNMS());
 		return packet;
 	}
 

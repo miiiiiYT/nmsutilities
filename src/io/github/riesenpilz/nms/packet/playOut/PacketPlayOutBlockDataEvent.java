@@ -13,10 +13,10 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
 import net.minecraft.server.v1_16_R3.PacketPlayOutTileEntityData;
 
 /**
- * https://wiki.vg/Protocol#Block_Entity_Data<br>
- * <br>
- * Sets the block entity associated with the block at the given location.<br>
- * <br>
+ * https://wiki.vg/Protocol#Block_Entity_Data
+ * <p>
+ * Sets the block entity associated with the block at the given location.
+ * <p>
  * Packet ID: 0x09<br>
  * State: Play<br>
  * Bound To: Client
@@ -36,6 +36,14 @@ public class PacketPlayOutBlockDataEvent extends PacketPlayOutEvent {
 				injectedPlayer.getWorld());
 		action = BlockAction.getByID((int) new Field(packet.getClass(), "b").get(packet));
 		nbtTag = new NBTTag((NBTTagCompound) new Field(packet.getClass(), "c").get(packet));
+	}
+
+	public PacketPlayOutBlockDataEvent(Player injectedPlayer, Location blockLocation, BlockAction action,
+			NBTTag nbtTag) {
+		super(injectedPlayer);
+		this.blockLocation = blockLocation;
+		this.action = action;
+		this.nbtTag = nbtTag;
 	}
 
 	public Location getBlockLocation() {

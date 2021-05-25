@@ -5,24 +5,24 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.entity.player.DigType;
+import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
-import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInBlockDig;
-import net.minecraft.server.v1_16_R3.PacketPlayInBlockDig.EnumPlayerDigType;
 
 /**
- * https://wiki.vg/Protocol#Player_Digging<br>
- * <br>
+ * https://wiki.vg/Protocol#Player_Digging
+ * <p>
  * Sent when the player mines a block. A Notchian server only accepts digging
  * packets with coordinates within a 6-unit radius between the center of the
- * block and 1.5 units from the player's feet (not their eyes).<br>
- * <br>
+ * block and 1.5 units from the player's feet (not their eyes).
+ * <p>
  * Packet ID: 0x1B<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
@@ -68,64 +68,10 @@ public class PacketPlayInBlockDigEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInBlockDig packet = new PacketPlayInBlockDig();
-		new Field(PacketPlayInBlockDig.class, "a").set(packet,
-				new BlockPosition(blockLocation.getX(), blockLocation.getY(), blockLocation.getZ()));
-		new Field(PacketPlayInBlockDig.class, "b").set(packet, CraftBlock.blockFaceToNotch(blockFace));
-		new Field(PacketPlayInBlockDig.class, "c").set(packet, digType.getNMS());
+		Field.set(packet, "a", PacketUtils.toBlockPosition(blockLocation));
+		Field.set(packet, "b", CraftBlock.blockFaceToNotch(blockFace));
+		Field.set(packet, "c", digType.getNMS());
 		return packet;
-	}
-
-	public static enum DigType {
-
-		START_DESTROY_BLOCK(EnumPlayerDigType.START_DESTROY_BLOCK),
-		/**
-		 * Sent when the player lets go of the Mine Block key (default: left click).
-		 */
-		CANCEL_DESTROY_BLOCK(EnumPlayerDigType.ABORT_DESTROY_BLOCK),
-		/**
-		 * Sent when the client thinks it is finished.
-		 */
-		FINISH_DESTROY_BLOCK(EnumPlayerDigType.STOP_DESTROY_BLOCK),
-		/**
-		 * Triggered by using the Drop Item key (default: Q) with the modifier to drop
-		 * the entire selected stack (default: depends on OS). Location is always set to
-		 * 0/0/0, Face is always set to {@link BlockFace#DOWN}.
-		 */
-		DROP_ALL_ITEMS(EnumPlayerDigType.DROP_ALL_ITEMS),
-		/**
-		 * Triggered by using the Drop Item key (default: Q). Location is always set to
-		 * 0/0/0, Face is always set to {@link BlockFace#DOWN}.
-		 */
-		DROP_ITEM(EnumPlayerDigType.DROP_ITEM),
-		/**
-		 * Indicates that the currently held item should have its state updated such as
-		 * eating food, pulling back bows, using buckets, etc. Location is always set to
-		 * 0/0/0, Face is always set to {@link BlockFace#DOWN}.
-		 */
-		RELEASE_USE_ITEM(EnumPlayerDigType.RELEASE_USE_ITEM),
-		/**
-		 * Used to swap or assign an item to the second hand. Location is always set to
-		 * 0/0/0, Face is always set to {@link BlockFace#DOWN}.
-		 * 
-		 */
-		SWAP_ITEM_WITH_OFFHAND(EnumPlayerDigType.SWAP_ITEM_WITH_OFFHAND);
-
-		private EnumPlayerDigType nms;
-
-		private DigType(EnumPlayerDigType nms) {
-			this.nms = nms;
-		}
-
-		public EnumPlayerDigType getNMS() {
-			return nms;
-		}
-
-		public static DigType getPlayerDigType(EnumPlayerDigType nms) {
-			for (DigType clickType : DigType.values())
-				if (clickType.getNMS().equals(nms))
-					return clickType;
-			return null;
-		}
 	}
 
 	@Override

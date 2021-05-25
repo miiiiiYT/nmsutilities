@@ -8,11 +8,11 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInDifficultyLock;
 
 /**
- * https://wiki.vg/Protocol#Lock_Difficulty<br>
- * <br>
+ * https://wiki.vg/Protocol#Lock_Difficulty
+ * <p>
  * Must have at least op level 2 to use. Appears to only be used on
- * singleplayer; the difficulty buttons are still disabled in multiplayer.<br>
- * <br>
+ * singleplayer; the difficulty buttons are still disabled in multiplayer.
+ * <p>
  * Packet ID: 0x11<br>
  * State: Play<br>
  * Bound To: Server
@@ -22,26 +22,26 @@ import net.minecraft.server.v1_16_R3.PacketPlayInDifficultyLock;
  */
 public class PacketPlayInDifficultyLockEvent extends PacketPlayInEvent {
 
-	private boolean look;
+	private boolean lock;
 
 	public PacketPlayInDifficultyLockEvent(Player injectedPlayer, PacketPlayInDifficultyLock packet) {
 		super(injectedPlayer);
-		look = packet.b();
+		lock = packet.b();
 	}
 
-	public PacketPlayInDifficultyLockEvent(Player injectedPlayer, boolean look) {
+	public PacketPlayInDifficultyLockEvent(Player injectedPlayer, boolean lock) {
 		super(injectedPlayer);
-		this.look = look;
+		this.lock = lock;
 	}
 
-	public boolean isLook() {
-		return look;
+	public boolean isLock() {
+		return lock;
 	}
 
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInDifficultyLock packet = new PacketPlayInDifficultyLock();
-		new Field(PacketPlayInDifficultyLock.class, "a").set(packet, look);
+		Field.set(packet, "a", lock);
 		return packet;
 	}
 

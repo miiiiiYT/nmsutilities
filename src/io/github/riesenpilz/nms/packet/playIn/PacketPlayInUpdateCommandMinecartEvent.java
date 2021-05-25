@@ -1,27 +1,25 @@
 package io.github.riesenpilz.nms.packet.playIn;
 
 import org.bukkit.entity.Player;
-import org.bukkit.entity.minecart.CommandMinecart;
 
-import io.github.riesenpilz.nms.entity.Entity;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInSetCommandMinecart;
 
 /**
- * https://wiki.vg/Protocol#Update_Command_Block_Minecart<br>
- * <br>
+ * https://wiki.vg/Protocol#Update_Command_Block_Minecart
+ * <p>
  * Packet ID: 0x27<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
 public class PacketPlayInUpdateCommandMinecartEvent extends PacketPlayInEvent {
 
-	private CommandMinecart commandMinecart;
+	private int entityID;
 	private String command;
 
 	/**
@@ -32,23 +30,21 @@ public class PacketPlayInUpdateCommandMinecartEvent extends PacketPlayInEvent {
 
 	public PacketPlayInUpdateCommandMinecartEvent(Player injectedPlayer, PacketPlayInSetCommandMinecart packet) {
 		super(injectedPlayer);
-		final int entityID = (int) new Field(PacketPlayInSetCommandMinecart.class, "a").get(packet);
-		final org.bukkit.entity.Entity entity = new Entity(entityID, injectedPlayer.getWorld()).getEntity();
-		commandMinecart = entity instanceof CommandMinecart ? (CommandMinecart) entity : null;
+		entityID = Field.get(packet, "a", int.class);
 		command = packet.b();
 		trackOutput = packet.c();
 	}
 
-	public PacketPlayInUpdateCommandMinecartEvent(Player injectedPlayer, CommandMinecart commandMinecart,
-			String command, boolean trackOutput) {
+	public PacketPlayInUpdateCommandMinecartEvent(Player injectedPlayer, int entityID, String command,
+			boolean trackOutput) {
 		super(injectedPlayer);
-		this.commandMinecart = commandMinecart;
+		this.entityID = entityID;
 		this.command = command;
 		this.trackOutput = trackOutput;
 	}
 
-	public CommandMinecart getCommandMinecart() {
-		return commandMinecart;
+	public int getEntityID() {
+		return entityID;
 	}
 
 	public String getCommand() {
@@ -62,9 +58,9 @@ public class PacketPlayInUpdateCommandMinecartEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInSetCommandMinecart packet = new PacketPlayInSetCommandMinecart();
-		new Field(PacketPlayInSetCommandMinecart.class, "a").set(packet, commandMinecart.getEntityId());
-		new Field(PacketPlayInSetCommandMinecart.class, "b").set(packet, command);
-		new Field(PacketPlayInSetCommandMinecart.class, "c").set(packet, trackOutput);
+		Field.set(packet, "a", entityID);
+		Field.set(packet, "b", command);
+		Field.set(packet, "c", trackOutput);
 		return packet;
 	}
 

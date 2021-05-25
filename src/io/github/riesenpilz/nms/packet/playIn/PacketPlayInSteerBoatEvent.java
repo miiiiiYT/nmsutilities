@@ -7,11 +7,11 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInBoatMove;
 
 /**
- * https://wiki.vg/Protocol#Steer_Boat<br>
- * <br>
+ * https://wiki.vg/Protocol#Steer_Boat
+ * <p>
  * Used to visually update whether boat paddles are turning. The server will
- * update the Boat entity metadata to match the values here.<br>
- * <br>
+ * update the Boat entity metadata to match the values here.
+ * <p>
  * Packet ID: 0x17<br>
  * State: Play<br>
  * Bound To: Server

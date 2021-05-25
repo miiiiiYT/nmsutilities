@@ -17,9 +17,9 @@ public enum RecipeBookType {
 	}
 
 	public static RecipeBookType getRecipeBookType(net.minecraft.server.v1_16_R3.RecipeBookType nms) {
-		for (RecipeBookType recipeBookType : RecipeBookType.values())
-			if (recipeBookType.getNMS().equals(nms))
-				return recipeBookType;
+		for (RecipeBookType type : values())
+			if (type.getNMS().equals(nms))
+				return type;
 		return null;
 	}
 }

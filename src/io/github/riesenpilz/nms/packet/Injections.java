@@ -29,17 +29,17 @@ import io.github.riesenpilz.nms.packet.playIn.PacketPlayInBlockPlaceEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInChangeBeaconEffectEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInChangeHeldItemEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInChatEvent;
-import io.github.riesenpilz.nms.packet.playIn.PacketPlayInClickWindowButtonEvent;
+import io.github.riesenpilz.nms.packet.playIn.PacketPlayInClickInventoryButtonEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInClientStatusEvent;
-import io.github.riesenpilz.nms.packet.playIn.PacketPlayInCloseWindowEvent;
+import io.github.riesenpilz.nms.packet.playIn.PacketPlayInCloseInventoryEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInCustomPayloadEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInDifficultyChangeEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInEditBookEvent;
-import io.github.riesenpilz.nms.packet.playIn.PacketPlayInEntityActionEvent;
+import io.github.riesenpilz.nms.packet.playIn.PacketPlayInActionEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInEntityNBTQueryEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInGenerateStructureEvent;
-import io.github.riesenpilz.nms.packet.playIn.PacketPlayInInteractWithEntityEvent;
+import io.github.riesenpilz.nms.packet.playIn.PacketPlayInEntityInteractEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInItemNameEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInKeepAliveEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInMovementEvent;
@@ -62,8 +62,8 @@ import io.github.riesenpilz.nms.packet.playIn.PacketPlayInUpdateSignEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInUpdateStructureBlockEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInUseItemEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInVehicleMoveEvent;
-import io.github.riesenpilz.nms.packet.playIn.PacketPlayInWindowClickEvent;
-import io.github.riesenpilz.nms.packet.playIn.PacketPlayInWindowConfirmationEvent;
+import io.github.riesenpilz.nms.packet.playIn.PacketPlayInInventoryClickEvent;
+import io.github.riesenpilz.nms.packet.playIn.PacketPlayInInventoryConfirmEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSpawnEntityEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSpawnLivingEntityEvent;
@@ -227,21 +227,21 @@ public class Injections implements Listener {
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayInTransaction) {
-			final PacketPlayInEvent event = new PacketPlayInWindowConfirmationEvent(player,
+			final PacketPlayInEvent event = new PacketPlayInInventoryConfirmEvent(player,
 					(PacketPlayInTransaction) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayInEnchantItem) {
-			final PacketPlayInEvent event = new PacketPlayInClickWindowButtonEvent(player,
+			final PacketPlayInEvent event = new PacketPlayInClickInventoryButtonEvent(player,
 					(PacketPlayInEnchantItem) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayInWindowClick) {
-			final PacketPlayInEvent event = new PacketPlayInWindowClickEvent(player, (PacketPlayInWindowClick) msg);
+			final PacketPlayInEvent event = new PacketPlayInInventoryClickEvent(player, (PacketPlayInWindowClick) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayInCloseWindow) {
-			final PacketPlayInEvent event = new PacketPlayInCloseWindowEvent(player, (PacketPlayInCloseWindow) msg);
+			final PacketPlayInEvent event = new PacketPlayInCloseInventoryEvent(player, (PacketPlayInCloseWindow) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayInCustomPayload) {
@@ -253,7 +253,7 @@ public class Injections implements Listener {
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayInUseEntity) {
-			final PacketPlayInEvent event = new PacketPlayInInteractWithEntityEvent(player,
+			final PacketPlayInEvent event = new PacketPlayInEntityInteractEvent(player,
 					(PacketPlayInUseEntity) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
@@ -310,7 +310,7 @@ public class Injections implements Listener {
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayInEntityAction) {
-			final PacketPlayInEvent event = new PacketPlayInEntityActionEvent(player, (PacketPlayInEntityAction) msg);
+			final PacketPlayInEvent event = new PacketPlayInActionEvent(player, (PacketPlayInEntityAction) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayInSteerVehicle) {

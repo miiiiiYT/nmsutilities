@@ -9,11 +9,11 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInDifficultyChange;
 
 /**
- * https://wiki.vg/Protocol#Set_Difficulty<br>
- * <br>
+ * https://wiki.vg/Protocol#Set_Difficulty
+ * <p>
  * Must have at least op level 2 to use. Appears to only be used on
- * singleplayer; the difficulty buttons are still disabled in multiplayer..<br>
- * <br>
+ * singleplayer; the difficulty buttons are still disabled in multiplayer..
+ * <p>
  * Packet ID: 0x02<br>
  * State: Play<br>
  * Bound To: Server
@@ -23,9 +23,6 @@ import net.minecraft.server.v1_16_R3.PacketPlayInDifficultyChange;
  */
 public class PacketPlayInDifficultyChangeEvent extends PacketPlayInEvent {
 
-	/**
-	 * New difficulty
-	 */
 	private Difficulty difficulty;
 
 	@SuppressWarnings("deprecation")

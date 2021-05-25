@@ -8,10 +8,10 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInHeldItemSlot;
 
 /**
- * https://wiki.vg/Protocol#Held_Item_Change_.28serverbound.29<br>
- * <br>
- * Sent when the player changes the slot selection.<br>
- * <br>
+ * https://wiki.vg/Protocol#Held_Item_Change_.28serverbound.29
+ * <p>
+ * Sent when the player changes the slot selection.
+ * <p>
  * Packet ID: 0x25<br>
  * State: Play<br>
  * Bound To: Server
@@ -43,7 +43,7 @@ public class PacketPlayInChangeHeldItemEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInHeldItemSlot packet = new PacketPlayInHeldItemSlot();
-		new Field(PacketPlayInHeldItemSlot.class, "itemInHandIndex").set(packet, slot);
+		Field.set(packet, "itemInHandIndex", slot);
 		return packet;
 	}
 

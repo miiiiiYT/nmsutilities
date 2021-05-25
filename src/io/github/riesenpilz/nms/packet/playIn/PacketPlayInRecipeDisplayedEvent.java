@@ -10,10 +10,10 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInRecipeDisplayed;
 
 /**
- * https://wiki.vg/Protocol#Set_Displayed_Recipe<br>
- * <br>
- * Replaces Recipe Book Data, type 0.<br>
- * <br>
+ * https://wiki.vg/Protocol#Set_Displayed_Recipe
+ * <p>
+ * Replaces Recipe Book Data, type 0.
+ * <p>
  * Packet ID: 0x1F<br>
  * State: Play<br>
  * Bound To: Server
@@ -43,8 +43,7 @@ public class PacketPlayInRecipeDisplayedEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInRecipeDisplayed packet = new PacketPlayInRecipeDisplayed();
-		new Field(PacketPlayInRecipeDisplayed.class, "a").set(packet,
-				new MinecraftKey(recipeID.getNamespace(), recipeID.getKey()));
+		Field.set(packet, "a", new MinecraftKey(recipeID.getNamespace(), recipeID.getKey()));
 		return packet;
 	}
 

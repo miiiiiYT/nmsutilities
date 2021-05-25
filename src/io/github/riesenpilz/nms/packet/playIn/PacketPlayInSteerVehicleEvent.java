@@ -8,14 +8,14 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInSteerVehicle;
 
 /**
- * https://wiki.vg/Protocol#Steer_Vehicle<br>
- * <br>
- * Also known as 'Input' packet.<br>
- * <br>
+ * https://wiki.vg/Protocol#Steer_Vehicle
+ * <p>
+ * Also known as 'Input' packet.
+ * <p>
  * Packet ID: 0x1D<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
@@ -69,10 +69,10 @@ public class PacketPlayInSteerVehicleEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInSteerVehicle packet = new PacketPlayInSteerVehicle();
-		new Field(PacketPlayInSteerVehicle.class, "a").set(packet, sideways);
-		new Field(PacketPlayInSteerVehicle.class, "b").set(packet, forward);
-		new Field(PacketPlayInSteerVehicle.class, "c").set(packet, jump);
-		new Field(PacketPlayInSteerVehicle.class, "d").set(packet, unmount);
+		Field.set(packet, "a", sideways);
+		Field.set(packet, "b", forward);
+		Field.set(packet, "c", jump);
+		Field.set(packet, "d", unmount);
 		return packet;
 	}
 

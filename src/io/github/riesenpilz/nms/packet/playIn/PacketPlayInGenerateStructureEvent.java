@@ -3,21 +3,21 @@ package io.github.riesenpilz.nms.packet.playIn;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
-import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInJigsawGenerate;
 
 /**
- * https://wiki.vg/Protocol#Generate_Structure<br>
- * <br>
- * Sent when Generate is pressed on the Jigsaw Block interface.<br>
- * <br>
+ * https://wiki.vg/Protocol#Generate_Structure
+ * <p>
+ * Sent when Generate is pressed on the Jigsaw Block interface.
+ * <p>
  * Packet ID: 0x0F<br>
  * State: Play<br>
  * Bound To: Server
- * 
+ *
  * @author Martin
  *
  */
@@ -33,8 +33,7 @@ public class PacketPlayInGenerateStructureEvent extends PacketPlayInEvent {
 
 	public PacketPlayInGenerateStructureEvent(Player injectedPlayer, PacketPlayInJigsawGenerate packet) {
 		super(injectedPlayer);
-		blockLocation = new Location(injectedPlayer.getWorld(), packet.b().getX(), packet.b().getY(),
-				packet.b().getZ());
+		blockLocation = PacketUtils.toLocation(packet.b(), injectedPlayer.getWorld());
 		levels = packet.c();
 		keepJigsaws = packet.d();
 	}
@@ -62,10 +61,9 @@ public class PacketPlayInGenerateStructureEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInJigsawGenerate packet = new PacketPlayInJigsawGenerate();
-		new Field(PacketPlayInJigsawGenerate.class, "a").set(packet,
-				new BlockPosition(blockLocation.getX(), blockLocation.getY(), blockLocation.getZ()));
-		new Field(PacketPlayInJigsawGenerate.class, "b").set(packet, levels);
-		new Field(PacketPlayInJigsawGenerate.class, "c").set(packet, keepJigsaws);
+		Field.set(packet, "a", PacketUtils.toBlockPosition(blockLocation));
+		Field.set(packet, "b", levels);
+		Field.set(packet, "c", keepJigsaws);
 		return packet;
 	}
 
