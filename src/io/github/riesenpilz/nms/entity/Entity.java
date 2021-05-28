@@ -1,77 +1,202 @@
 package io.github.riesenpilz.nms.entity;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
-
-import com.google.gson.JsonObject;
+import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 
 import io.github.riesenpilz.nms.nbt.NBTTag;
+import io.github.riesenpilz.nms.packet.PacketEvent;
+import io.github.riesenpilz.nms.reflections.Field;
 import io.github.riesenpilz.nms.world.World;
+import net.minecraft.server.v1_16_R3.EntityTypes;
 import net.minecraft.server.v1_16_R3.NBTTagCompound;
-import net.minecraft.server.v1_16_R3.WorldServer;
+import net.minecraft.server.v1_16_R3.Packet;
 
-public class Entity {
-	private final org.bukkit.entity.Entity entity;
+public abstract class Entity {
 
-	public Entity(org.bukkit.entity.Entity entity) {
-		this.entity = entity;
+	private final net.minecraft.server.v1_16_R3.Entity entity;
+
+	@SuppressWarnings("deprecation")
+	public Entity(EntityType type, World world, PacketEvent packet) {
+		entity = new net.minecraft.server.v1_16_R3.Entity(EntityTypes.a(type.getName()).get(), world.getNMS()) {
+
+			@Override
+			protected void saveData(NBTTagCompound arg0) {
+				arg0.a(Entity.this.saveData().getNMS());
+			}
+
+			@Override
+			protected void loadData(NBTTagCompound arg0) {
+				Entity.this.loadData(new NBTTag(arg0));
+			}
+
+			@Override
+			protected void initDatawatcher() {
+				initDatawatcher();
+
+			}
+
+			@Override
+			public Packet<?> P() {
+				return packet.getNMS();
+			}
+		};
 	}
 
-	public Entity(net.minecraft.server.v1_16_R3.Entity nms) {
-		this.entity = Bukkit.getEntity(nms.getUniqueID());
+	private Entity(net.minecraft.server.v1_16_R3.Entity nms) {
+		this.entity = nms;
 	}
 
-	public Entity(int entityID, org.bukkit.World world) {
-		final WorldServer nmsWorld = new World(world).getNMS();
-		this.entity = Bukkit.getEntity(nmsWorld.getEntity(entityID).getUniqueID());
+	public static Entity fromNMS(net.minecraft.server.v1_16_R3.Entity nms) {
+		return new Entity(nms) {
+
+			@Override
+			public NBTTag saveData() {
+				return new NBTTag(nms.save(new NBTTagCompound()));
+			}
+
+			@Override
+			public void loadData(NBTTag tag) {
+				nms.load(tag.getNMS());
+			}
+
+			@Override
+			protected void initDatawatcher() {
+				// TODO
+			}
+		};
 	}
 
-	public Entity(UUID uuid) {
-		this.entity = Bukkit.getEntity(uuid);
-	}
+	protected abstract void initDatawatcher();
 
-	public net.minecraft.server.v1_16_R3.Entity getNMS() {
-		return ((CraftEntity) entity).getHandle();
-	}
+	public abstract void loadData(NBTTag tag);
 
-	public void setNBTTag(NBTTag nbtTag) {
-		getNMS().load(nbtTag.getNMS());
-	}
+	public abstract NBTTag saveData();
 
-	public NBTTag getNBTTag() {
-		return new NBTTag(getNMS().save(new NBTTagCompound()));
-	}
-
-	public void setPermaTag(JsonObject jsonObject) {
-		JsonObject config = getWorld().getConfig("entities");
-		config.add(getUUIDString(), jsonObject);
-		getWorld().setConfig("entities", config);
-	}
-
-	public JsonObject getPermaTag() {
-		final JsonObject config = getWorld().getConfig("entities");
-		return config.has(getUUIDString()) ? config.getAsJsonObject(getUUIDString()) : new JsonObject();
-	}
-
-	public void removePermaTag() {
-		setPermaTag(null);
-	}
-
-	public World getWorld() {
-		return new World(getEntity().getWorld());
-	}
-
-	public org.bukkit.entity.Entity getEntity() {
+	public final net.minecraft.server.v1_16_R3.Entity getNMS() {
 		return entity;
 	}
 
-	public String getUUIDString() {
-		return getEntity().getUniqueId().toString();
+	public final int getID() {
+		return entity.getId();
 	}
 
-	public int getID() {
-		return entity.getEntityId();
+	@SuppressWarnings("deprecation")
+	public final EntityType getType() {
+		return EntityType.fromName(entity.getEntityType().f());
 	}
+
+	public final World getWorld() {
+		return new World(entity.world);
+	}
+
+	public final void setWorld(World world) {
+		entity.world = world.getNMS();
+	}
+
+	public final List<Entity> getPassengers() {
+		List<Entity> passengers = new ArrayList<>();
+		for (net.minecraft.server.v1_16_R3.Entity nms : entity.passengers)
+			passengers.add(Entity.fromNMS(nms));
+		return passengers;
+	}
+
+	public final void setPassengers(List<Entity> passengers) {
+		List<net.minecraft.server.v1_16_R3.Entity> nms = new ArrayList<>();
+		for (Entity entity : passengers)
+			nms.add(entity.getNMS());
+		for (int i = 0; i < entity.getPassengers().size(); i++)
+			entity.passengers.remove(i);
+		entity.passengers.addAll(nms);
+	}
+
+	public final void addPassanger(Entity entity) {
+		this.entity.passengers.add(entity.getNMS());
+	}
+
+	public final void setVehicle(Entity entity) {
+		Field.set(this.entity, "vehicle", entity);
+	}
+
+	public final Entity getVehicle() {
+		return fromNMS(entity.getVehicle());
+	}
+
+	public final boolean hasVehicle() {
+		return getVehicle() != null;
+	}
+
+	public Entity getRootVehicle() {
+		return Entity.fromNMS(entity.getRootVehicle());
+	}
+
+	public final boolean isAttachedToPlayer() {
+		return entity.attachedToPlayer;
+	}
+
+	public final void setAttachedToPlayer(boolean attachedToPlayer) {
+		entity.attachedToPlayer = attachedToPlayer;
+	}
+
+	public final void setLastLocation(Location location) {
+		entity.lastX = location.getX();
+		entity.lastY = location.getX();
+		entity.lastZ = location.getX();
+		entity.lastYaw = location.getYaw();
+		entity.lastPitch = location.getPitch();
+	}
+
+	public final Location getLastLocation() {
+		return new Location(null, entity.lastX, entity.lastY, entity.lastZ, entity.lastYaw, entity.lastPitch);
+	}
+
+	public final Set<Entity> getAllPassangers() {
+		Set<Entity> entities = new HashSet<>();
+		for (net.minecraft.server.v1_16_R3.Entity nms : entity.getAllPassengers())
+			entities.add(Entity.fromNMS(nms));
+		return entities;
+	}
+
+	public final void setLocation(Location location) {
+		entity.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+	}
+
+	public final Location getLocation() {
+		return new Location(new World(entity.world).getWorld(), entity.locX(), entity.locY(), entity.locZ(), entity.yaw, entity.pitch);
+	}
+
+	/**
+	 * public boolean i; <br>
+	 * public boolean positionChanged; <br>
+	 * public boolean v; <br>
+	 * public boolean velocityChanged; <br>
+	 * public boolean dead; <br>
+	 * public float z; <br>
+	 * public float A; <br>
+	 * public float B; <br>
+	 * public float fallDistance; <br>
+	 * public double D; <br>
+	 * public double E; <br>
+	 * public double F; <br>
+	 * public float G; <br>
+	 * public boolean noclip; <br>
+	 * public float I; <br>
+	 * public int ticksLived; <br>
+	 * public int fireTicks; <br>
+	 * public boolean inWater; <br>
+	 * public int noDamageTicks; <br>
+	 * public boolean inChunk; <br>
+	 * public int chunkX; <br>
+	 * public int chunkY; <br>
+	 * public int chunkZ; <br>
+	 * public boolean Y; <br>
+	 * public boolean impulse; <br>
+	 * public int portalCooldown; <br>
+	 * public boolean glowing; <br>
+	 * 
+	 */
 }

@@ -20,20 +20,20 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutWindowData;
  * @author Martin
  *
  */
-public class PacketPlayOutWindowPropertyEvent extends PacketPlayOutEvent {
+public class PacketPlayOutInventoryPropertyEvent extends PacketPlayOutEvent {
 
 	private int windowID;
 	private int property;
 	private int value;
 
-	public PacketPlayOutWindowPropertyEvent(Player injectedPlayer, PacketPlayOutWindowData packet) {
+	public PacketPlayOutInventoryPropertyEvent(Player injectedPlayer, PacketPlayOutWindowData packet) {
 		super(injectedPlayer);
 		windowID = Field.get(packet, "a", int.class);
 		property = Field.get(packet, "b", int.class);
 		value = Field.get(packet, "c", int.class);
 	}
 
-	public PacketPlayOutWindowPropertyEvent(Player injectedPlayer, int windowID, int property, int value) {
+	public PacketPlayOutInventoryPropertyEvent(Player injectedPlayer, int windowID, int property, int value) {
 		super(injectedPlayer);
 		this.windowID = windowID;
 		this.property = property;

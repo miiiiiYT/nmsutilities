@@ -29,12 +29,12 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutWindowItems;
  * @author Martin
  *
  */
-public class PacketPlayOutWindowItemsEvent extends PacketPlayOutEvent {
+public class PacketPlayOutInventoryItemsEvent extends PacketPlayOutEvent {
 
 	private int windowID;
 	private List<ItemStack> itemStacks;
 
-	public PacketPlayOutWindowItemsEvent(Player injectedPlayer, PacketPlayOutWindowItems packet) {
+	public PacketPlayOutInventoryItemsEvent(Player injectedPlayer, PacketPlayOutWindowItems packet) {
 		super(injectedPlayer);
 		windowID = Field.get(packet, "a", int.class);
 		@SuppressWarnings("unchecked")
@@ -43,7 +43,7 @@ public class PacketPlayOutWindowItemsEvent extends PacketPlayOutEvent {
 			itemStacks.add(new ItemStack(itemStack));
 	}
 
-	public PacketPlayOutWindowItemsEvent(Player injectedPlayer, int windowID, List<ItemStack> itemStacks) {
+	public PacketPlayOutInventoryItemsEvent(Player injectedPlayer, int windowID, List<ItemStack> itemStacks) {
 		super(injectedPlayer);
 		this.windowID = windowID;
 		this.itemStacks = itemStacks;

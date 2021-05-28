@@ -30,8 +30,8 @@ public class Chunk {
 		return getTag() != null;
 	}
 
-	public World getWorld() {
-		return new World(chunk.getWorld());
+	public ServerWorld getWorld() {
+		return new ServerWorld(chunk.getWorld());
 	}
 
 	public String getKey() {

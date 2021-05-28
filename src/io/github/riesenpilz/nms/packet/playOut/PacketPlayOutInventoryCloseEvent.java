@@ -20,19 +20,19 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutCloseWindow;
  * @author Martin
  *
  */
-public class PacketPlayOutWindowCloseEvent extends PacketPlayOutEvent {
+public class PacketPlayOutInventoryCloseEvent extends PacketPlayOutEvent {
 
 	/**
 	 * This is the ID of the window that was closed. 0 for inventory.
 	 */
 	private int windowID;
 
-	public PacketPlayOutWindowCloseEvent(Player injectedPlayer, PacketPlayOutCloseWindow packet) {
+	public PacketPlayOutInventoryCloseEvent(Player injectedPlayer, PacketPlayOutCloseWindow packet) {
 		super(injectedPlayer);
 		windowID = Field.get(packet, "a", int.class);
 	}
 
-	public PacketPlayOutWindowCloseEvent(Player injectedPlayer, int windowID) {
+	public PacketPlayOutInventoryCloseEvent(Player injectedPlayer, int windowID) {
 		super(injectedPlayer);
 		this.windowID = windowID;
 	}

@@ -1,11 +1,18 @@
 package io.github.riesenpilz.nms.inventory;
 
+import java.util.UUID;
+
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
+
 import io.github.riesenpilz.nms.nbt.NBTTag;
 import io.github.riesenpilz.nms.nbt.NBTTagList;
+import io.github.riesenpilz.nms.reflections.Field;
 
 public class ItemStack {
 	private net.minecraft.server.v1_16_R3.ItemStack itemStack;
@@ -100,4 +107,16 @@ public class ItemStack {
 		this.itemStack = CraftItemStack.asNMSCopy(itemStack);
 	}
 
+	private static final Base64 base64 = new Base64();
+
+	public void setSkullTexture(String url) {
+		if (!getMaterial().equals(Material.PLAYER_HEAD))
+			return;
+		GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+		byte[] encodedData = base64.encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
+		profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
+		ItemMeta headMeta = getItemMeta();
+		Field.set(getItemMeta(), "profile", profile);
+		setItemMeta(headMeta);
+	}
 }

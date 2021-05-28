@@ -137,4 +137,7 @@ public class NBTTag implements Iterable<String> {
     public NBTBase get(String key) {
         return nbtTagCompound.get(key);
     }
+    public void setALL(NBTTag tag) {
+    	nbtTagCompound.a(tag.getNMS());
+    }
 }

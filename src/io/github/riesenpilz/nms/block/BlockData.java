@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
 
 import io.github.riesenpilz.nms.packet.PacketUtils;
-import io.github.riesenpilz.nms.world.World;
+import io.github.riesenpilz.nms.world.ServerWorld;
 import net.minecraft.server.v1_16_R3.Block;
 import net.minecraft.server.v1_16_R3.IBlockData;
 
@@ -23,7 +23,7 @@ public class BlockData {
 	
 
 	public io.github.riesenpilz.nms.block.Block setBlock(Location loc) {
-		block.c(new World(loc.getWorld()).getNMS(), PacketUtils.toBlockPosition(loc));
+		block.c(new ServerWorld(loc.getWorld()).getNMS(), PacketUtils.toBlockPosition(loc));
 		return new io.github.riesenpilz.nms.block.Block(loc);
 	}
 

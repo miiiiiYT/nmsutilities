@@ -16,7 +16,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import io.github.riesenpilz.nms.nbt.NBTTag;
-import io.github.riesenpilz.nms.world.World;
+import io.github.riesenpilz.nms.world.ServerWorld;
 import net.minecraft.server.v1_16_R3.IBlockData;
 
 public class Block {
@@ -63,14 +63,14 @@ public class Block {
 	}
 
 	public JsonObject getTags() {
-		final JsonObject jsonObject = new World(block.getWorld()).getConfig("BlockData");
+		final JsonObject jsonObject = new ServerWorld(block.getWorld()).getConfig("BlockData");
 		final String path = block.getLocation().getBlockX() + "." + block.getLocation().getBlockY() + "."
 				+ block.getLocation().getBlockZ();
 		return jsonObject.has(path) ? jsonObject.getAsJsonObject(path) : new JsonObject();
 	}
 
 	public void removeTags() {
-		final World world = new World(block.getWorld());
+		final ServerWorld world = new ServerWorld(block.getWorld());
 		final JsonObject jsonObject = world.getConfig("BlockData");
 		final String path = block.getLocation().getBlockX() + "." + block.getLocation().getBlockY() + "."
 				+ block.getLocation().getBlockZ();
@@ -106,7 +106,7 @@ public class Block {
 	}
 
 	public void setTags(JsonObject config) {
-		final World world = new World(block.getWorld());
+		final ServerWorld world = new ServerWorld(block.getWorld());
 		final JsonObject jsonObject = world.getConfig("BlockData");
 		final String path = block.getLocation().getBlockX() + "." + block.getLocation().getBlockY() + "."
 				+ block.getLocation().getBlockZ();
