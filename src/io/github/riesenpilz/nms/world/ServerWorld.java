@@ -10,9 +10,6 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
-import io.github.riesenpilz.nms.inventory.PlayerWorldInventory;
-import net.minecraft.server.v1_16_R3.WorldServer;
-import io.github.riesenpilz.nms.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
@@ -27,6 +24,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonWriter;
 
+import io.github.riesenpilz.nms.Main;
+import io.github.riesenpilz.nms.inventory.PlayerWorldInventory;
+import io.github.riesenpilz.nms.world.chunk.Chunk;
+import net.minecraft.server.v1_16_R3.WorldServer;
+
+@SuppressWarnings("deprecation")
 public class ServerWorld {
 	private final org.bukkit.World world;
 
@@ -91,7 +94,7 @@ public class ServerWorld {
 	public File getFolder() {
 		return world.getWorldFolder();
 	}
-
+	@Deprecated
 	public void setInventory(PlayerWorldInventory inventory, String name) {
 		JsonObject config = getWorldConfig();
 		JsonObject invs = config.has("inventorys") ? config.getAsJsonObject("inventorys") : new JsonObject();
@@ -99,7 +102,7 @@ public class ServerWorld {
 		config.add("inventorys", invs);
 		setWorldConfig(config);
 	}
-
+	@Deprecated
 	public PlayerWorldInventory getInventory(String name) {
 		JsonObject config = getWorldConfig();
 		if (!config.has("inventorys"))

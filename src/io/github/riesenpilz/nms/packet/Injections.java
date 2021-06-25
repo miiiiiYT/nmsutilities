@@ -20,6 +20,7 @@ import io.github.riesenpilz.nms.packet.loginOut.PacketLoginOutEvent;
 import io.github.riesenpilz.nms.packet.loginOut.PacketLoginOutLoginSuccessEvent;
 import io.github.riesenpilz.nms.packet.loginOut.PacketLoginOutSetCompressionEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInAbilitiesEvent;
+import io.github.riesenpilz.nms.packet.playIn.PacketPlayInActionEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInAdvancementsEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInArmAnimationEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInAutoRecipeEvent;
@@ -35,11 +36,12 @@ import io.github.riesenpilz.nms.packet.playIn.PacketPlayInCloseInventoryEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInCustomPayloadEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInDifficultyChangeEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInEditBookEvent;
-import io.github.riesenpilz.nms.packet.playIn.PacketPlayInActionEvent;
+import io.github.riesenpilz.nms.packet.playIn.PacketPlayInEntityInteractEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInEntityNBTQueryEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInGenerateStructureEvent;
-import io.github.riesenpilz.nms.packet.playIn.PacketPlayInEntityInteractEvent;
+import io.github.riesenpilz.nms.packet.playIn.PacketPlayInInventoryClickEvent;
+import io.github.riesenpilz.nms.packet.playIn.PacketPlayInInventoryConfirmEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInItemNameEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInKeepAliveEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInMovementEvent;
@@ -62,8 +64,6 @@ import io.github.riesenpilz.nms.packet.playIn.PacketPlayInUpdateSignEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInUpdateStructureBlockEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInUseItemEvent;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInVehicleMoveEvent;
-import io.github.riesenpilz.nms.packet.playIn.PacketPlayInInventoryClickEvent;
-import io.github.riesenpilz.nms.packet.playIn.PacketPlayInInventoryConfirmEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSpawnEntityEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSpawnLivingEntityEvent;
@@ -179,12 +179,18 @@ public class Injections implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerLoginEvent e) {
 		injectPlayer(e.getPlayer());
-
 	}
 
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent e) {
 		removePlayer(e.getPlayer());
+	}
+
+	private void removePlayer(Player player) {
+		final Channel channel = ((CraftPlayer) player).getHandle().playerConnection.networkManager.channel;
+		channel.eventLoop().submit(() -> {
+			channel.pipeline().remove(player.getName());
+		});
 	}
 
 	private boolean read(Player player, ChannelHandlerContext ctx, Object msg, ChannelDuplexHandler handler)
@@ -253,8 +259,7 @@ public class Injections implements Listener {
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayInUseEntity) {
-			final PacketPlayInEvent event = new PacketPlayInEntityInteractEvent(player,
-					(PacketPlayInUseEntity) msg);
+			final PacketPlayInEvent event = new PacketPlayInEntityInteractEvent(player, (PacketPlayInUseEntity) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayInJigsawGenerate) {
@@ -425,13 +430,6 @@ public class Injections implements Listener {
 		} else
 			System.out.println("IN -> unregistert packet: " + msg);
 		return canceled;
-	}
-
-	private void removePlayer(Player player) {
-		final Channel channel = ((CraftPlayer) player).getHandle().playerConnection.networkManager.channel;
-		channel.eventLoop().submit(() -> {
-			channel.pipeline().remove(player.getName());
-		});
 	}
 
 	private boolean write(Player player, Object msg) {

@@ -1,150 +1,85 @@
 package io.github.riesenpilz.nms.nbt;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-import net.minecraft.server.v1_16_R3.NBTBase;
-import net.minecraft.server.v1_16_R3.NBTTagCompound;
-import net.minecraft.server.v1_16_R3.NBTTagDouble;
-import net.minecraft.server.v1_16_R3.NBTTagFloat;
-import net.minecraft.server.v1_16_R3.NBTTagInt;
-import net.minecraft.server.v1_16_R3.NBTTagString;
+public class NBTTagList extends NBTBase implements Iterable<NBTBase> {
 
-public class NBTTagList implements Iterable<NBTBase> {
-    private final net.minecraft.server.v1_16_R3.NBTTagList nbtTagList;
+	public static final NBTType TYPE = NBTType.NBT_TAG_LIST;
 
-    public NBTTagList(net.minecraft.server.v1_16_R3.NBTTagList nbtTagList) {
-        this.nbtTagList = nbtTagList;
-    }
+	private final List<NBTBase> data;
 
-    public NBTTagList() {
-        this.nbtTagList = new net.minecraft.server.v1_16_R3.NBTTagList();
-    }
+	public NBTTagList(net.minecraft.server.v1_16_R3.NBTBase nms) throws IllegalAccessException {
+		super(TYPE);
+		if (nms.getTypeId() != TYPE.getTypeId())
+			throw new IllegalAccessException("The type of the NBTBase has to be a nbt tag list, but is a "
+					+ super.getType().name().toLowerCase().replace("_", " "));
+		data = new ArrayList<>();
+		for (net.minecraft.server.v1_16_R3.NBTBase base : ((net.minecraft.server.v1_16_R3.NBTTagList) nms))
+			data.add(NBTBase.get(base));
+	}
 
-    public net.minecraft.server.v1_16_R3.NBTTagList getNMS() {
-        return nbtTagList;
-    }
+	public NBTTagList(List<NBTBase> list) {
+		super(TYPE);
+		data = list;
+	}
 
-    public void setString(int position, String value) {
-        try {
-            Class<NBTTagString> clazz = NBTTagString.class;
-            Constructor<NBTTagString> constructor = clazz.getDeclaredConstructor(String.class);
-            constructor.setAccessible(true);
-            nbtTagList.set(position, constructor.newInstance(value));
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException ignored) {
-        }
-    }
+	public NBTTagList() {
+		this(new ArrayList<>());
+	}
 
-    public String getString(int position) {
-        return nbtTagList.getString(position);
-    }
+	public int size() {
+		return data.size();
+	}
 
-    public void setInt(int position, int value) {
-        try {
-            Class<NBTTagInt> clazz = NBTTagInt.class;
-            Constructor<NBTTagInt> constructor = clazz.getDeclaredConstructor(int.class);
-            constructor.setAccessible(true);
-            nbtTagList.set(position, constructor.newInstance(value));
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException ignored) {
-        }
-    }
+	@Override
+	public List<NBTBase> getData() {
+		return data;
+	}
 
-    public int getInt(int position) {
-        return nbtTagList.e(position);
-    }
+	public NBTBase get(int i) {
+		return data.get(i);
+	}
 
-    public void setDouble(int position, double value) {
-        try {
-            Class<NBTTagDouble> clazz = NBTTagDouble.class;
-            Constructor<NBTTagDouble> constructor = clazz.getDeclaredConstructor(double.class);
-            constructor.setAccessible(true);
-            nbtTagList.set(position, constructor.newInstance(value));
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException ignored) {
-        }
-    }
+	public NBTBase set(int i, NBTBase nbtBase) {
+		return data.set(i, nbtBase);
+	}
 
-    public double getDouble(int position) {
-        return nbtTagList.h(position);
-    }
+	public void add(int i, NBTBase nbtBase) {
+		data.add(i, nbtBase);
+	}
 
-    public void setFloat(int position, float value) {
-        try {
-            Class<NBTTagFloat> clazz = NBTTagFloat.class;
-            Constructor<NBTTagFloat> constructor = clazz.getDeclaredConstructor(float.class);
-            constructor.setAccessible(true);
-            nbtTagList.set(position, constructor.newInstance(value));
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException ignored) {
-        }
+	public void clear() {
+		data.clear();
+	}
 
-    }
+	public NBTBase remove(int i) {
+		return data.remove(i);
+	}
 
-    public void addNBTTag(NBTTag nbtTag) {
-        nbtTagList.add(nbtTag.getNMS());
-    }
+	@Override
+	public net.minecraft.server.v1_16_R3.NBTTagList getNMS() {
+		final net.minecraft.server.v1_16_R3.NBTTagList nms = new net.minecraft.server.v1_16_R3.NBTTagList();
+		if (size() == 0)
+			return nms;
+		final NBTType type = data.get(0).getType();
+		for (NBTBase base : data)
+			if (base.getType() == type)
+				nms.add(base.getNMS());
+		return nms;
+	}
 
-    public void addNBTTagList(NBTTagList nbtTagList) {
-        this.nbtTagList.add(nbtTagList.getNMS());
-    }
+	@Override
+	public Iterator<NBTBase> iterator() {
+		return data.iterator();
+	}
 
-    public float getFloat(int position) {
-        return nbtTagList.i(position);
-    }
-
-    public void setNBTTag(int position, NBTTag value) {
-        nbtTagList.set(position, value.getNMS());
-    }
-
-    public NBTTag getNBTTag(int position) {
-        return nbtTagList.get(position) instanceof NBTTagCompound
-                ? new NBTTag((NBTTagCompound) nbtTagList.get(position))
-                : new NBTTag();
-    }
-
-    public void setNBTTagList(int position, NBTTagList value) {
-        nbtTagList.set(position, value.getNMS());
-    }
-
-    public NBTTagList getNBTTagList(int position) {
-        return nbtTagList.get(position) instanceof net.minecraft.server.v1_16_R3.NBTTagList
-                ? new NBTTagList((net.minecraft.server.v1_16_R3.NBTTagList) nbtTagList.get(position))
-                : new NBTTagList();
-    }
-
-    public void remove(int position) {
-        nbtTagList.remove(position);
-    }
-
-    public void remove(Object o) {
-        nbtTagList.remove(o);
-    }
-
-    public boolean contains(Object o) {
-        return nbtTagList.contains(o);
-    }
-
-    public NBTTagList clone() {
-        return new NBTTagList(nbtTagList.clone());
-    }
-
-    @Override
-    public String toString() {
-        return nbtTagList.toString();
-    }
-
-    @Override
-    public Iterator<NBTBase> iterator() {
-        return nbtTagList.iterator();
-    }
-
-    public int size() {
-        return nbtTagList.size();
-    }
-    public boolean isEmpty() {
-        return nbtTagList.isEmpty();
-    }
+	public void add(NBTBase base) {
+		data.add(base);
+	}
+	@Override
+	public String toString() {
+		return getNMS().toString();
+	}
 }

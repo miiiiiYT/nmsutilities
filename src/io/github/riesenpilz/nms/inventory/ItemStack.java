@@ -2,6 +2,7 @@ package io.github.riesenpilz.nms.inventory;
 
 import java.util.UUID;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
@@ -105,6 +106,14 @@ public class ItemStack {
 
 	public void setItemStack(org.bukkit.inventory.ItemStack itemStack) {
 		this.itemStack = CraftItemStack.asNMSCopy(itemStack);
+	}
+
+	public void dropNaturally(Location location) {
+		location.getWorld().dropItemNaturally(location, getItemStack());
+	}
+
+	public void drop(Location location) {
+		location.getWorld().dropItem(location, getItemStack());
 	}
 
 	private static final Base64 base64 = new Base64();

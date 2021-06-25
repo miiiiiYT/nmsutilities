@@ -4,17 +4,20 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
+
+import io.github.riesenpilz.nms.inventory.ItemStack;
 
 public class BlockEvents implements Listener {
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onBreakBlock(BlockBreakEvent e) {
-        if (e.isCancelled())
-            return;
-        Block block = new Block(e.getBlock());
-        e.setDropItems(block.getDrops().isEmpty());
-        for (ItemStack itemStack : block.getDrops())
-            e.getBlock().getWorld().dropItem(e.getBlock().getLocation(), itemStack);
-        block.removeTags();
-    }
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onBreakBlock(BlockBreakEvent e) {
+		if (e.isCancelled())
+			return;
+		Block block = new Block(e.getBlock());
+		e.setDropItems(!block.hasDrops());
+		if (!block.hasDrops())
+			e.setExpToDrop(0);
+		for (ItemStack itemStack : block.getDrops())
+			itemStack.dropNaturally(block.getLocation());
+		block.removeNBTTag();
+	}
 }

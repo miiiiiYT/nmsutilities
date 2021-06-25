@@ -6,6 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/eclipse-21.03/spigot-1.16.5.jar" sourcepath="C:/Users/Martin/Desktop/server/RPG Server 1.14.4/Spigot/Spigot-API"/>
+	<classpathentry kind="lib" path="C:/Users/Martin/eclipse-21.03/spigot-1.16.5.jar" sourcepath="/CraftBukkit"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

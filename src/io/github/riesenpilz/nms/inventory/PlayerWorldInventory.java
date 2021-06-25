@@ -11,9 +11,10 @@ import org.bukkit.inventory.ItemStack;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.util.Objects;
-
+@Deprecated
 public class PlayerWorldInventory {
 
     public PlayerWorldInventory(Player player) {
@@ -59,8 +60,12 @@ public class PlayerWorldInventory {
         if (jsonObject.has("contents")) {
             JsonArray jsonArray = jsonObject.getAsJsonArray("contents");
             for (int i = 0; i < jsonArray.size(); i++)
-                contents[i] = jsonArray.get(i).getAsString().isEmpty() ? null
-                        : io.github.riesenpilz.nms.inventory.ItemStack.getItemStack(new NBTTag(jsonArray.get(i).getAsString())).getItemStack();
+				try {
+					contents[i] = jsonArray.get(i).getAsString().isEmpty() ? null
+					        : io.github.riesenpilz.nms.inventory.ItemStack.getItemStack(new NBTTag(jsonArray.get(i).getAsString())).getItemStack();
+				} catch (CommandSyntaxException e) {
+					e.printStackTrace();
+				}
         }
         if (jsonObject.has("xp"))
             setXp(jsonObject.get("xp").getAsInt());
