@@ -52,6 +52,14 @@ public class PacketPlayOutBlockAnimationEvent extends PacketPlayOutEvent {
 
 	}
 
+	public PacketPlayOutBlockAnimationEvent(Player injectedPlayer, int entityID, Location blockLocation,
+			int destroyStage) {
+		super(injectedPlayer);
+		this.entityID = entityID;
+		this.blockLocation = blockLocation;
+		this.destroyStage = destroyStage;
+	}
+
 	public int getEntityID() {
 		return entityID;
 	}

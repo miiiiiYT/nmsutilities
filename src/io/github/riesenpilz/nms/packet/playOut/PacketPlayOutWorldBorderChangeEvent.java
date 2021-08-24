@@ -6,10 +6,10 @@ import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
 
 /**
- * <br>
- * <br>
- * <br>
- * <br>
+ * 
+ * <p>
+ * 
+ * <p>
  * Packet ID: <br>
  * State: Play<br>
  * Bound To: Client
@@ -17,9 +17,9 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
  * @author Martin
  *
  */
-public class PacketPlayOutChangeWorldBorderEvent extends PacketPlayOutEvent {
+public class PacketPlayOutWorldBorderChangeEvent extends PacketPlayOutEvent {
 
-	public PacketPlayOutChangeWorldBorderEvent(Player injectedPlayer) {
+	public PacketPlayOutWorldBorderChangeEvent(Player injectedPlayer) {
 		super(injectedPlayer);
 	}
 
@@ -30,11 +30,11 @@ public class PacketPlayOutChangeWorldBorderEvent extends PacketPlayOutEvent {
 
 	@Override
 	public int getPacketID() {
-		return 0;
+		return ;
 	}
 
 	@Override
 	public String getProtocolURLString() {
-		return null;
+		return "";
 	}
 }
