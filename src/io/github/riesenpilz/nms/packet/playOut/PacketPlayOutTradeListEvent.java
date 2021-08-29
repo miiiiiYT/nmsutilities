@@ -6,11 +6,11 @@ import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
 
 /**
- * <br>
- * <br>
- * <br>
- * <br>
- * Packet ID: <br>
+ * https://wiki.vg/Protocol#Trade_List
+ * <p>
+ * The list of trades a villager NPC is offering.
+ * <p>
+ * Packet ID: 0x28<br>
  * State: Play<br>
  * Bound To: Client
  * 
@@ -19,7 +19,7 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
  */
 public class PacketPlayOutTradeListEvent extends PacketPlayOutEvent {
 
-	public PacketPlayOutTradeListEvent(Player injectedPlayer) {
+	public PacketPlayOutTradeListEvent(Player injectedPlayer, PacketPlayOut) {
 		super(injectedPlayer);
 	}
 
@@ -30,11 +30,11 @@ public class PacketPlayOutTradeListEvent extends PacketPlayOutEvent {
 
 	@Override
 	public int getPacketID() {
-		return 0;
+		return 0x28;
 	}
 
 	@Override
 	public String getProtocolURLString() {
-		return null;
+		return "https://wiki.vg/Protocol#Trade_List";
 	}
 }

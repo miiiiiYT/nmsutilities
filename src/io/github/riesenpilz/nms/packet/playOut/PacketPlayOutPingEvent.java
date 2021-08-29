@@ -6,20 +6,22 @@ import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
 
 /**
- * <br>
- * <br>
- * <br>
- * <br>
- * Packet ID: <br>
+ * https://wiki.vg/Protocol#Ping_2
+ * <p>
+ * Unknown what this packet does just yet, not used by the Notchian server or
+ * client. Most likely added as a replacement to the removed window confirmation
+ * packet.
+ * <p>
+ * Packet ID: 0x30<br>
  * State: Play<br>
  * Bound To: Client
  * 
  * @author Martin
  *
  */
-public class PacketPlayOutOpenWindowEvent extends PacketPlayOutEvent {
+public class PacketPlayOutPingEvent extends PacketPlayOutEvent {
 
-	public PacketPlayOutOpenWindowEvent(Player injectedPlayer) {
+	public PacketPlayOutPingEvent(Player injectedPlayer, PacketPlayOut) {
 		super(injectedPlayer);
 	}
 
@@ -30,11 +32,11 @@ public class PacketPlayOutOpenWindowEvent extends PacketPlayOutEvent {
 
 	@Override
 	public int getPacketID() {
-		return 0;
+		return 0x30;
 	}
 
 	@Override
 	public String getProtocolURLString() {
-		return null;
+		return "https://wiki.vg/Protocol#Ping_2";
 	}
 }
