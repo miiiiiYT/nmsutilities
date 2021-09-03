@@ -22,7 +22,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutRelEntityM
  * @author Martin
  *
  */
-public class PacketPlayOutEntityPositionAndLookEvent extends PacketPlayOutEvent {
+public class PacketPlayOutEntityPositionAndRotationEvent extends PacketPlayOutEvent {
 
 	private int entityID;
 
@@ -52,7 +52,7 @@ public class PacketPlayOutEntityPositionAndLookEvent extends PacketPlayOutEvent 
 	private byte pitch;
 	private boolean onGround;
 
-	public PacketPlayOutEntityPositionAndLookEvent(Player injectedPlayer, PacketPlayOutRelEntityMoveLook packet) {
+	public PacketPlayOutEntityPositionAndRotationEvent(Player injectedPlayer, PacketPlayOutRelEntityMoveLook packet) {
 		super(injectedPlayer);
 		entityID = Field.get(packet, "a", int.class);
 		deltaX = Field.get(packet, "b", short.class);
@@ -65,7 +65,7 @@ public class PacketPlayOutEntityPositionAndLookEvent extends PacketPlayOutEvent 
 
 	
 
-	public PacketPlayOutEntityPositionAndLookEvent(Player injectedPlayer, int entityID, short deltaX, short deltaY,
+	public PacketPlayOutEntityPositionAndRotationEvent(Player injectedPlayer, int entityID, short deltaX, short deltaY,
 			short deltaZ, byte yaw, byte pitch, boolean onGround) {
 		super(injectedPlayer);
 		this.entityID = entityID;

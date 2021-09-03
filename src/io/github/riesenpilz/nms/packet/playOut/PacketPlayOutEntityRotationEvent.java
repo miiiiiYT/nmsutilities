@@ -19,7 +19,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutEntityLook
  * @author Martin
  *
  */
-public class PacketPlayOutEntityLookEvent extends PacketPlayOutEvent {
+public class PacketPlayOutEntityRotationEvent extends PacketPlayOutEvent {
 
 	private int entityID;
 	/**
@@ -33,7 +33,7 @@ public class PacketPlayOutEntityLookEvent extends PacketPlayOutEvent {
 	private byte pitch;
 	private boolean onGround;
 
-	public PacketPlayOutEntityLookEvent(Player injectedPlayer, PacketPlayOutEntityLook packet) {
+	public PacketPlayOutEntityRotationEvent(Player injectedPlayer, PacketPlayOutEntityLook packet) {
 		super(injectedPlayer);
 		entityID = Field.get(packet, "a", int.class);
 		yaw = Field.get(packet, "e", byte.class);
@@ -41,7 +41,7 @@ public class PacketPlayOutEntityLookEvent extends PacketPlayOutEvent {
 		onGround = Field.get(packet, "g", boolean.class);
 	}
 
-	public PacketPlayOutEntityLookEvent(Player injectedPlayer, int entityID, byte yaw, byte pitch, boolean onGround) {
+	public PacketPlayOutEntityRotationEvent(Player injectedPlayer, int entityID, byte yaw, byte pitch, boolean onGround) {
 		super(injectedPlayer);
 		this.entityID = entityID;
 		this.yaw = yaw;
