@@ -113,14 +113,14 @@ public class PacketPlayOutWorldBorderInitializeEvent extends PacketPlayOutEvent 
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutWorldBorder packet = new PacketPlayOutWorldBorder();
 		Field.set(packet, "a", EnumWorldBorderAction.INITIALIZE);
-		Field.set(packet, "a", portalTeleportBoundary);
-		Field.set(packet, "a", centerX);
-		Field.set(packet, "a", centerZ);
-		Field.set(packet, "a", oldDiameter);
-		Field.set(packet, "a", newDiameter);
-		Field.set(packet, "a", speed);
-		Field.set(packet, "a", warningBlocks);
-		Field.set(packet, "a", warningTime);	
+		Field.set(packet, "b", portalTeleportBoundary);
+		Field.set(packet, "c", centerX);
+		Field.set(packet, "d", centerZ);
+		Field.set(packet, "e", oldDiameter);
+		Field.set(packet, "f", newDiameter);
+		Field.set(packet, "g", speed);
+		Field.set(packet, "h", warningBlocks);
+		Field.set(packet, "i", warningTime);	
 		return packet;
 	}
 

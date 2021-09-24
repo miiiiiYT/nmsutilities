@@ -22,7 +22,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutCombatEvent;
 public class PacketPlayOutCombatStartEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutCombatStartEvent(Player injectedPlayer,
-			net.minecraft.server.v1_16_R3.PacketPlayOutCombatEvent packet) {
+			PacketPlayOutCombatEvent packet) {
 		super(injectedPlayer);
 	}
 
@@ -33,7 +33,7 @@ public class PacketPlayOutCombatStartEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutCombatEvent packet = new PacketPlayOutCombatEvent();
-		packet.a = net.minecraft.server.v1_16_R3.PacketPlayOutCombatEvent.EnumCombatEventType.ENTER_COMBAT;
+		packet.a = PacketPlayOutCombatEvent.EnumCombatEventType.ENTER_COMBAT;
 		return packet;
 	}
 

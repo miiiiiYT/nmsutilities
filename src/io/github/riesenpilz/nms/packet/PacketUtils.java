@@ -1,10 +1,14 @@
 package io.github.riesenpilz.nms.packet;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
 
 import net.minecraft.server.v1_16_R3.BlockPosition;
+import net.minecraft.server.v1_16_R3.EnumGamemode;
+import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.Vec3D;
 
 public class PacketUtils {
@@ -23,5 +27,24 @@ public class PacketUtils {
 
 	public static Vec3D toVec3D(Vector vector) {
 		return new Vec3D(vector.getX(), vector.getY(), vector.getZ());
+	}
+
+	@SuppressWarnings("deprecation")
+	public static NamespacedKey toNamespacedKey(MinecraftKey minecraftKey) {
+		return new NamespacedKey(minecraftKey.getNamespace(), minecraftKey.getKey());
+	}
+
+	public static MinecraftKey toMinecraftKey(NamespacedKey namespacedKey) {
+		return new MinecraftKey(namespacedKey.getNamespace(), namespacedKey.getKey());
+	}
+
+	@SuppressWarnings("deprecation")
+	public static GameMode toGameMode(EnumGamemode enumGamemode) {
+		return GameMode.getByValue(enumGamemode.getId());
+	}
+
+	@SuppressWarnings("deprecation")
+	public static EnumGamemode toEnumGamemode(GameMode gameMode) {
+		return EnumGamemode.getById(gameMode.getValue());
 	}
 }

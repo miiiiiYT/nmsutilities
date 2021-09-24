@@ -1,10 +1,13 @@
 package io.github.riesenpilz.nms.packet.playOut;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nms.nbt.NBTTag;
+import io.github.riesenpilz.nms.reflections.Field;
+import net.minecraft.server.v1_16_R3.NBTTagCompound;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
 import net.minecraft.server.v1_16_R3.PacketPlayOutMapChunk;
@@ -35,9 +38,9 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutMapChunk;
  *
  */
 public class PacketPlayOutChunkDataEvent extends PacketPlayOutEvent {
-/**
- * Chunk coordinate (block coordinate divided by 16, rounded down)
- */
+	/**
+	 * Chunk coordinate (block coordinate divided by 16, rounded down)
+	 */
 	private int chunkX;
 	private int chunkZ;
 	private int c;
@@ -67,11 +70,81 @@ public class PacketPlayOutChunkDataEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutChunkDataEvent(Player injectedPlayer, PacketPlayOutMapChunk packet) {
 		super(injectedPlayer);
+
+		chunkX = Field.get(packet, "a", int.class);
+		chunkZ = Field.get(packet, "b", int.class);
+		c = Field.get(packet, "c", int.class);
+		heightmaps = new NBTTag(Field.get(packet, "d", NBTTagCompound.class));
+		biomes = Field.get(packet, "e", int[].class);
+		data = Field.get(packet, "f", byte[].class);
+		@SuppressWarnings("unchecked")
+		final List<NBTTagCompound> nmsBlockEntities = Field.get(packet, "g", List.class);
+		blockEntities = new ArrayList<>();
+		for (NBTTagCompound nmsTag : nmsBlockEntities)
+			blockEntities.add(new NBTTag(nmsTag));
+		h = Field.get(packet, "h", boolean.class);
+	}
+
+	public PacketPlayOutChunkDataEvent(Player injectedPlayer, int chunkX, int chunkZ, int c, NBTTag heightmaps,
+			int[] biomes, byte[] data, List<NBTTag> blockEntities, boolean h) {
+		super(injectedPlayer);
+		this.chunkX = chunkX;
+		this.chunkZ = chunkZ;
+		this.c = c;
+		this.heightmaps = heightmaps;
+		this.biomes = biomes;
+		this.data = data;
+		this.blockEntities = blockEntities;
+		this.h = h;
+	}
+
+	public int getChunkX() {
+		return chunkX;
+	}
+
+	public int getChunkZ() {
+		return chunkZ;
+	}
+
+	public int getC() {
+		return c;
+	}
+
+	public NBTTag getHeightmaps() {
+		return heightmaps;
+	}
+
+	public int[] getBiomes() {
+		return biomes;
+	}
+
+	public byte[] getData() {
+		return data;
+	}
+
+	public List<NBTTag> getBlockEntities() {
+		return blockEntities;
+	}
+
+	public boolean isH() {
+		return h;
 	}
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return null;
+		final PacketPlayOutMapChunk packet = new PacketPlayOutMapChunk();
+		Field.set(packet, "a", chunkX);
+		Field.set(packet, "b", chunkZ);
+		Field.set(packet, "c", c);
+		Field.set(packet, "d", heightmaps.getNMS());
+		Field.set(packet, "e", biomes);
+		Field.set(packet, "f", data);
+		final List<NBTTagCompound> nmsBlockEntities = new ArrayList<>();
+		for (NBTTag tag : blockEntities)
+			nmsBlockEntities.add(tag.getNMS());
+		Field.set(packet, "g", nmsBlockEntities);
+		Field.set(packet, "h", h);
+		return packet;
 	}
 
 	@Override

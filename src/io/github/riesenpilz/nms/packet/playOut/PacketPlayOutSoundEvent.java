@@ -94,8 +94,8 @@ public class PacketPlayOutSoundEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		return new PacketPlayOutNamedSoundEffect(getEffect(),
-				net.minecraft.server.v1_16_R3.SoundCategory.valueOf(category.name()), pitch, pitch, pitch, volume,
-				pitch);
+				net.minecraft.server.v1_16_R3.SoundCategory.valueOf(category.name()), location.getX(), location.getY(),
+				location.getZ(), volume, pitch);
 	}
 
 	private SoundEffect getEffect() {

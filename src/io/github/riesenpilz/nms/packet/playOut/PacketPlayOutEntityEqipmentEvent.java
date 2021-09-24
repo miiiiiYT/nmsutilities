@@ -1,16 +1,23 @@
 package io.github.riesenpilz.nms.packet.playOut;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.entity.Player;
 
+import com.mojang.datafixers.util.Pair;
+
+import io.github.riesenpilz.nms.inventory.ItemStack;
+import io.github.riesenpilz.nms.reflections.Field;
+import net.minecraft.server.v1_16_R3.EnumItemSlot;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
+import net.minecraft.server.v1_16_R3.PacketPlayOutEntityEquipment;
 
 /**
- * <br>
- * <br>
- * <br>
- * <br>
- * Packet ID: <br>
+ * https://wiki.vg/Protocol#Entity_Equipment
+ * <p>
+ * Packet ID: 0x50<br>
  * State: Play<br>
  * Bound To: Client
  * 
@@ -19,22 +26,99 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
  */
 public class PacketPlayOutEntityEqipmentEvent extends PacketPlayOutEvent {
 
-	public PacketPlayOutEntityEqipmentEvent(Player injectedPlayer) {
+	private int entityId;
+	private List<Equipment> equimpent;
+
+	@SuppressWarnings("unchecked")
+	public PacketPlayOutEntityEqipmentEvent(Player injectedPlayer, PacketPlayOutEntityEquipment packet) {
 		super(injectedPlayer);
+		
+		entityId = Field.get(packet, "a", int.class);
+		final List<Pair<EnumItemSlot, net.minecraft.server.v1_16_R3.ItemStack>> nms = Field.get(packet, "b", List.class);
+		equimpent = new ArrayList<>();
+		for (Pair<EnumItemSlot, net.minecraft.server.v1_16_R3.ItemStack> nmsEquipment : nms)
+			equimpent.add(new Equipment(nmsEquipment));
+	}
+
+	public PacketPlayOutEntityEqipmentEvent(Player injectedPlayer, int entityId, List<Equipment> equimpent) {
+		super(injectedPlayer);
+		this.entityId = entityId;
+		this.equimpent = equimpent;
+	}
+
+	public int getEntityId() {
+		return entityId;
+	}
+
+	public List<Equipment> getEquimpent() {
+		return equimpent;
 	}
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return null;
+		final List<Pair<EnumItemSlot, net.minecraft.server.v1_16_R3.ItemStack>> nms = new ArrayList<>();
+		for (Equipment equipment : this.equimpent)
+			nms.add(equipment.getNMS());
+		return new PacketPlayOutEntityEquipment(entityId, nms);
 	}
 
 	@Override
 	public int getPacketID() {
-		return 0;
+		return 0x50;
 	}
 
 	@Override
 	public String getProtocolURLString() {
-		return null;
+		return "https://wiki.vg/Protocol#Entity_Equipment";
+	}
+
+	public static class Equipment {
+
+		private ItemStack itemStack;
+		private Slot slot;
+
+		public Equipment(ItemStack itemStack, Slot slot) {
+			this.itemStack = itemStack;
+			this.slot = slot;
+		}
+
+		public Equipment(Pair<EnumItemSlot, net.minecraft.server.v1_16_R3.ItemStack> nms) {
+			itemStack = new ItemStack(nms.getSecond());
+			slot = Slot.getSlot(nms.getFirst());
+		}
+
+		public ItemStack getItemStack() {
+			return itemStack;
+		}
+
+		public Slot getSlot() {
+			return slot;
+		}
+
+		public Pair<EnumItemSlot, net.minecraft.server.v1_16_R3.ItemStack> getNMS() {
+			return Pair.of(slot.getNMS(), itemStack.getNMS());
+		}
+	}
+
+	public enum Slot {
+		MAINHAND(EnumItemSlot.MAINHAND), OFFHAND(EnumItemSlot.OFFHAND), FEET(EnumItemSlot.FEET),
+		LEGS(EnumItemSlot.LEGS), CHEST(EnumItemSlot.CHEST), HEAD(EnumItemSlot.HEAD);
+
+		private EnumItemSlot nms;
+
+		private Slot(EnumItemSlot nms) {
+			this.nms = nms;
+		}
+
+		public EnumItemSlot getNMS() {
+			return nms;
+		}
+
+		public static Slot getSlot(EnumItemSlot nms) {
+			for (Slot slot : values())
+				if (slot.getNMS().equals(nms))
+					return slot;
+			return null;
+		}
 	}
 }

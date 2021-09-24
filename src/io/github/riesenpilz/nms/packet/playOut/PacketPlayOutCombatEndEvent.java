@@ -32,7 +32,7 @@ public class PacketPlayOutCombatEndEvent extends PacketPlayOutEvent {
 	private int duration;
 
 	public PacketPlayOutCombatEndEvent(Player injectedPlayer,
-			net.minecraft.server.v1_16_R3.PacketPlayOutCombatEvent packet) {
+			PacketPlayOutCombatEvent packet) {
 		super(injectedPlayer);
 		entityID = packet.c;
 		duration = packet.d;
@@ -55,7 +55,7 @@ public class PacketPlayOutCombatEndEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutCombatEvent packet = new PacketPlayOutCombatEvent();
-		packet.a = net.minecraft.server.v1_16_R3.PacketPlayOutCombatEvent.EnumCombatEventType.END_COMBAT;
+		packet.a = PacketPlayOutCombatEvent.EnumCombatEventType.END_COMBAT;
 		packet.c = entityID;
 		packet.d = duration;
 		return packet;

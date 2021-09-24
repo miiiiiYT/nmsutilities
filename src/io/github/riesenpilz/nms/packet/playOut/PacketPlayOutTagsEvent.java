@@ -2,15 +2,16 @@ package io.github.riesenpilz.nms.packet.playOut;
 
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.reflections.Field;
+import net.minecraft.server.v1_16_R3.ITagRegistry;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
+import net.minecraft.server.v1_16_R3.PacketPlayOutTags;
 
 /**
- * <br>
- * <br>
- * <br>
- * <br>
- * Packet ID: <br>
+ * https://wiki.vg/Protocol#Tags
+ * <p>
+ * Packet ID: 0x66<br>
  * State: Play<br>
  * Bound To: Client
  * 
@@ -19,22 +20,35 @@ import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
  */
 public class PacketPlayOutTagsEvent extends PacketPlayOutEvent {
 
-	public PacketPlayOutTagsEvent(Player injectedPlayer) {
+	private ITagRegistry tags;
+
+	public PacketPlayOutTagsEvent(Player injectedPlayer, PacketPlayOutTags packet) {
 		super(injectedPlayer);
+
+		tags = Field.get(packet, "a", ITagRegistry.class);
+	}
+
+	public PacketPlayOutTagsEvent(Player injectedPlayer, ITagRegistry tags) {
+		super(injectedPlayer);
+		this.tags = tags;
+	}
+
+	public ITagRegistry getTags() {
+		return tags;
 	}
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return null;
+		return new PacketPlayOutTags(tags);
 	}
 
 	@Override
 	public int getPacketID() {
-		return 0;
+		return 0x66;
 	}
 
 	@Override
 	public String getProtocolURLString() {
-		return null;
+		return "https://wiki.vg/Protocol#Tags";
 	}
 }

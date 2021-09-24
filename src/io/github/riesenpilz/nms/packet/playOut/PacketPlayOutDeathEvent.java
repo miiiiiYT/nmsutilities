@@ -36,8 +36,7 @@ public class PacketPlayOutDeathEvent extends PacketPlayOutEvent {
 	 */
 	private IChatBaseComponent message;
 
-	public PacketPlayOutDeathEvent(Player injectedPlayer,
-			net.minecraft.server.v1_16_R3.PacketPlayOutCombatEvent packet) {
+	public PacketPlayOutDeathEvent(Player injectedPlayer, PacketPlayOutCombatEvent packet) {
 		super(injectedPlayer);
 		playerID = packet.b;
 		entityID = packet.c;
@@ -66,7 +65,7 @@ public class PacketPlayOutDeathEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutCombatEvent packet = new PacketPlayOutCombatEvent();
-		packet.a = net.minecraft.server.v1_16_R3.PacketPlayOutCombatEvent.EnumCombatEventType.END_COMBAT;
+		packet.a = PacketPlayOutCombatEvent.EnumCombatEventType.END_COMBAT;
 		packet.b = playerID;
 		packet.c = entityID;
 		packet.e = message;

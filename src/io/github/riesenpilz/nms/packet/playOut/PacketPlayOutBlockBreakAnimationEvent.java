@@ -34,7 +34,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutBlockBreakAnimation;
  * @author Martin
  *
  */
-public class PacketPlayOutBlockAnimationEvent extends PacketPlayOutEvent {
+public class PacketPlayOutBlockBreakAnimationEvent extends PacketPlayOutEvent {
 
 	/**
 	 * Entity ID of the entity breaking the block.
@@ -43,7 +43,7 @@ public class PacketPlayOutBlockAnimationEvent extends PacketPlayOutEvent {
 	private Location blockLocation;
 	private int destroyStage;
 
-	public PacketPlayOutBlockAnimationEvent(Player injectedPlayer, PacketPlayOutBlockBreakAnimation packet) {
+	public PacketPlayOutBlockBreakAnimationEvent(Player injectedPlayer, PacketPlayOutBlockBreakAnimation packet) {
 		super(injectedPlayer);
 		entityID = (int) new Field(packet.getClass(), "a").get(packet);
 		blockLocation = PacketUtils.toLocation((BlockPosition) new Field(packet.getClass(), "b").get(packet),
@@ -52,7 +52,7 @@ public class PacketPlayOutBlockAnimationEvent extends PacketPlayOutEvent {
 
 	}
 
-	public PacketPlayOutBlockAnimationEvent(Player injectedPlayer, int entityID, Location blockLocation,
+	public PacketPlayOutBlockBreakAnimationEvent(Player injectedPlayer, int entityID, Location blockLocation,
 			int destroyStage) {
 		super(injectedPlayer);
 		this.entityID = entityID;

@@ -24,13 +24,13 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutTileEntityData;
  * @author Martin
  *
  */
-public class PacketPlayOutBlockDataEvent extends PacketPlayOutEvent {
+public class PacketPlayOutBlockEntityDataEvent extends PacketPlayOutEvent {
 
 	private Location blockLocation;
 	private BlockAction action;
 	private NBTTag nbtTag;
 
-	public PacketPlayOutBlockDataEvent(Player injectedPlayer, PacketPlayOutTileEntityData packet) {
+	public PacketPlayOutBlockEntityDataEvent(Player injectedPlayer, PacketPlayOutTileEntityData packet) {
 		super(injectedPlayer);
 		blockLocation = PacketUtils.toLocation((BlockPosition) new Field(packet.getClass(), "a").get(packet),
 				injectedPlayer.getWorld());
@@ -38,7 +38,7 @@ public class PacketPlayOutBlockDataEvent extends PacketPlayOutEvent {
 		nbtTag = new NBTTag((NBTTagCompound) new Field(packet.getClass(), "c").get(packet));
 	}
 
-	public PacketPlayOutBlockDataEvent(Player injectedPlayer, Location blockLocation, BlockAction action,
+	public PacketPlayOutBlockEntityDataEvent(Player injectedPlayer, Location blockLocation, BlockAction action,
 			NBTTag nbtTag) {
 		super(injectedPlayer);
 		this.blockLocation = blockLocation;
