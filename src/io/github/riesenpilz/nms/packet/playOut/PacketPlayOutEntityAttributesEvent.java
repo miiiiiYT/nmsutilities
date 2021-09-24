@@ -22,21 +22,21 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutUpdateAttributes.AttributeSnap
  * @author Martin
  *
  */
-public class PacketPlayOutEntityPropertiesEvent extends PacketPlayOutEvent {
+public class PacketPlayOutEntityAttributesEvent extends PacketPlayOutEvent {
 
 	private int entityId;
     private List<AttributeSnapshot> attributes;
 
 	
 	@SuppressWarnings("unchecked")
-	public PacketPlayOutEntityPropertiesEvent(Player injectedPlayer, PacketPlayOutUpdateAttributes packet) {
+	public PacketPlayOutEntityAttributesEvent(Player injectedPlayer, PacketPlayOutUpdateAttributes packet) {
 		super(injectedPlayer);
 		
 		entityId = Field.get(packet, "a", int.class);
 		attributes = Field.get(packet, "b", List.class);
 	}
 
-	public PacketPlayOutEntityPropertiesEvent(Player injectedPlayer, int entityId, List<AttributeSnapshot> attributes) {
+	public PacketPlayOutEntityAttributesEvent(Player injectedPlayer, int entityId, List<AttributeSnapshot> attributes) {
 		super(injectedPlayer);
 		this.entityId = entityId;
 		this.attributes = attributes;

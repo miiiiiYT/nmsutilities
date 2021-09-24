@@ -19,20 +19,20 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutHeldItemSlot;
  * @author Martin
  *
  */
-public class PacketPlayOutHeldItemChangeEvent extends PacketPlayOutEvent {
+public class PacketPlayOutHeldItemSlotEvent extends PacketPlayOutEvent {
 
 	/**
 	 * The slot which the player has selected (0–8).
 	 */
 	private byte slot;
 
-	public PacketPlayOutHeldItemChangeEvent(Player injectedPlayer, PacketPlayOutHeldItemSlot packet) {
+	public PacketPlayOutHeldItemSlotEvent(Player injectedPlayer, PacketPlayOutHeldItemSlot packet) {
 		super(injectedPlayer);
 
 		slot = Field.get(packet, "a", byte.class);
 	}
 
-	public PacketPlayOutHeldItemChangeEvent(Player injectedPlayer, byte slot) {
+	public PacketPlayOutHeldItemSlotEvent(Player injectedPlayer, byte slot) {
 		super(injectedPlayer);
 		this.slot = slot;
 	}

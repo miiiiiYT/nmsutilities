@@ -24,13 +24,13 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntityEquipment;
  * @author Martin
  *
  */
-public class PacketPlayOutEntityEqipmentEvent extends PacketPlayOutEvent {
+public class PacketPlayOutEntityEquipmentEvent extends PacketPlayOutEvent {
 
 	private int entityId;
 	private List<Equipment> equimpent;
 
 	@SuppressWarnings("unchecked")
-	public PacketPlayOutEntityEqipmentEvent(Player injectedPlayer, PacketPlayOutEntityEquipment packet) {
+	public PacketPlayOutEntityEquipmentEvent(Player injectedPlayer, PacketPlayOutEntityEquipment packet) {
 		super(injectedPlayer);
 		
 		entityId = Field.get(packet, "a", int.class);
@@ -40,7 +40,7 @@ public class PacketPlayOutEntityEqipmentEvent extends PacketPlayOutEvent {
 			equimpent.add(new Equipment(nmsEquipment));
 	}
 
-	public PacketPlayOutEntityEqipmentEvent(Player injectedPlayer, int entityId, List<Equipment> equimpent) {
+	public PacketPlayOutEntityEquipmentEvent(Player injectedPlayer, int entityId, List<Equipment> equimpent) {
 		super(injectedPlayer);
 		this.entityId = entityId;
 		this.equimpent = equimpent;

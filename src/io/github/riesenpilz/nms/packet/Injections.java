@@ -80,12 +80,81 @@ import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutCostumPayloadEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutCraftRecipeResponseEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutDeathEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutDifficultyEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutDisconnectEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityAttachEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityAttributesEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityDestroyEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityEffectEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityEffectRemoveEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityEquipmentEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityHeadLookEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityMetadataEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityMoveEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityPositionAndRotationEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityPositionEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityRotationEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntitySoundEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityStatusEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityTeleportEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityVelocityEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutExplosionEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutGameStateEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutHeldItemSlotEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutInventoryCloseEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutInventoryConfirmEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutInventoryItemsEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutInventoryOpenEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutInventoryPropertyEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutJoinGameEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutKeepAliveEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutListCommandsEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutMapDataEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutMessageEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutMultiBlockChangeEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutNBTQueryResponseEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutOpenBookEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutOpenHorseWindowEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutOpenSignEditorEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutParticleEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutPlayerAbilitiesEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutPlayerDiggingEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutPlayerInfoEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutRecipeUpdateEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutRecipesUnlockEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutResourcePackEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutRespawnEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutScoreboardDisplayEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutScoreboardObjectiveEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutScoreboardTeamsEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutScoreboardUpdateScoreEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSelectAdvancementTabEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSetCooldownEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSetPassengersEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSetSlotEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSetXpEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSoundEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSpawnEntityEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSpawnLivingEntityEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSpawnPaintingEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSpawnPlayerEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSpawnPositionEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSpawnXpEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutStatisticsEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutStopSoundEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutTabCompleteEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutTabListHeaderAndFooterEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutTagsEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutTimeUpdateEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutTitleEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutTradeListEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutUnloadChunkEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutUpdateHealthEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutUpdateLightEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutUpdateViewDistanceEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutUpdateViewPositionEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutVehicleMoveEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutWorldBorderInitializeEvent;
 import io.github.riesenpilz.nms.packet.statusIn.PacketStatusInEvent;
 import io.github.riesenpilz.nms.packet.statusIn.PacketStatusInPingEvent;
 import io.github.riesenpilz.nms.packet.statusIn.PacketStatusInReqestEvent;
@@ -96,85 +165,13 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
-import net.minecraft.server.v1_16_R3.PacketHandshakingInSetProtocol;
-import net.minecraft.server.v1_16_R3.PacketLoginInCustomPayload;
-import net.minecraft.server.v1_16_R3.PacketLoginInEncryptionBegin;
-import net.minecraft.server.v1_16_R3.PacketLoginInStart;
-import net.minecraft.server.v1_16_R3.PacketLoginOutCustomPayload;
-import net.minecraft.server.v1_16_R3.PacketLoginOutDisconnect;
-import net.minecraft.server.v1_16_R3.PacketLoginOutEncryptionBegin;
-import net.minecraft.server.v1_16_R3.PacketLoginOutSetCompression;
-import net.minecraft.server.v1_16_R3.PacketLoginOutSuccess;
-import net.minecraft.server.v1_16_R3.PacketPlayInAbilities;
-import net.minecraft.server.v1_16_R3.PacketPlayInAdvancements;
-import net.minecraft.server.v1_16_R3.PacketPlayInArmAnimation;
-import net.minecraft.server.v1_16_R3.PacketPlayInAutoRecipe;
-import net.minecraft.server.v1_16_R3.PacketPlayInBEdit;
-import net.minecraft.server.v1_16_R3.PacketPlayInBeacon;
-import net.minecraft.server.v1_16_R3.PacketPlayInBlockDig;
-import net.minecraft.server.v1_16_R3.PacketPlayInBlockPlace;
-import net.minecraft.server.v1_16_R3.PacketPlayInBoatMove;
-import net.minecraft.server.v1_16_R3.PacketPlayInChat;
-import net.minecraft.server.v1_16_R3.PacketPlayInClientCommand;
-import net.minecraft.server.v1_16_R3.PacketPlayInCloseWindow;
-import net.minecraft.server.v1_16_R3.PacketPlayInCustomPayload;
-import net.minecraft.server.v1_16_R3.PacketPlayInDifficultyChange;
-import net.minecraft.server.v1_16_R3.PacketPlayInEnchantItem;
-import net.minecraft.server.v1_16_R3.PacketPlayInEntityAction;
-import net.minecraft.server.v1_16_R3.PacketPlayInEntityNBTQuery;
-import net.minecraft.server.v1_16_R3.PacketPlayInFlying;
+import net.minecraft.server.v1_16_R3.*;
 import net.minecraft.server.v1_16_R3.PacketPlayInFlying.PacketPlayInLook;
 import net.minecraft.server.v1_16_R3.PacketPlayInFlying.PacketPlayInPosition;
 import net.minecraft.server.v1_16_R3.PacketPlayInFlying.PacketPlayInPositionLook;
-import net.minecraft.server.v1_16_R3.PacketPlayInHeldItemSlot;
-import net.minecraft.server.v1_16_R3.PacketPlayInItemName;
-import net.minecraft.server.v1_16_R3.PacketPlayInJigsawGenerate;
-import net.minecraft.server.v1_16_R3.PacketPlayInKeepAlive;
-import net.minecraft.server.v1_16_R3.PacketPlayInPickItem;
-import net.minecraft.server.v1_16_R3.PacketPlayInRecipeDisplayed;
-import net.minecraft.server.v1_16_R3.PacketPlayInRecipeSettings;
-import net.minecraft.server.v1_16_R3.PacketPlayInResourcePackStatus;
-import net.minecraft.server.v1_16_R3.PacketPlayInSetCommandBlock;
-import net.minecraft.server.v1_16_R3.PacketPlayInSetCommandMinecart;
-import net.minecraft.server.v1_16_R3.PacketPlayInSetCreativeSlot;
-import net.minecraft.server.v1_16_R3.PacketPlayInSetJigsaw;
-import net.minecraft.server.v1_16_R3.PacketPlayInSettings;
-import net.minecraft.server.v1_16_R3.PacketPlayInSpectate;
-import net.minecraft.server.v1_16_R3.PacketPlayInSteerVehicle;
-import net.minecraft.server.v1_16_R3.PacketPlayInStruct;
-import net.minecraft.server.v1_16_R3.PacketPlayInTabComplete;
-import net.minecraft.server.v1_16_R3.PacketPlayInTeleportAccept;
-import net.minecraft.server.v1_16_R3.PacketPlayInTileNBTQuery;
-import net.minecraft.server.v1_16_R3.PacketPlayInTrSel;
-import net.minecraft.server.v1_16_R3.PacketPlayInTransaction;
-import net.minecraft.server.v1_16_R3.PacketPlayInUpdateSign;
-import net.minecraft.server.v1_16_R3.PacketPlayInUseEntity;
-import net.minecraft.server.v1_16_R3.PacketPlayInUseItem;
-import net.minecraft.server.v1_16_R3.PacketPlayInVehicleMove;
-import net.minecraft.server.v1_16_R3.PacketPlayInWindowClick;
-import net.minecraft.server.v1_16_R3.PacketPlayOutAdvancements;
-import net.minecraft.server.v1_16_R3.PacketPlayOutAnimation;
-import net.minecraft.server.v1_16_R3.PacketPlayOutAutoRecipe;
-import net.minecraft.server.v1_16_R3.PacketPlayOutBlockAction;
-import net.minecraft.server.v1_16_R3.PacketPlayOutBlockBreakAnimation;
-import net.minecraft.server.v1_16_R3.PacketPlayOutBlockChange;
-import net.minecraft.server.v1_16_R3.PacketPlayOutBoss;
-import net.minecraft.server.v1_16_R3.PacketPlayOutCamera;
-import net.minecraft.server.v1_16_R3.PacketPlayOutCollect;
-import net.minecraft.server.v1_16_R3.PacketPlayOutCombatEvent;
-import net.minecraft.server.v1_16_R3.PacketPlayOutCustomPayload;
-import net.minecraft.server.v1_16_R3.PacketPlayOutMapChunk;
-import net.minecraft.server.v1_16_R3.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.server.v1_16_R3.PacketPlayOutServerDifficulty;
-import net.minecraft.server.v1_16_R3.PacketPlayOutSpawnEntity;
-import net.minecraft.server.v1_16_R3.PacketPlayOutSpawnEntityExperienceOrb;
-import net.minecraft.server.v1_16_R3.PacketPlayOutSpawnEntityLiving;
-import net.minecraft.server.v1_16_R3.PacketPlayOutSpawnEntityPainting;
-import net.minecraft.server.v1_16_R3.PacketPlayOutTileEntityData;
-import net.minecraft.server.v1_16_R3.PacketStatusInPing;
-import net.minecraft.server.v1_16_R3.PacketStatusInStart;
-import net.minecraft.server.v1_16_R3.PacketStatusOutPong;
-import net.minecraft.server.v1_16_R3.PacketStatusOutServerInfo;
+import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutEntityLook;
+import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
+import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
 
 public class Injections implements Listener {
 
@@ -526,13 +523,11 @@ public class Injections implements Listener {
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayOutAnimation) {
-			final PacketPlayOutEvent event = new PacketPlayOutAnimationEvent(player,
-					(PacketPlayOutAnimation) msg);
+			final PacketPlayOutEvent event = new PacketPlayOutAnimationEvent(player, (PacketPlayOutAnimation) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayOutBlockAction) {
-			final PacketPlayOutEvent event = new PacketPlayOutBlockActionEvent(player,
-					(PacketPlayOutBlockAction) msg);
+			final PacketPlayOutEvent event = new PacketPlayOutBlockActionEvent(player, (PacketPlayOutBlockAction) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayOutBlockBreakAnimation) {
@@ -541,8 +536,7 @@ public class Injections implements Listener {
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayOutBlockChange) {
-			final PacketPlayOutEvent event = new PacketPlayOutBlockChangeEvent(player,
-					(PacketPlayOutBlockChange) msg);
+			final PacketPlayOutEvent event = new PacketPlayOutBlockChangeEvent(player, (PacketPlayOutBlockChange) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayOutTileEntityData) {
@@ -551,48 +545,41 @@ public class Injections implements Listener {
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayOutBoss) {
-			final PacketPlayOutEvent event = new PacketPlayOutBossBarEvent(player,
-					(PacketPlayOutBoss) msg);
+			final PacketPlayOutEvent event = new PacketPlayOutBossBarEvent(player, (PacketPlayOutBoss) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayOutCamera) {
-			final PacketPlayOutEvent event = new PacketPlayOutCameraEvent(player,
-					(PacketPlayOutCamera) msg);
+			final PacketPlayOutEvent event = new PacketPlayOutCameraEvent(player, (PacketPlayOutCamera) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayOutMapChunk) {
-			final PacketPlayOutEvent event = new PacketPlayOutChunkDataEvent(player,
-					(PacketPlayOutMapChunk) msg);
+			final PacketPlayOutEvent event = new PacketPlayOutChunkDataEvent(player, (PacketPlayOutMapChunk) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayOutCollect) {
-			final PacketPlayOutEvent event = new PacketPlayOutCollectItemEvent(player,
-					(PacketPlayOutCollect) msg);
+			final PacketPlayOutEvent event = new PacketPlayOutCollectItemEvent(player, (PacketPlayOutCollect) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayOutCombatEvent) {
 			PacketPlayOutCombatEvent packet = (PacketPlayOutCombatEvent) msg;
 			switch (packet.a) {
 			case END_COMBAT:
-				PacketPlayOutEvent event = new PacketPlayOutCombatEndEvent(player,
-						(PacketPlayOutCombatEvent) msg);
+				PacketPlayOutEvent event = new PacketPlayOutCombatEndEvent(player, (PacketPlayOutCombatEvent) msg);
 				Bukkit.getPluginManager().callEvent(event);
 				canceled = event.isCanceled();
 				break;
 			case ENTER_COMBAT:
-				event = new PacketPlayOutCombatStartEvent(player,
-						(PacketPlayOutCombatEvent) msg);
+				event = new PacketPlayOutCombatStartEvent(player, (PacketPlayOutCombatEvent) msg);
 				Bukkit.getPluginManager().callEvent(event);
 				canceled = event.isCanceled();
 				break;
 			case ENTITY_DIED:
-				event = new PacketPlayOutDeathEvent(player,
-						(PacketPlayOutCombatEvent) msg);
+				event = new PacketPlayOutDeathEvent(player, (PacketPlayOutCombatEvent) msg);
 				Bukkit.getPluginManager().callEvent(event);
 				canceled = event.isCanceled();
 				break;
 			}
-			
+
 		} else if (msg instanceof PacketPlayOutCustomPayload) {
 			final PacketPlayOutEvent event = new PacketPlayOutCostumPayloadEvent(player,
 					(PacketPlayOutCustomPayload) msg);
@@ -606,6 +593,325 @@ public class Injections implements Listener {
 		} else if (msg instanceof PacketPlayOutServerDifficulty) {
 			final PacketPlayOutEvent event = new PacketPlayOutDifficultyEvent(player,
 					(PacketPlayOutServerDifficulty) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutKickDisconnect) {
+			final PacketPlayOutEvent event = new PacketPlayOutDisconnectEvent(player,
+					(PacketPlayOutKickDisconnect) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutAttachEntity) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntityAttachEvent(player,
+					(PacketPlayOutAttachEntity) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutEntityDestroy) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntityDestroyEvent(player,
+					(PacketPlayOutEntityDestroy) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutEntityEffect) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntityEffectEvent(player,
+					(PacketPlayOutEntityEffect) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutRemoveEntityEffect) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntityEffectRemoveEvent(player,
+					(PacketPlayOutRemoveEntityEffect) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutEntityEquipment) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntityEquipmentEvent(player,
+					(PacketPlayOutEntityEquipment) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutEntityHeadRotation) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntityHeadLookEvent(player,
+					(PacketPlayOutEntityHeadRotation) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutEntityMetadata) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntityMetadataEvent(player,
+					(PacketPlayOutEntityMetadata) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutRelEntityMove) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntityMoveEvent(player, (PacketPlayOutRelEntityMove) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutRelEntityMoveLook) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntityPositionAndRotationEvent(player,
+					(PacketPlayOutRelEntityMoveLook) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutPosition) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntityPositionEvent(player, (PacketPlayOutPosition) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutUpdateAttributes) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntityAttributesEvent(player,
+					(PacketPlayOutUpdateAttributes) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutEntityLook) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntityRotationEvent(player,
+					(PacketPlayOutEntityLook) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutEntitySound) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntitySoundEvent(player, (PacketPlayOutEntitySound) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutEntityStatus) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntityStatusEvent(player,
+					(PacketPlayOutEntityStatus) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutEntityTeleport) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntityTeleportEvent(player,
+					(PacketPlayOutEntityTeleport) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutEntityVelocity) {
+			final PacketPlayOutEvent event = new PacketPlayOutEntityVelocityEvent(player,
+					(PacketPlayOutEntityVelocity) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutExplosion) {
+			final PacketPlayOutEvent event = new PacketPlayOutExplosionEvent(player, (PacketPlayOutExplosion) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutGameStateChange) {
+			final PacketPlayOutEvent event = new PacketPlayOutGameStateEvent(player,
+					(PacketPlayOutGameStateChange) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutHeldItemSlot) {
+			final PacketPlayOutEvent event = new PacketPlayOutHeldItemSlotEvent(player,
+					(PacketPlayOutHeldItemSlot) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutCloseWindow) {
+			final PacketPlayOutEvent event = new PacketPlayOutInventoryCloseEvent(player,
+					(PacketPlayOutCloseWindow) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutTransaction) {
+			final PacketPlayOutEvent event = new PacketPlayOutInventoryConfirmEvent(player,
+					(PacketPlayOutTransaction) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutWindowItems) {
+			final PacketPlayOutEvent event = new PacketPlayOutInventoryItemsEvent(player,
+					(PacketPlayOutWindowItems) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutOpenWindow) {
+			final PacketPlayOutEvent event = new PacketPlayOutInventoryOpenEvent(player, (PacketPlayOutOpenWindow) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutWindowData) {
+			final PacketPlayOutEvent event = new PacketPlayOutInventoryPropertyEvent(player,
+					(PacketPlayOutWindowData) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutLogin) {
+			final PacketPlayOutEvent event = new PacketPlayOutJoinGameEvent(player, (PacketPlayOutLogin) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutKeepAlive) {
+			final PacketPlayOutEvent event = new PacketPlayOutKeepAliveEvent(player, (PacketPlayOutKeepAlive) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutCommands) {
+			final PacketPlayOutEvent event = new PacketPlayOutListCommandsEvent(player, (PacketPlayOutCommands) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutCommands) {
+			final PacketPlayOutEvent event = new PacketPlayOutListCommandsEvent(player, (PacketPlayOutCommands) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutMap) {
+			final PacketPlayOutEvent event = new PacketPlayOutMapDataEvent(player, (PacketPlayOutMap) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutChat) {
+			final PacketPlayOutEvent event = new PacketPlayOutMessageEvent(player, (PacketPlayOutChat) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutMultiBlockChange) {
+			final PacketPlayOutEvent event = new PacketPlayOutMultiBlockChangeEvent(player,
+					(PacketPlayOutMultiBlockChange) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutNBTQuery) {
+			final PacketPlayOutEvent event = new PacketPlayOutNBTQueryResponseEvent(player,
+					(PacketPlayOutNBTQuery) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutOpenBook) {
+			final PacketPlayOutEvent event = new PacketPlayOutOpenBookEvent(player, (PacketPlayOutOpenBook) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutOpenWindowHorse) {
+			final PacketPlayOutEvent event = new PacketPlayOutOpenHorseWindowEvent(player,
+					(PacketPlayOutOpenWindowHorse) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutOpenSignEditor) {
+			final PacketPlayOutEvent event = new PacketPlayOutOpenSignEditorEvent(player,
+					(PacketPlayOutOpenSignEditor) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutWorldParticles) {
+			final PacketPlayOutEvent event = new PacketPlayOutParticleEvent(player, (PacketPlayOutWorldParticles) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutAbilities) {
+			final PacketPlayOutEvent event = new PacketPlayOutPlayerAbilitiesEvent(player,
+					(PacketPlayOutAbilities) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutBlockBreak) {
+			final PacketPlayOutEvent event = new PacketPlayOutPlayerDiggingEvent(player, (PacketPlayOutBlockBreak) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutPlayerInfo) {
+			final PacketPlayOutEvent event = new PacketPlayOutPlayerInfoEvent(player, (PacketPlayOutPlayerInfo) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutRecipes) {
+			final PacketPlayOutEvent event = new PacketPlayOutRecipesUnlockEvent(player, (PacketPlayOutRecipes) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutRecipeUpdate) {
+			final PacketPlayOutEvent event = new PacketPlayOutRecipeUpdateEvent(player,
+					(PacketPlayOutRecipeUpdate) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutResourcePackSend) {
+			final PacketPlayOutEvent event = new PacketPlayOutResourcePackEvent(player,
+					(PacketPlayOutResourcePackSend) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutRespawn) {
+			final PacketPlayOutEvent event = new PacketPlayOutRespawnEvent(player, (PacketPlayOutRespawn) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutScoreboardDisplayObjective) {
+			final PacketPlayOutEvent event = new PacketPlayOutScoreboardDisplayEvent(player,
+					(PacketPlayOutScoreboardDisplayObjective) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutScoreboardObjective) {
+			final PacketPlayOutEvent event = new PacketPlayOutScoreboardObjectiveEvent(player,
+					(PacketPlayOutScoreboardObjective) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutScoreboardTeam) {
+			final PacketPlayOutEvent event = new PacketPlayOutScoreboardTeamsEvent(player,
+					(PacketPlayOutScoreboardTeam) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutScoreboardScore) {
+			final PacketPlayOutEvent event = new PacketPlayOutScoreboardUpdateScoreEvent(player,
+					(PacketPlayOutScoreboardScore) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutSelectAdvancementTab) {
+			final PacketPlayOutEvent event = new PacketPlayOutSelectAdvancementTabEvent(player,
+					(PacketPlayOutSelectAdvancementTab) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutSetCooldown) {
+			final PacketPlayOutEvent event = new PacketPlayOutSetCooldownEvent(player, (PacketPlayOutSetCooldown) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutMount) {
+			final PacketPlayOutEvent event = new PacketPlayOutSetPassengersEvent(player, (PacketPlayOutMount) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutSetSlot) {
+			final PacketPlayOutEvent event = new PacketPlayOutSetSlotEvent(player, (PacketPlayOutSetSlot) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutExperience) {
+			final PacketPlayOutEvent event = new PacketPlayOutSetXpEvent(player, (PacketPlayOutExperience) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutNamedSoundEffect) {
+			final PacketPlayOutEvent event = new PacketPlayOutSoundEvent(player, (PacketPlayOutNamedSoundEffect) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutSpawnPosition) {
+			final PacketPlayOutEvent event = new PacketPlayOutSpawnPositionEvent(player,
+					(PacketPlayOutSpawnPosition) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutStatistic) {
+			final PacketPlayOutEvent event = new PacketPlayOutStatisticsEvent(player, (PacketPlayOutStatistic) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutStopSound) {
+			final PacketPlayOutEvent event = new PacketPlayOutStopSoundEvent(player, (PacketPlayOutStopSound) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutTabComplete) {
+			final PacketPlayOutEvent event = new PacketPlayOutTabCompleteEvent(player, (PacketPlayOutTabComplete) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutPlayerListHeaderFooter) {
+			final PacketPlayOutEvent event = new PacketPlayOutTabListHeaderAndFooterEvent(player,
+					(PacketPlayOutPlayerListHeaderFooter) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutTags) {
+			final PacketPlayOutEvent event = new PacketPlayOutTagsEvent(player, (PacketPlayOutTags) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutUpdateTime) {
+			final PacketPlayOutEvent event = new PacketPlayOutTimeUpdateEvent(player, (PacketPlayOutUpdateTime) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutTitle) {
+			final PacketPlayOutEvent event = new PacketPlayOutTitleEvent(player, (PacketPlayOutTitle) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutOpenWindowMerchant) {
+			final PacketPlayOutEvent event = new PacketPlayOutTradeListEvent(player,
+					(PacketPlayOutOpenWindowMerchant) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutUnloadChunk) {
+			final PacketPlayOutEvent event = new PacketPlayOutUnloadChunkEvent(player, (PacketPlayOutUnloadChunk) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutUpdateHealth) {
+			final PacketPlayOutEvent event = new PacketPlayOutUpdateHealthEvent(player,
+					(PacketPlayOutUpdateHealth) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutLightUpdate) {
+			final PacketPlayOutEvent event = new PacketPlayOutUpdateLightEvent(player, (PacketPlayOutLightUpdate) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutViewDistance) {
+			final PacketPlayOutEvent event = new PacketPlayOutUpdateViewDistanceEvent(player,
+					(PacketPlayOutViewDistance) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutViewCentre) {
+			final PacketPlayOutEvent event = new PacketPlayOutUpdateViewPositionEvent(player,
+					(PacketPlayOutViewCentre) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutVehicleMove) {
+			final PacketPlayOutEvent event = new PacketPlayOutVehicleMoveEvent(player, (PacketPlayOutVehicleMove) msg);
+			Bukkit.getPluginManager().callEvent(event);
+			canceled = event.isCanceled();
+		} else if (msg instanceof PacketPlayOutWorldBorder) {
+			final PacketPlayOutEvent event = new PacketPlayOutWorldBorderInitializeEvent(player,
+					(PacketPlayOutWorldBorder) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		}
