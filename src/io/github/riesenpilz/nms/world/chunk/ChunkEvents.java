@@ -43,6 +43,10 @@ public class ChunkEvents implements Listener {
 		File chunkFile = chunk.getFile();
 		NBTTag tag = chunk.getAllNBTTags();
 		chunk.removeAllNBTTags();
+		
+		if (tag.isEmpty())
+			return;
+		
 		new BukkitRunnable() {
 
 			@Override
@@ -65,7 +69,8 @@ public class ChunkEvents implements Listener {
 	public NBTTag read(File file, int offset) throws IOException, CommandSyntaxException {
 		file.getParentFile().mkdirs();
 		if (!file.exists())
-			file.createNewFile();
+			return new NBTTag();
+		
 		String tagString = "";
 		Scanner sc = new Scanner(file);
 		for (int i = 0; i <= offset; i++) {
@@ -76,6 +81,7 @@ public class ChunkEvents implements Listener {
 		sc.close();
 		if (tagString.isEmpty())
 			return new NBTTag();
+		
 		return new NBTTag(tagString);
 	}
 

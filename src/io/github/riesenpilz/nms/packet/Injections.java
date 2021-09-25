@@ -90,7 +90,7 @@ import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityEquipmentEvent
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityHeadLookEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityMetadataEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityMoveEvent;
-import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityPositionAndRotationEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityMoveAndRotationEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityPositionEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityRotationEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntitySoundEvent;
@@ -192,17 +192,7 @@ public class Injections implements Listener {
 		new io.github.riesenpilz.nms.entity.player.Player(player).getChannelPipeline().addBefore("packet_handler",
 				player.getName(), channelDuplexHandler);
 	}
-
-	@EventHandler
-	public void onPacketOut(PacketOutEvent e) {
-		System.out.println("§aPacket out: " + e.getEventName() + " binary: " + e.getPacketIDBinary());
-	}
-
-	@EventHandler
-	public void onPacketRecieved(PacketInEvent e) {
-		System.out.println("§bPacket in: " + e.getEventName() + " binary: " + e.getPacketIDBinary());
-	}
-
+	
 	@EventHandler
 	public void onPlayerJoin(PlayerLoginEvent e) {
 		injectPlayer(e.getPlayer());
@@ -640,7 +630,7 @@ public class Injections implements Listener {
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayOutRelEntityMoveLook) {
-			final PacketPlayOutEvent event = new PacketPlayOutEntityPositionAndRotationEvent(player,
+			final PacketPlayOutEvent event = new PacketPlayOutEntityMoveAndRotationEvent(player,
 					(PacketPlayOutRelEntityMoveLook) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
