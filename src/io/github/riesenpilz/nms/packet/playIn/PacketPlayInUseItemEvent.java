@@ -33,7 +33,7 @@ public class PacketPlayInUseItemEvent extends PacketPlayInEvent {
 
 	public PacketPlayInUseItemEvent(Player injectedPlayer, PacketPlayInUseItem packet) {
 		super(injectedPlayer);
-		block = new MovingBlock(packet.c());
+		block = MovingBlock.getMovingBlockOf(packet.c());
 		hand = Hand.getHand(packet.b());
 	}
 

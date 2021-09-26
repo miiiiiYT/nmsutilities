@@ -31,7 +31,7 @@ public abstract class Entity {
 
 			@Override
 			protected void loadData(NBTTagCompound arg0) {
-				Entity.this.loadData(new NBTTag(arg0));
+				Entity.this.loadData(NBTTag.getNBTTagOf(arg0));
 			}
 
 			@Override
@@ -56,7 +56,7 @@ public abstract class Entity {
 
 			@Override
 			public NBTTag saveData() {
-				return new NBTTag(nms.save(new NBTTagCompound()));
+				return NBTTag.getNBTTagOf(nms.save(new NBTTagCompound()));
 			}
 
 			@Override

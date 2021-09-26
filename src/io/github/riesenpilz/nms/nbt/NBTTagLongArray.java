@@ -10,12 +10,13 @@ public class NBTTagLongArray extends NBTBase {
 
 	private long[] data;
 
-	public NBTTagLongArray(net.minecraft.server.v1_16_R3.NBTBase nms) throws IllegalAccessException {
+	public NBTTagLongArray(net.minecraft.server.v1_16_R3.NBTTagLongArray nms) {
 		super(TYPE);
-		if (nms.getTypeId() != TYPE.getTypeId())
-			throw new IllegalAccessException("The type of the NBTBase has to be a long array, but is a "
-					+ super.getType().name().toLowerCase().replace("_", " "));
-		data = ((net.minecraft.server.v1_16_R3.NBTTagLongArray) nms).getLongs();
+		data = nms.getLongs();
+	}
+
+	public static NBTTagLongArray getNBTTagLongArrayOf(net.minecraft.server.v1_16_R3.NBTTagLongArray nms) {
+		return new NBTTagLongArray(nms);
 	}
 
 	public NBTTagLongArray(long[] data) {
@@ -76,4 +77,10 @@ public class NBTTagLongArray extends NBTBase {
 	public net.minecraft.server.v1_16_R3.NBTTagLongArray getNMS() {
 		return new net.minecraft.server.v1_16_R3.NBTTagLongArray(data);
 	}
+
+	@Override
+	protected NBTTagLongArray clone() {
+		return new NBTTagLongArray(ArrayUtils.clone(data));
+	}
+
 }

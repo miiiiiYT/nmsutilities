@@ -1,17 +1,23 @@
 package io.github.riesenpilz.nms.nbt;
 
+import javax.annotation.Nonnull;
+
+import org.apache.commons.lang.Validate;
+
 public class NBTTagByte extends NBTBase {
 
 	public static final NBTType TYPE = NBTType.BYTE;
 
 	private final byte data;
 
-	public NBTTagByte(net.minecraft.server.v1_16_R3.NBTBase nms) throws IllegalAccessException {
+	protected NBTTagByte(net.minecraft.server.v1_16_R3.NBTTagByte nms) {
 		super(TYPE);
-		if (!(nms.getTypeId() == TYPE.getTypeId()))
-			throw new IllegalAccessException("The type of the NBTBase has to be a byte, but is a "
-					+ super.getType().name().toLowerCase().replace("_", " "));
-		data = ((net.minecraft.server.v1_16_R3.NBTTagByte) nms).asByte();
+		data = nms.asByte();
+	}
+
+	public static NBTTagByte getNBTTagByteOf(net.minecraft.server.v1_16_R3.NBTTagByte nms) {
+		Validate.notNull(nms);
+		return new NBTTagByte(nms);
 	}
 
 	public NBTTagByte(byte data) {
@@ -19,6 +25,7 @@ public class NBTTagByte extends NBTBase {
 		this.data = data;
 	}
 
+	@Nonnull
 	@Override
 	public Byte getData() {
 		return data;
@@ -27,5 +34,10 @@ public class NBTTagByte extends NBTBase {
 	@Override
 	public net.minecraft.server.v1_16_R3.NBTTagByte getNMS() {
 		return net.minecraft.server.v1_16_R3.NBTTagByte.a(data);
+	}
+
+	@Override
+	protected NBTTagByte clone() {
+		return new NBTTagByte(data);
 	}
 }

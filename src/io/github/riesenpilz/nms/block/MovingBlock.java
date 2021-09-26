@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nms.block;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
@@ -10,39 +11,57 @@ import io.github.riesenpilz.nms.packet.PacketUtils;
 import net.minecraft.server.v1_16_R3.MovingObjectPositionBlock;
 
 public class MovingBlock {
-	private MovingObjectPositionBlock movingBlock;
+	private MovingObjectPositionBlock nms;
 
-	public MovingBlock(MovingObjectPositionBlock nms) {
-		movingBlock = nms;
+	protected MovingBlock(MovingObjectPositionBlock nms) {
+		Validate.notNull(nms);
+		this.nms = nms;
+	}
+
+	public MovingBlock(Vector velocity, BlockFace face, Location location, boolean flag) {
+		Validate.notNull(velocity);
+		Validate.notNull(face);
+		Validate.notNull(location);
+		Validate.notNull(flag);
+		nms = new MovingObjectPositionBlock(PacketUtils.toVec3D(velocity), CraftBlock.blockFaceToNotch(face),
+				PacketUtils.toBlockPosition(location), flag);
+	}
+
+	public static MovingBlock getMovingBlockOf(MovingObjectPositionBlock nms) {
+		return new MovingBlock(nms);
 	}
 
 	public void setVelocity(Vector velocity) {
-		movingBlock = new MovingObjectPositionBlock(PacketUtils.toVec3D(velocity), movingBlock.getDirection(),
-				movingBlock.getBlockPosition(), movingBlock.d());
+		Validate.notNull(velocity);
+		nms = new MovingObjectPositionBlock(PacketUtils.toVec3D(velocity), nms.getDirection(), nms.getBlockPosition(),
+				nms.d());
 	}
 
 	public Vector getVelocity() {
-		return PacketUtils.toVetor(movingBlock.getPos());
+		return PacketUtils.toVetor(nms.getPos());
 	}
 
 	public void setLocation(Location location) {
-		movingBlock = movingBlock.a(PacketUtils.toBlockPosition(location));
+		Validate.notNull(location);
+		nms = nms.a(PacketUtils.toBlockPosition(location));
 	}
 
 	public Location getLoation(World world) {
-		return PacketUtils.toLocation(movingBlock.getBlockPosition(), world);
+		Validate.notNull(world);
+		return PacketUtils.toLocation(nms.getBlockPosition(), world);
 	}
 
 	public void setFacing(BlockFace face) {
-		movingBlock = movingBlock.a(CraftBlock.blockFaceToNotch(face));
+		Validate.notNull(face);
+		nms = nms.a(CraftBlock.blockFaceToNotch(face));
 	}
 
 	public BlockFace getFacing() {
-		return CraftBlock.notchToBlockFace(movingBlock.getDirection());
+		return CraftBlock.notchToBlockFace(nms.getDirection());
 	}
 
 	public MovingObjectPositionBlock getNMS() {
-		return movingBlock;
+		return nms;
 	}
 
 }

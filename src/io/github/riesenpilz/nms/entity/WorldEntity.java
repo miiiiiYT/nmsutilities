@@ -39,7 +39,7 @@ public class WorldEntity {
 	}
 
 	public NBTTag saveToNBTTag() {
-		return new NBTTag(getNMS().save(new NBTTagCompound()));
+		return NBTTag.getNBTTagOf(getNMS().save(new NBTTagCompound()));
 	}
 
 	@Deprecated

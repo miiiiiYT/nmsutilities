@@ -1,23 +1,28 @@
 package io.github.riesenpilz.nms.nbt;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 public class NBTTagList extends NBTBase implements Iterable<NBTBase> {
 
 	public static final NBTType TYPE = NBTType.NBT_TAG_LIST;
-
+	
+	/**
+	 * Can only contain one type of NBTBase!
+	 */
 	private final List<NBTBase> data;
 
-	public NBTTagList(net.minecraft.server.v1_16_R3.NBTBase nms) throws IllegalAccessException {
+	public NBTTagList(net.minecraft.server.v1_16_R3.NBTTagList nms) {
 		super(TYPE);
-		if (nms.getTypeId() != TYPE.getTypeId())
-			throw new IllegalAccessException("The type of the NBTBase has to be a nbt tag list, but is a "
-					+ super.getType().name().toLowerCase().replace("_", " "));
 		data = new ArrayList<>();
-		for (net.minecraft.server.v1_16_R3.NBTBase base : ((net.minecraft.server.v1_16_R3.NBTTagList) nms))
-			data.add(NBTBase.get(base));
+		for (net.minecraft.server.v1_16_R3.NBTBase base : nms)
+			data.add(NBTBase.getNBTBaseOf(base));
+	}
+
+	public static NBTTagList getNBTTagListOf(net.minecraft.server.v1_16_R3.NBTTagList nms) {
+		return new NBTTagList(nms);
 	}
 
 	public NBTTagList(List<NBTBase> list) {
@@ -78,8 +83,17 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase> {
 	public void add(NBTBase base) {
 		data.add(base);
 	}
+
 	@Override
 	public String toString() {
 		return getNMS().toString();
 	}
+
+	@Override
+	protected NBTTagList clone() {
+		List<NBTBase> newData = new ArrayList<>();
+		Collections.copy(data, newData);
+		return new NBTTagList(newData);
+	}
+
 }

@@ -6,12 +6,13 @@ public class NBTTagFloat extends NBTBase {
 
 	private final float data;
 
-	public NBTTagFloat(net.minecraft.server.v1_16_R3.NBTBase nms) throws IllegalAccessException {
+	public NBTTagFloat(net.minecraft.server.v1_16_R3.NBTTagFloat nms) {
 		super(TYPE);
-		if ((nms.getTypeId() != TYPE.getTypeId()))
-			throw new IllegalAccessException("The type of the NBTBase has to be a float, but is a "
-					+ super.getType().name().toLowerCase().replace("_", " "));
-		data = ((net.minecraft.server.v1_16_R3.NBTTagFloat) nms).asFloat();
+		data = nms.asFloat();
+	}
+
+	public static NBTTagFloat getNBTTagFloatOf(net.minecraft.server.v1_16_R3.NBTTagFloat nms) {
+		return new NBTTagFloat(nms);
 	}
 
 	public NBTTagFloat(float data) {
@@ -28,4 +29,10 @@ public class NBTTagFloat extends NBTBase {
 	public net.minecraft.server.v1_16_R3.NBTTagFloat getNMS() {
 		return net.minecraft.server.v1_16_R3.NBTTagFloat.a(data);
 	}
+
+	@Override
+	protected NBTTagFloat clone() {
+		return new NBTTagFloat(data);
+	}
+
 }

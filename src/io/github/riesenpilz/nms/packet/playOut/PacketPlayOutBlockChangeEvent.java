@@ -39,7 +39,7 @@ public class PacketPlayOutBlockChangeEvent extends PacketPlayOutEvent {
 	public PacketPlayOutBlockChangeEvent(Player injectedPlayer, PacketPlayOutBlockChange packet) {
 		super(injectedPlayer);
 		blockLocation = PacketUtils.toLocation(Field.get(packet, "a", BlockPosition.class), injectedPlayer.getWorld());
-		blockData = new BlockData(Field.get(packet, "b", IBlockData.class));
+		blockData = BlockData.getBlockDataOf(Field.get(packet, "b", IBlockData.class));
 	}
 
 	public Location getBlockLocation() {

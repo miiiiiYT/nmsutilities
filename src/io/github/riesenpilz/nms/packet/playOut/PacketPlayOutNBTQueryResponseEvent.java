@@ -41,7 +41,7 @@ public class PacketPlayOutNBTQueryResponseEvent extends PacketPlayOutEvent {
 		super(injectedPlayer);
 		
 		transactionId = Field.get(packet, "a", int.class);
-		tag = new NBTTag(Field.get(packet, "b", NBTTagCompound.class));
+		tag = NBTTag.getNBTTagOf(Field.get(packet, "b", NBTTagCompound.class));
 	}
 
 	public PacketPlayOutNBTQueryResponseEvent(Player injectedPlayer, int transactionId, NBTTag tag) {

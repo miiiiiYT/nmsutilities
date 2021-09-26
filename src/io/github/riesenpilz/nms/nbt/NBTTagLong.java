@@ -6,14 +6,13 @@ public class NBTTagLong extends NBTBase {
 
 	private final long data;
 
-	public NBTTagLong(net.minecraft.server.v1_16_R3.NBTBase nms) throws IllegalAccessException {
+	public NBTTagLong(net.minecraft.server.v1_16_R3.NBTTagLong nms) {
 		super(TYPE);
-		if ((nms.getTypeId() != TYPE.getTypeId()))
-			throw new IllegalAccessException("The type of the NBTBase has to be a long, but is a "
-					+ super.getType().name().toLowerCase().replace("_", " "));
-		data = ((net.minecraft.server.v1_16_R3.NBTTagLong) nms).asInt();
+		data = nms.asLong();
 	}
-
+	public static NBTTagLong getNBTTagLongOf(net.minecraft.server.v1_16_R3.NBTTagLong nms) {
+		return new NBTTagLong(nms);
+	}
 	public NBTTagLong(long data) {
 		super(TYPE);
 		this.data = data;
@@ -28,4 +27,11 @@ public class NBTTagLong extends NBTBase {
 	public net.minecraft.server.v1_16_R3.NBTTagLong getNMS() {
 		return net.minecraft.server.v1_16_R3.NBTTagLong.a(data);
 	}
+
+	@Override
+	protected NBTTagLong clone() {
+		return new NBTTagLong(data);
+	}
+
+	
 }

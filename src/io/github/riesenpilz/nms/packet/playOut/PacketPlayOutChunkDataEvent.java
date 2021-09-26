@@ -74,14 +74,14 @@ public class PacketPlayOutChunkDataEvent extends PacketPlayOutEvent {
 		chunkX = Field.get(packet, "a", int.class);
 		chunkZ = Field.get(packet, "b", int.class);
 		c = Field.get(packet, "c", int.class);
-		heightmaps = new NBTTag(Field.get(packet, "d", NBTTagCompound.class));
+		heightmaps = NBTTag.getNBTTagOf(Field.get(packet, "d", NBTTagCompound.class));
 		biomes = Field.get(packet, "e", int[].class);
 		data = Field.get(packet, "f", byte[].class);
 		@SuppressWarnings("unchecked")
 		final List<NBTTagCompound> nmsBlockEntities = Field.get(packet, "g", List.class);
 		blockEntities = new ArrayList<>();
 		for (NBTTagCompound nmsTag : nmsBlockEntities)
-			blockEntities.add(new NBTTag(nmsTag));
+			blockEntities.add(NBTTag.getNBTTagOf(nmsTag));
 		h = Field.get(packet, "h", boolean.class);
 	}
 

@@ -2,6 +2,7 @@ package io.github.riesenpilz.nms.nbt;
 
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.ArrayUtils;
 
 public class NBTTagByteArray extends NBTBase {
@@ -10,12 +11,14 @@ public class NBTTagByteArray extends NBTBase {
 
 	private byte[] data;
 
-	public NBTTagByteArray(net.minecraft.server.v1_16_R3.NBTBase nms) throws IllegalAccessException {
+	public NBTTagByteArray(net.minecraft.server.v1_16_R3.NBTTagByteArray nms) {
 		super(TYPE);
-		if (nms.getTypeId() != TYPE.getTypeId())
-			throw new IllegalAccessException("The type of the NBTBase has to be a byte array, but is a "
-					+ super.getType().name().toLowerCase().replace("_", " "));
-		data = ((net.minecraft.server.v1_16_R3.NBTTagByteArray) nms).getBytes();
+		data = nms.getBytes();
+	}
+
+	public static NBTTagByteArray getNBTTagByteArrayOf(net.minecraft.server.v1_16_R3.NBTTagByteArray nms) {
+		Validate.notNull(nms);
+		return new NBTTagByteArray(nms);
 	}
 
 	public NBTTagByteArray(byte[] data) {
@@ -75,6 +78,11 @@ public class NBTTagByteArray extends NBTBase {
 	@Override
 	public net.minecraft.server.v1_16_R3.NBTTagByteArray getNMS() {
 		return new net.minecraft.server.v1_16_R3.NBTTagByteArray(data);
+	}
+
+	@Override
+	protected NBTTagByteArray clone() {
+		return new NBTTagByteArray(ArrayUtils.clone(data));
 	}
 
 }

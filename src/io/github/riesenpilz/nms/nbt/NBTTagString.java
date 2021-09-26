@@ -6,12 +6,13 @@ public class NBTTagString extends NBTBase {
 
 	private final String data;
 
-	public NBTTagString(net.minecraft.server.v1_16_R3.NBTBase nms) throws IllegalAccessException {
+	public NBTTagString(net.minecraft.server.v1_16_R3.NBTTagString nms) {
 		super(TYPE);
-		if (!(nms.getTypeId() == TYPE.getTypeId()))
-			throw new IllegalAccessException("The type of the NBTBase has to be a string, but is a "
-					+ super.getType().name().toLowerCase().replace("_", " "));
-		data = ((net.minecraft.server.v1_16_R3.NBTTagString) nms).asString();
+		data = nms.asString();
+	}
+
+	public static NBTTagString getNBTTagStringOf(net.minecraft.server.v1_16_R3.NBTTagString nms) {
+		return new NBTTagString(nms);
 	}
 
 	public NBTTagString(String data) {
@@ -27,4 +28,10 @@ public class NBTTagString extends NBTBase {
 	public net.minecraft.server.v1_16_R3.NBTTagString getNMS() {
 		return net.minecraft.server.v1_16_R3.NBTTagString.a(data);
 	}
+
+	@Override
+	protected NBTTagString clone() {
+		return new NBTTagString(new String(data));
+	}
+
 }

@@ -77,7 +77,7 @@ public class Block {
 	 * @return the {@link BlockData} of the block
 	 */
 	public BlockData getBlockData() {
-		return new BlockData(block);
+		return BlockData.getBlockDataOf(block);
 	}
 
 	/**
@@ -250,5 +250,13 @@ public class Block {
 	 */
 	public Location getLocation() {
 		return block.getLocation();
+	}
+	
+	/**
+	 * Gets the Bukkit block
+	 * @return the Bukkit block
+	 */
+	public org.bukkit.block.Block getBukkit() {
+		return block;
 	}
 }

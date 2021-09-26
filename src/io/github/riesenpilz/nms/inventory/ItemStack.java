@@ -39,7 +39,7 @@ public class ItemStack {
 	}
 
 	public NBTTag getTag() {
-		return new NBTTag(getNMS().getOrCreateTag());
+		return NBTTag.getNBTTagOf(getNMS().getOrCreateTag());
 	}
 
 	public void setTag(NBTTag nbtTag) {

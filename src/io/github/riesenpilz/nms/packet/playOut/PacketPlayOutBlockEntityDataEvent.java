@@ -35,7 +35,7 @@ public class PacketPlayOutBlockEntityDataEvent extends PacketPlayOutEvent {
 		blockLocation = PacketUtils.toLocation((BlockPosition) new Field(packet.getClass(), "a").get(packet),
 				injectedPlayer.getWorld());
 		action = BlockAction.getByID((int) new Field(packet.getClass(), "b").get(packet));
-		nbtTag = new NBTTag((NBTTagCompound) new Field(packet.getClass(), "c").get(packet));
+		nbtTag = NBTTag.getNBTTagOf((NBTTagCompound) new Field(packet.getClass(), "c").get(packet));
 	}
 
 	public PacketPlayOutBlockEntityDataEvent(Player injectedPlayer, Location blockLocation, BlockAction action,

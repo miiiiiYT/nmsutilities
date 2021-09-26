@@ -6,14 +6,13 @@ public class NBTTagShort extends NBTBase {
 
 	private final short data;
 
-	public NBTTagShort(net.minecraft.server.v1_16_R3.NBTBase nms) throws IllegalAccessException {
+	public NBTTagShort(net.minecraft.server.v1_16_R3.NBTTagShort nms) {
 		super(TYPE);
-		if ((nms.getTypeId() != TYPE.getTypeId()))
-			throw new IllegalAccessException("The type of the NBTBase has to be a short, but is a "
-					+ super.getType().name().toLowerCase().replace("_", " "));
-		data = ((net.minecraft.server.v1_16_R3.NBTTagShort) nms).asShort();
+		data = nms.asShort();
 	}
-
+	public static NBTTagShort getNBTTagShortOf(net.minecraft.server.v1_16_R3.NBTTagShort nms) {
+		return new NBTTagShort(nms);
+	}
 	public NBTTagShort(short data) {
 		super(TYPE);
 		this.data = data;
@@ -28,4 +27,10 @@ public class NBTTagShort extends NBTBase {
 	public net.minecraft.server.v1_16_R3.NBTTagShort getNMS() {
 		return net.minecraft.server.v1_16_R3.NBTTagShort.a(data);
 	}
+
+	@Override
+	protected NBTTagShort clone() {
+		return new NBTTagShort(data);
+	}
+
 }

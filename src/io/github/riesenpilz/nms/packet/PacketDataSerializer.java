@@ -52,7 +52,7 @@ public class PacketDataSerializer {
 	}
 
 	public NBTTag getNextNBTTag() {
-		return new NBTTag(dataSerializer.l());
+		return NBTTag.getNBTTagOf(dataSerializer.l());
 	}
 
 	public Location getNextBlockPosition(World world) {

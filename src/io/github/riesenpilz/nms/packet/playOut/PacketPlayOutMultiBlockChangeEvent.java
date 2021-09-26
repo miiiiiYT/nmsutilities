@@ -47,7 +47,7 @@ public class PacketPlayOutMultiBlockChangeEvent extends PacketPlayOutEvent {
 		IBlockData[] iBlockDatas = Field.get(packet, "c", IBlockData[].class);
 		blockDatas = new BlockData[iBlockDatas.length];
 		for (int i = 0; i < blockDatas.length; i++)
-			blockDatas[i] = new BlockData(iBlockDatas[i]);
+			blockDatas[i] = BlockData.getBlockDataOf(iBlockDatas[i]);
 		updateLight = Field.get(packet, "d", boolean.class);
 	}
 

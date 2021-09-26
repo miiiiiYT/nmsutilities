@@ -15,4 +15,9 @@ public class NBTTagEnd extends NBTBase {
 	public Object getData() {
 		return null;
 	}
+
+	@Override
+	protected NBTTagEnd clone() {
+		return new NBTTagEnd();
+	}
 }

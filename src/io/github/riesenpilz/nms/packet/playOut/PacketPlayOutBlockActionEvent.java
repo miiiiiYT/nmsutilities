@@ -38,11 +38,11 @@ public class PacketPlayOutBlockActionEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutBlockActionEvent(Player injectedPlayer, PacketPlayOutBlockAction packet) {
 		super(injectedPlayer);
-		blockLocation = PacketUtils.toLocation((BlockPosition) new Field(packet.getClass(), "a").get(packet),
+		blockLocation = PacketUtils.toLocation(Field.get(packet, "a", BlockPosition.class),
 				injectedPlayer.getWorld());
-		actionID = (int) new Field(packet.getClass(), "b").get(packet);
-		actionParam = (int) new Field(packet.getClass(), "c").get(packet);
-		blockData = new BlockData((Block) new Field(packet.getClass(), "d").get(packet));
+		actionID = Field.get(packet, "b", int.class);
+		actionParam = Field.get(packet, "c", int.class);
+		blockData = BlockData.getBlockDataOf(Field.get(packet, "d", Block.class));
 	}
 
 	public Location getBlockLocation() {

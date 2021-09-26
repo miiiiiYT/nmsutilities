@@ -1,14 +1,24 @@
 package io.github.riesenpilz.nms.nbt;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 public enum NBTType {
-	END((byte) 0), BYTE((byte) 1), SHORT((byte) 2), INT((byte) 3), LONG((byte) 4), FLOAT((byte) 5), DOUBLE((byte) 6),
-	BYTE_ARRAY((byte) 7), STRING((byte) 8), NBT_TAG_LIST((byte) 9), NBT_TAG((byte) 10), INT_ARRAY((byte) 11),
-	LONG_ARRAY((byte) 12);
+	END((byte) 0, null), BYTE((byte) 1, byte.class), SHORT((byte) 2, short.class), INT((byte) 3, int.class),
+	LONG((byte) 4, long.class), FLOAT((byte) 5, float.class), DOUBLE((byte) 6, double.class),
+	BYTE_ARRAY((byte) 7, byte[].class), STRING((byte) 8, String.class), NBT_TAG_LIST((byte) 9, List.class),
+	NBT_TAG((byte) 10, Map.class), INT_ARRAY((byte) 11, int.class), LONG_ARRAY((byte) 12, long[].class);
 
 	private final byte typeId;
 
-	private NBTType(byte typeId) {
+	@Nullable
+	private final Class<?> clazz;
+
+	private NBTType(byte typeId, Class<?> clazz) {
 		this.typeId = typeId;
+		this.clazz = clazz;
 	}
 
 	public static NBTType getType(byte typeId) {
@@ -20,5 +30,10 @@ public enum NBTType {
 
 	public byte getTypeId() {
 		return typeId;
+	}
+
+	@Nullable
+	public Class<?> getClazz() {
+		return clazz;
 	}
 }

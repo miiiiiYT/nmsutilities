@@ -14,6 +14,11 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import io.github.riesenpilz.nms.inventory.ItemStack;
 import io.github.riesenpilz.nms.nbt.NBTTag;
 
+/**
+ * This class removes and moves block NBTTags when its necessary and drops the
+ * custom drops
+ *
+ */
 public class BlockEvents implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockBreak(BlockBreakEvent e) {

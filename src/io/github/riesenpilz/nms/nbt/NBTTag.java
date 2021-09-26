@@ -5,8 +5,12 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang.Validate;
+
+import com.google.common.collect.Maps;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import io.github.riesenpilz.nms.reflections.Field;
@@ -14,48 +18,92 @@ import net.minecraft.server.v1_16_R3.MojangsonParser;
 import net.minecraft.server.v1_16_R3.NBTCompressedStreamTools;
 import net.minecraft.server.v1_16_R3.NBTTagCompound;
 
-public class NBTTag extends NBTBase implements Iterable<String> {
+public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>, Cloneable {
 	private final Map<String, NBTBase> contents;
 
+	/**
+	 * Constructs an empty NBTTag
+	 */
 	public NBTTag() {
 		super(NBTType.NBT_TAG);
 		contents = new HashMap<>();
 	}
 
+	/**
+	 * Constructs an NBTTag with the given contents
+	 * 
+	 * @param contents
+	 */
 	public NBTTag(Map<String, NBTBase> contents) {
 		super(NBTType.NBT_TAG);
+		Validate.notNull(contents);
+
 		this.contents = contents;
 	}
 
-	public NBTTag(NBTTagCompound nms) {
+	/**
+	 * Gets the contents of the given {@link NBTTagCompound} and converts it to
+	 * contents for this {@link NBTTag}
+	 * 
+	 * @param nms the NBTTagCompound
+	 */
+	protected NBTTag(NBTTagCompound nms) {
 		super(NBTType.NBT_TAG);
+		Validate.notNull(nms);
+
 		contents = new HashMap<>();
 		@SuppressWarnings("unchecked")
 		Map<String, net.minecraft.server.v1_16_R3.NBTBase> nmsContents = Field.get(nms, "map", Map.class);
-		for (String s : nmsContents.keySet()) {
-			contents.put(s, NBTBase.get(nmsContents.get(s)));
-		}
+		for (Entry<String, net.minecraft.server.v1_16_R3.NBTBase> entry : nmsContents.entrySet())
+			contents.put(entry.getKey(), NBTBase.getNBTBaseOf(entry.getValue()));
 	}
 
-	public NBTTag(InputStream inputstream) throws IOException {
-		this(NBTCompressedStreamTools.a(inputstream));
+	/**
+	 * Converts the given {@link NBTTagCompound} to a NBTTag
+	 * 
+	 * @param nms the NBTTagCompound to convert
+	 * @return the new NBTTag
+	 */
+	public static NBTTag getNBTTagOf(NBTTagCompound nms) {
+		return new NBTTag(nms);
 	}
 
-	public NBTTag(String s) throws CommandSyntaxException {
-		this(MojangsonParser.parse(s));
+	/**
+	 * Converts a NBTTag inputStream to a NBTTag
+	 * 
+	 * @param inputStream the inputStream to convert
+	 * @return the new NBTTag
+	 * @throws IOException
+	 */
+	public static NBTTag getNBTTagOf(InputStream inputStream) throws IOException {
+		Validate.notNull(inputStream);
+		return new NBTTag(NBTCompressedStreamTools.a(inputStream));
 	}
 
+	/**
+	 * Converts a NBTTag string to a NBTTag
+	 * 
+	 * @param nbtTagString
+	 * @throws CommandSyntaxException
+	 * @see NBTTag#toString()
+	 */
+	public NBTTag(String nbtTagString) throws CommandSyntaxException {
+		this(MojangsonParser.parse(nbtTagString));
+	}
+
+	/**
+	 * Gets the NMS variant of this instance
+	 */
 	public NBTTagCompound getNMS() {
-		NBTTagCompound comp = new NBTTagCompound();
-		for (String s : contents.keySet()) {
-			comp.set(s, contents.get(s).getNMS());
-		}
-		return comp;
+		NBTTagCompound nms = new NBTTagCompound();
+		for (Entry<String, NBTBase> entry : contents.entrySet())
+			nms.set(entry.getKey(), entry.getValue().getNMS());
+		return nms;
 	}
 
 	@Override
-	public Iterator<String> iterator() {
-		return contents.keySet().iterator();
+	public Iterator<Entry<String, NBTBase>> iterator() {
+		return contents.entrySet().iterator();
 	}
 
 	// END
@@ -259,12 +307,23 @@ public class NBTTag extends NBTBase implements Iterable<String> {
 	public boolean hasKey(String key) {
 		return getKeys().contains(key);
 	}
+
+	/**
+	 * Tests if the value of the given key is from the given type.
+	 * 
+	 * @param key  the key
+	 * @param type the type to test
+	 * @return true if the value of the given key is from the given type
+	 */
 	public boolean hasKeyWithValueType(String key, NBTType type) {
 		return getKeys().contains(key) && contents.get(key).getType().equals(type);
 	}
+
 	@Override
 	public NBTTag clone() {
-		return new NBTTag(getNMS().clone());
+		Map<String, NBTBase> newContents = new HashMap<>();
+		Maps.transformValues(contents, NBTBase::clone);
+		return new NBTTag(newContents);
 	}
 
 	@Override

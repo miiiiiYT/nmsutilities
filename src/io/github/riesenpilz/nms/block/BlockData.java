@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nms.block;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
 
@@ -9,25 +10,41 @@ import net.minecraft.server.v1_16_R3.Block;
 import net.minecraft.server.v1_16_R3.IBlockData;
 
 public class BlockData {
-	private final Block block;
+	private final Block nms;
 
-	public BlockData(Block block) {
-		this.block = block;
+	protected BlockData(Block nms) {
+		Validate.notNull(nms);
+		this.nms = nms;
 	}
-	public BlockData(IBlockData blockData) {
-		this.block = blockData.getBlock();
+
+	protected BlockData(IBlockData nms) {
+		Validate.notNull(nms);
+		this.nms = nms.getBlock();
 	}
-	public BlockData(org.bukkit.block.Block block) {
-		this.block = ((CraftBlock)block).getNMS().getBlock();
+
+	protected BlockData(org.bukkit.block.Block block) {
+		Validate.notNull(block);
+		this.nms = ((CraftBlock) block).getNMS().getBlock();
+	}
+
+	public static BlockData getBlockDataOf(Block nms) {
+		return new BlockData(nms);
+	}
+
+	public static BlockData getBlockDataOf(IBlockData nms) {
+		return new BlockData(nms);
 	}
 	
-
+	public static BlockData getBlockDataOf(org.bukkit.block.Block block) {
+		return new BlockData(block);
+	}
+	
 	public io.github.riesenpilz.nms.block.Block setBlock(Location loc) {
-		block.c(new ServerWorld(loc.getWorld()).getNMS(), PacketUtils.toBlockPosition(loc));
+		nms.c(new ServerWorld(loc.getWorld()).getNMS(), PacketUtils.toBlockPosition(loc));
 		return io.github.riesenpilz.nms.block.Block.getBlockOf(loc);
 	}
 
 	public Block getNMS() {
-		return block;
+		return nms;
 	}
 }
