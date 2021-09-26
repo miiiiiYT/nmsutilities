@@ -94,6 +94,7 @@ public class ServerWorld {
 	public File getFolder() {
 		return world.getWorldFolder();
 	}
+
 	@Deprecated
 	public void setInventory(PlayerWorldInventory inventory, String name) {
 		JsonObject config = getWorldConfig();
@@ -102,6 +103,7 @@ public class ServerWorld {
 		config.add("inventorys", invs);
 		setWorldConfig(config);
 	}
+
 	@Deprecated
 	public PlayerWorldInventory getInventory(String name) {
 		JsonObject config = getWorldConfig();
@@ -113,6 +115,7 @@ public class ServerWorld {
 		return new PlayerWorldInventory(invs.getAsJsonObject(name));
 	}
 
+	@Deprecated
 	public void removeInventory(String name) {
 		JsonObject config = getWorldConfig();
 		JsonObject invs = config.getAsJsonObject("inventorys");

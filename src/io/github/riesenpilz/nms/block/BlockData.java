@@ -24,7 +24,7 @@ public class BlockData {
 
 	public io.github.riesenpilz.nms.block.Block setBlock(Location loc) {
 		block.c(new ServerWorld(loc.getWorld()).getNMS(), PacketUtils.toBlockPosition(loc));
-		return new io.github.riesenpilz.nms.block.Block(loc);
+		return io.github.riesenpilz.nms.block.Block.getBlockOf(loc);
 	}
 
 	public Block getNMS() {

@@ -11,8 +11,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
+import io.github.riesenpilz.nms.nbt.NBTBase;
 import io.github.riesenpilz.nms.nbt.NBTTag;
 import io.github.riesenpilz.nms.nbt.NBTTagList;
+import io.github.riesenpilz.nms.nbt.NBTType;
 import io.github.riesenpilz.nms.reflections.Field;
 
 public class ItemStack {
@@ -127,5 +129,14 @@ public class ItemStack {
 		ItemMeta headMeta = getItemMeta();
 		Field.set(getItemMeta(), "profile", profile);
 		setItemMeta(headMeta);
+	}
+
+	public static boolean isItemStackNBT(NBTBase nbtItemStack) {
+		if (!nbtItemStack.getType().equals(NBTType.NBT_TAG))
+			return false;
+		NBTTag nbtTagItemStack = (NBTTag) nbtItemStack;
+		return nbtTagItemStack.hasKeyWithValueType("id", NBTType.INT)
+				&& nbtTagItemStack.hasKeyWithValueType("count", NBTType.INT)
+				&& nbtTagItemStack.hasKeyWithValueType("tag", NBTType.NBT_TAG);
 	}
 }

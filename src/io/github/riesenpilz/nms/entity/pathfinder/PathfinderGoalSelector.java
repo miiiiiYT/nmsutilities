@@ -1,24 +1,24 @@
 package io.github.riesenpilz.nms.entity.pathfinder;
 
 public class PathfinderGoalSelector {
-    private final net.minecraft.server.v1_16_R3.PathfinderGoalSelector pathfinderGoalSelector;
+    private final net.minecraft.server.v1_16_R3.PathfinderGoalSelector nms;
 
-    public PathfinderGoalSelector(net.minecraft.server.v1_16_R3.PathfinderGoalSelector pathfinderGoalSelector) {
-        this.pathfinderGoalSelector = pathfinderGoalSelector;
+    public PathfinderGoalSelector(net.minecraft.server.v1_16_R3.PathfinderGoalSelector nms) {
+        this.nms = nms;
     }
 
     public void addPathFinderGoal(PathfinderGoal pathfinderGoal) {
-        pathfinderGoalSelector.a(pathfinderGoal.getPathfinderGoal());
+        nms.a(pathfinderGoal.getPathfinderGoal());
     }
 
     public void addPathFinderGoal(int priority, PathfinderGoal pathfinderGoal) {
-        pathfinderGoalSelector.a(priority, pathfinderGoal.getPathfinderGoal());
+        nms.a(priority, pathfinderGoal.getPathfinderGoal());
     }
     public void addPathFinderGoal(net.minecraft.server.v1_16_R3.PathfinderGoal pathfinderGoal) {
-        pathfinderGoalSelector.a(pathfinderGoal);
+        nms.a(pathfinderGoal);
     }
 
     public void addPathFinderGoal(int priority, net.minecraft.server.v1_16_R3.PathfinderGoal pathfinderGoal) {
-        pathfinderGoalSelector.a(priority, pathfinderGoal);
+        nms.a(priority, pathfinderGoal);
     }
 }

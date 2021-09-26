@@ -259,7 +259,9 @@ public class NBTTag extends NBTBase implements Iterable<String> {
 	public boolean hasKey(String key) {
 		return getKeys().contains(key);
 	}
-
+	public boolean hasKeyWithValueType(String key, NBTType type) {
+		return getKeys().contains(key) && contents.get(key).getType().equals(type);
+	}
 	@Override
 	public NBTTag clone() {
 		return new NBTTag(getNMS().clone());

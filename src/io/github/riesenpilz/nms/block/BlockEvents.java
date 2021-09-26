@@ -20,7 +20,7 @@ public class BlockEvents implements Listener {
 		if (e.isCancelled())
 			return;
 
-		Block block = new Block(e.getBlock());
+		Block block = Block.getBlockOf(e.getBlock());
 
 		e.setDropItems(!block.hasDrops());
 		if (!block.hasDrops())
@@ -37,7 +37,7 @@ public class BlockEvents implements Listener {
 		if (e.isCancelled())
 			return;
 
-		Block block = new Block(e.getBlock());
+		Block block = Block.getBlockOf(e.getBlock());
 
 		block.removeNBTTag();
 	}
@@ -46,11 +46,11 @@ public class BlockEvents implements Listener {
 	public void onPistonExtend(BlockPistonExtendEvent e) {
 		if (e.isCancelled())
 			return;
-		
+
 		HashMap<Block, NBTTag> newLocations = new HashMap<>();
 		for (org.bukkit.block.Block block : e.getBlocks()) {
-			final Block block1 = new Block(block);
-			newLocations.put(new Block(block.getRelative(e.getDirection())), block1.getNBTTag());
+			final Block block1 = Block.getBlockOf(block);
+			newLocations.put(Block.getBlockOf(block.getRelative(e.getDirection())), block1.getNBTTag());
 			block1.removeNBTTag();
 		}
 		for (Entry<Block, NBTTag> entry : newLocations.entrySet())
@@ -61,11 +61,11 @@ public class BlockEvents implements Listener {
 	public void onPistonRetract(BlockPistonRetractEvent e) {
 		if (e.isCancelled())
 			return;
-		
+
 		HashMap<Block, NBTTag> newLocations = new HashMap<>();
 		for (org.bukkit.block.Block block : e.getBlocks()) {
-			final Block block1 = new Block(block);
-			newLocations.put(new Block(block.getRelative(e.getDirection())), block1.getNBTTag());
+			final Block block1 = Block.getBlockOf(block);
+			newLocations.put(Block.getBlockOf(block.getRelative(e.getDirection())), block1.getNBTTag());
 			block1.removeNBTTag();
 		}
 		for (Entry<Block, NBTTag> entry : newLocations.entrySet())

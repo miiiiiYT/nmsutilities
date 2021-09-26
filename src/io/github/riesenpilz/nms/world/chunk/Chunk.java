@@ -5,8 +5,6 @@ import java.util.HashMap;
 
 import org.bukkit.Location;
 
-import com.google.gson.JsonObject;
-
 import io.github.riesenpilz.nms.nbt.NBTTag;
 import io.github.riesenpilz.nms.world.ServerWorld;
 
@@ -18,36 +16,9 @@ public class Chunk {
 		this.chunk = chunk;
 	}
 
-	@Deprecated
-	public void setTag(JsonObject jsonObject) {
-		JsonObject jsonObject1 = getWorld().getConfig("chunks");
-		jsonObject1.add(getKey(), jsonObject);
-		getWorld().setConfig("chunks", jsonObject1);
-	}
-
-	@Deprecated
-	public JsonObject getTag() {
-		JsonObject tag = getWorld().getConfig("chunks");
-		return tag.has(getKey()) ? (JsonObject) tag.get(getKey()) : new JsonObject();
-	}
-
-	@Deprecated
-	public void removeTag() {
-		setTag(null);
-	}
-
-	@Deprecated
-	public boolean hasTag() {
-		return getTag() != null;
-	}
 
 	public ServerWorld getWorld() {
 		return new ServerWorld(chunk.getWorld());
-	}
-
-	@Deprecated
-	public String getKey() {
-		return chunk.getX() + ":" + chunk.getZ();
 	}
 
 	public Location getLocation() {
