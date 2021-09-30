@@ -1,13 +1,19 @@
 package io.github.riesenpilz.nms.inventory;
 
+import java.util.Collection;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
+import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
@@ -18,24 +24,30 @@ import io.github.riesenpilz.nms.nbt.NBTType;
 import io.github.riesenpilz.nms.reflections.Field;
 
 public class ItemStack {
-	private net.minecraft.server.v1_16_R3.ItemStack itemStack;
+	private net.minecraft.server.v1_16_R3.ItemStack nms;
 
-	public ItemStack(org.bukkit.inventory.ItemStack bukkitItemStack) {
-		itemStack = CraftItemStack.asNMSCopy(bukkitItemStack);
+	protected ItemStack(@Nullable org.bukkit.inventory.ItemStack bukkit) {
+		nms = nms == null ? net.minecraft.server.v1_16_R3.ItemStack.b : CraftItemStack.asNMSCopy(bukkit);
 	}
 
-	public ItemStack(Material material) {
-		itemStack = CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(material));
+	public ItemStack(@Nullable Material material) {
+		nms = CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(material == null ? Material.AIR : material));
 	}
 
-	public ItemStack(net.minecraft.server.v1_16_R3.ItemStack nms) {
-		if (nms == null)
-			nms = net.minecraft.server.v1_16_R3.ItemStack.b;
-		itemStack = nms;
+	protected ItemStack(@Nullable net.minecraft.server.v1_16_R3.ItemStack nms) {
+		this.nms = nms == null ? net.minecraft.server.v1_16_R3.ItemStack.b : nms;
+	}
+
+	public static ItemStack getItemStackOf(@Nullable org.bukkit.inventory.ItemStack bukkit) {
+		return new ItemStack(bukkit);
+	}
+
+	public static ItemStack getItemStackOf(@Nullable net.minecraft.server.v1_16_R3.ItemStack nms) {
+		return new ItemStack(nms);
 	}
 
 	public net.minecraft.server.v1_16_R3.ItemStack getNMS() {
-		return itemStack;
+		return nms;
 	}
 
 	public NBTTag getTag() {
@@ -43,6 +55,7 @@ public class ItemStack {
 	}
 
 	public void setTag(NBTTag nbtTag) {
+		Validate.notNull(nbtTag);
 		getNMS().setTag(nbtTag.getNMS());
 	}
 
@@ -57,32 +70,30 @@ public class ItemStack {
 			getNMS().removeTag("ench");
 	}
 
-	public NBTTag toTag() {
+	public NBTTag toNBTTag() {
 		NBTTag tag = new NBTTag();
 		tag.setNBTTag("tag", getTag());
-		tag.setString("id", getItemStack().getType().name());
-		tag.setInt("count", getItemStack().getAmount());
+		tag.setString("id", getBukkit().getType().name());
+		tag.setInt("count", getBukkit().getAmount());
 		return tag;
 	}
 
 	public void setMaterial(Material material) {
-		final org.bukkit.inventory.ItemStack itemStack2 = getItemStack();
-		itemStack2.setType(material);
-		setItemStack(itemStack2);
+		final org.bukkit.inventory.ItemStack bukkit = getBukkit();
+		bukkit.setType(material);
+		changeItemStack(bukkit);
 	}
 
 	public void setAmount(int amount) {
-		final org.bukkit.inventory.ItemStack itemStack2 = getItemStack();
-		itemStack2.setAmount(amount);
-		setItemStack(itemStack2);
+		nms.setCount(amount);
 	}
 
 	public int getAmount() {
-		return getItemStack().getAmount();
+		return nms.getCount();
 	}
 
 	public Material getMaterial() {
-		return getItemStack().getType();
+		return getBukkit().getType();
 	}
 
 	public static ItemStack getItemStack(NBTTag nbtTag) {
@@ -93,42 +104,52 @@ public class ItemStack {
 	}
 
 	public ItemMeta getItemMeta() {
-		return getItemStack().getItemMeta();
+		return getBukkit().getItemMeta();
 	}
 
 	public void setItemMeta(ItemMeta itemMeta) {
-		final org.bukkit.inventory.ItemStack itemStack2 = getItemStack();
+		final org.bukkit.inventory.ItemStack itemStack2 = getBukkit();
 		itemStack2.setItemMeta(itemMeta);
-		setItemStack(itemStack2);
+		changeItemStack(itemStack2);
 	}
 
-	public org.bukkit.inventory.ItemStack getItemStack() {
+	public org.bukkit.inventory.ItemStack getBukkit() {
 		return CraftItemStack.asBukkitCopy(getNMS());
 	}
 
-	public void setItemStack(org.bukkit.inventory.ItemStack itemStack) {
-		this.itemStack = CraftItemStack.asNMSCopy(itemStack);
+	private void changeItemStack(org.bukkit.inventory.ItemStack bukkit) {
+		this.nms = CraftItemStack.asNMSCopy(bukkit);
 	}
 
 	public void dropNaturally(Location location) {
-		location.getWorld().dropItemNaturally(location, getItemStack());
+		location.getWorld().dropItemNaturally(location, getBukkit());
 	}
 
 	public void drop(Location location) {
-		location.getWorld().dropItem(location, getItemStack());
+		location.getWorld().dropItem(location, getBukkit());
 	}
 
 	private static final Base64 base64 = new Base64();
 
 	public void setSkullTexture(String url) {
-		if (!getMaterial().equals(Material.PLAYER_HEAD))
-			return;
+		Validate.isTrue(getMaterial().equals(Material.PLAYER_HEAD));
 		GameProfile profile = new GameProfile(UUID.randomUUID(), null);
 		byte[] encodedData = base64.encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
 		profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
-		ItemMeta headMeta = getItemMeta();
-		Field.set(getItemMeta(), "profile", profile);
+		SkullMeta headMeta = (SkullMeta) getItemMeta();
+		Field.set(headMeta, "profile", profile);
 		setItemMeta(headMeta);
+	}
+
+	public String getSkullTexture() {
+		Validate.isTrue(getMaterial().equals(Material.PLAYER_HEAD));
+
+		GameProfile profile = Field.get((SkullMeta) getItemMeta(), "profile", GameProfile.class);
+		Collection<Property> properties = profile.getProperties().get("textures");
+		Property property = Iterables.getFirst(properties, null);
+		Validate.notNull(property, "Skull doesnt has a texture");
+		byte[] decodedData = base64.decode(property.getValue().getBytes());
+		return new String(decodedData).substring("{textures:{SKIN:{url:\"".length() - 1, "\"}}}".length() - 1);
 	}
 
 	public static boolean isItemStackNBT(NBTBase nbtItemStack) {

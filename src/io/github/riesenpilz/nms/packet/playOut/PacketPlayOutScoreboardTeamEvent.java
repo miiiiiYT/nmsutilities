@@ -27,7 +27,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutScoreboardTeam;
  * @author Martin
  *
  */
-public class PacketPlayOutScoreboardTeamsEvent extends PacketPlayOutEvent {
+public class PacketPlayOutScoreboardTeamEvent extends PacketPlayOutEvent {
 
 	/**
 	 * A unique name for the team. (Shared with scoreboard).(16 chars max.)
@@ -52,7 +52,7 @@ public class PacketPlayOutScoreboardTeamsEvent extends PacketPlayOutEvent {
 	private Set<FriendlyTag> tags;
 
 	@SuppressWarnings("unchecked")
-	public PacketPlayOutScoreboardTeamsEvent(Player injectedPlayer, PacketPlayOutScoreboardTeam packet) {
+	public PacketPlayOutScoreboardTeamEvent(Player injectedPlayer, PacketPlayOutScoreboardTeam packet) {
 		super(injectedPlayer);
 		name = Field.get(packet, "a", String.class);
 		mode = Mode.getById(Field.get(packet, "b", int.class));
@@ -81,7 +81,7 @@ public class PacketPlayOutScoreboardTeamsEvent extends PacketPlayOutEvent {
 
 	}
 
-	public PacketPlayOutScoreboardTeamsEvent(Player injectedPlayer, String name, IChatBaseComponent displayName,
+	public PacketPlayOutScoreboardTeamEvent(Player injectedPlayer, String name, IChatBaseComponent displayName,
 			IChatBaseComponent prefix, IChatBaseComponent suffix, NameTagVisibility visibility, CollisionRule rule,
 			ChatColor teamColor, Collection<String> entities, Mode mode, Set<FriendlyTag> tags) {
 		super(injectedPlayer);

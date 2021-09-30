@@ -36,7 +36,7 @@ public class PlayerWorldInventory {
         JsonObject jsonObject = new JsonObject();
         JsonArray jsonArray = new JsonArray();
         for (ItemStack itemStack : getContents())
-            jsonArray.add(itemStack == null ? "" : new io.github.riesenpilz.nms.inventory.ItemStack(itemStack).toTag().toString());
+            jsonArray.add(itemStack == null ? "" : new io.github.riesenpilz.nms.inventory.ItemStack(itemStack).toNBTTag().toString());
         jsonObject.add("contents", jsonArray);
         jsonObject.addProperty("xp", getXp());
         jsonObject.addProperty("foodLevel", getFoodLevel());
@@ -62,7 +62,7 @@ public class PlayerWorldInventory {
             for (int i = 0; i < jsonArray.size(); i++)
 				try {
 					contents[i] = jsonArray.get(i).getAsString().isEmpty() ? null
-					        : io.github.riesenpilz.nms.inventory.ItemStack.getItemStack(new NBTTag(jsonArray.get(i).getAsString())).getItemStack();
+					        : io.github.riesenpilz.nms.inventory.ItemStack.getItemStack(new NBTTag(jsonArray.get(i).getAsString())).getBukkit();
 				} catch (CommandSyntaxException e) {
 					e.printStackTrace();
 				}

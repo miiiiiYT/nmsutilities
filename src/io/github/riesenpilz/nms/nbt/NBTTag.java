@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang.Validate;
 
 import com.google.common.collect.Maps;
@@ -19,7 +21,7 @@ import net.minecraft.server.v1_16_R3.NBTCompressedStreamTools;
 import net.minecraft.server.v1_16_R3.NBTTagCompound;
 
 public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>, Cloneable {
-	private final Map<String, NBTBase> contents;
+	private final HashMap<String, NBTBase> contents;
 
 	/**
 	 * Constructs an empty NBTTag
@@ -34,7 +36,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	 * 
 	 * @param contents
 	 */
-	public NBTTag(Map<String, NBTBase> contents) {
+	public NBTTag(HashMap<String, NBTBase> contents) {
 		super(NBTType.NBT_TAG);
 		Validate.notNull(contents);
 
@@ -96,7 +98,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	 */
 	public NBTTagCompound getNMS() {
 		NBTTagCompound nms = new NBTTagCompound();
-		for (Entry<String, NBTBase> entry : contents.entrySet())
+		for (Entry<String, NBTBase> entry : this)
 			nms.set(entry.getKey(), entry.getValue().getNMS());
 		return nms;
 	}
@@ -108,7 +110,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 
 	// END
 	public boolean isEnd(String key) {
-		return hasKey(key) && contents.get(key).getType().equals(NBTType.END);
+		return hasKey(key) && get(key).is(NBTType.END);
 	}
 
 	// BYTE
@@ -117,11 +119,12 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	public byte getByte(String key) {
-		return ((NBTTagByte) contents.get(key)).getData();
+		Validate.isTrue(get(key) instanceof NBTTagByte);
+		return (byte) get(key).getData();
 	}
 
 	public boolean isByte(String key) {
-		return hasKey(key) && contents.get(key).getType().equals(NBTType.BYTE);
+		return hasKeyWithValueType(key, NBTType.BYTE);
 	}
 
 	// SHORT
@@ -130,11 +133,12 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	public short getShort(String key) {
-		return ((NBTTagShort) contents.get(key)).getData();
+		Validate.isTrue(get(key) instanceof NBTTagShort);
+		return (short) get(key).getData();
 	}
 
 	public boolean isShort(String key) {
-		return hasKey(key) && contents.get(key).getType().equals(NBTType.SHORT);
+		return hasKeyWithValueType(key, NBTType.SHORT);
 	}
 
 	// INT
@@ -143,11 +147,12 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	public int getInt(String key) {
-		return ((NBTTagInt) contents.get(key)).getData();
+		Validate.isTrue(get(key) instanceof NBTTagInt);
+		return (int) get(key).getData();
 	}
 
 	public boolean isInt(String key) {
-		return hasKey(key) && contents.get(key).getType().equals(NBTType.INT);
+		return hasKeyWithValueType(key, NBTType.INT);
 	}
 
 	// LONG
@@ -156,11 +161,12 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	public long getLong(String key) {
-		return ((NBTTagLong) contents.get(key)).getData();
+		Validate.isTrue(get(key) instanceof NBTTagLong);
+		return (long) get(key).getData();
 	}
 
 	public boolean isLong(String key) {
-		return hasKey(key) && contents.get(key).getType().equals(NBTType.LONG);
+		return hasKeyWithValueType(key, NBTType.LONG);
 	}
 
 	// FLOAT
@@ -169,11 +175,12 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	public float getFloat(String key) {
-		return ((NBTTagFloat) contents.get(key)).getData();
+		Validate.isTrue(get(key) instanceof NBTTagFloat);
+		return (float) get(key).getData();
 	}
 
 	public boolean isFloat(String key) {
-		return hasKey(key) && contents.get(key).getType().equals(NBTType.FLOAT);
+		return hasKeyWithValueType(key, NBTType.FLOAT);
 	}
 
 	// DOUBLE
@@ -182,11 +189,12 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	public double getDouble(String key) {
-		return ((NBTTagDouble) contents.get(key)).getData();
+		Validate.isTrue(get(key) instanceof NBTTagDouble);
+		return (double) get(key).getData();
 	}
 
 	public boolean isDouble(String key) {
-		return hasKey(key) && contents.get(key).getType().equals(NBTType.DOUBLE);
+		return hasKeyWithValueType(key, NBTType.DOUBLE);
 	}
 
 	// BYTE_ARRAY
@@ -195,11 +203,11 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	public byte[] getByteArray(String key) {
-		return ((NBTTagByteArray) contents.get(key)).getData();
+		return ((NBTTagByteArray) get(key)).getData();
 	}
 
 	public boolean isByteArray(String key) {
-		return hasKey(key) && contents.get(key).getType().equals(NBTType.BYTE_ARRAY);
+		return hasKeyWithValueType(key, NBTType.BYTE_ARRAY);
 	}
 
 	// STRING
@@ -208,11 +216,11 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	public String getString(String key) {
-		return ((NBTTagString) contents.get(key)).getData();
+		return ((NBTTagString) get(key)).getData();
 	}
 
 	public boolean isString(String key) {
-		return hasKey(key) && contents.get(key).getType().equals(NBTType.STRING);
+		return hasKeyWithValueType(key, NBTType.STRING);
 	}
 
 	// NBT_TAG_LIST
@@ -221,7 +229,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	public NBTTagList getNBTTagList(String key) {
-		return ((NBTTagList) contents.get(key));
+		return ((NBTTagList) get(key));
 	}
 
 	public NBTTagList getOrDefNBTTagList(String key, NBTTagList def) {
@@ -232,7 +240,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	public boolean isNBTTagList(String key) {
-		return hasKey(key) && contents.get(key).getType().equals(NBTType.NBT_TAG_LIST);
+		return hasKeyWithValueType(key, NBTType.NBT_TAG_LIST);
 	}
 
 	// NBT_TAG
@@ -241,18 +249,18 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	public NBTTag getNBTTag(String key) {
-		return ((NBTTag) contents.get(key));
+		return ((NBTTag) get(key));
 	}
 
 	public NBTTag getOrDefNBTTag(String key, NBTTag def) {
 		final NBTTag nbtTag = (NBTTag) contents.getOrDefault(key, def);
-		if (nbtTag != contents.get(key))
+		if (nbtTag != get(key))
 			set(key, nbtTag);
 		return nbtTag;
 	}
 
 	public boolean isNBTTag(String key) {
-		return hasKey(key) && contents.get(key).getType().equals(NBTType.NBT_TAG);
+		return hasKeyWithValueType(key, NBTType.NBT_TAG);
 	}
 
 	// INT_ARRAY
@@ -261,11 +269,11 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	public int[] getIntArray(String key) {
-		return ((NBTTagIntArray) contents.get(key)).getData();
+		return ((NBTTagIntArray) get(key)).getData();
 	}
 
 	public boolean isIntArray(String key) {
-		return hasKey(key) && contents.get(key).getType().equals(NBTType.INT_ARRAY);
+		return hasKeyWithValueType(key, NBTType.INT_ARRAY);
 	}
 
 	// LONG_ARRAY
@@ -274,11 +282,11 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	public long[] getLongArray(String key) {
-		return ((NBTTagLongArray) contents.get(key)).getData();
+		return ((NBTTagLongArray) get(key)).getData();
 	}
 
 	public boolean isLongArray(String key) {
-		return hasKey(key) && contents.get(key).getType().equals(NBTType.LONG_ARRAY);
+		return hasKeyWithValueType(key, NBTType.LONG_ARRAY);
 	}
 
 	// BOOLEAN
@@ -287,13 +295,13 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	public boolean getBoolean(String key) {
-		return ((NBTTagByte) contents.get(key)).getData() == 1;
+		Validate.isTrue(get(key) instanceof NBTTagByte);
+		return (byte) get(key).getData() == 1;
 	}
 
 	public boolean isBoolean(String key) {
-		final NBTBase nbtBase = contents.get(key);
-		return hasKey(key) && nbtBase.getType().equals(NBTType.BYTE)
-				&& (((NBTTagByte) nbtBase).getData() == 1 || ((NBTTagByte) nbtBase).getData() == 0);
+		final NBTBase nbtBase = getOrEnd(key);
+		return nbtBase.is(NBTType.BYTE) && ((byte) nbtBase.getData() == 1 || (byte) nbtBase.getData() == 0);
 	}
 
 	public Set<String> getKeys() {
@@ -305,7 +313,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	public boolean hasKey(String key) {
-		return getKeys().contains(key);
+		return contents.containsKey(key);
 	}
 
 	/**
@@ -316,12 +324,12 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	 * @return true if the value of the given key is from the given type
 	 */
 	public boolean hasKeyWithValueType(String key, NBTType type) {
-		return getKeys().contains(key) && contents.get(key).getType().equals(type);
+		return getOrEnd(key).is(type);
 	}
 
 	@Override
 	public NBTTag clone() {
-		Map<String, NBTBase> newContents = new HashMap<>();
+		HashMap<String, NBTBase> newContents = new HashMap<>();
 		Maps.transformValues(contents, NBTBase::clone);
 		return new NBTTag(newContents);
 	}
@@ -339,8 +347,17 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 		contents.put(key, value);
 	}
 
+	@Nullable
 	public NBTBase get(String key) {
 		return contents.get(key);
+	}
+
+	public NBTBase getOrDef(String key, NBTBase def) {
+		return hasKey(key) ? get(key) : def;
+	}
+
+	public NBTBase getOrEnd(String key) {
+		return getOrDef(key, new NBTTagEnd());
 	}
 
 	public void setALL(NBTTag tag) {
@@ -351,7 +368,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	}
 
 	@Override
-	public Map<String, NBTBase> getData() {
+	public HashMap<String, NBTBase> getData() {
 		return contents;
 	}
 }

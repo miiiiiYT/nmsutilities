@@ -48,7 +48,7 @@ public class PacketDataSerializer {
 	}
 
 	public ItemStack getNextItemStack() {
-		return new ItemStack(dataSerializer.n());
+		return ItemStack.getItemStackOf(dataSerializer.n());
 	}
 
 	public NBTTag getNextNBTTag() {

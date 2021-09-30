@@ -40,7 +40,7 @@ public class PacketPlayOutInventoryItemsEvent extends PacketPlayOutEvent {
 		@SuppressWarnings("unchecked")
 		List<net.minecraft.server.v1_16_R3.ItemStack> itemStacks2 = Field.get(packet, "a", List.class);
 		for (net.minecraft.server.v1_16_R3.ItemStack itemStack : itemStacks2)
-			itemStacks.add(new ItemStack(itemStack));
+			itemStacks.add(ItemStack.getItemStackOf(itemStack));
 	}
 
 	public PacketPlayOutInventoryItemsEvent(Player injectedPlayer, int windowID, List<ItemStack> itemStacks) {

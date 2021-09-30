@@ -83,7 +83,7 @@ public class PacketPlayOutEntityEquipmentEvent extends PacketPlayOutEvent {
 		}
 
 		public Equipment(Pair<EnumItemSlot, net.minecraft.server.v1_16_R3.ItemStack> nms) {
-			itemStack = new ItemStack(nms.getSecond());
+			itemStack = ItemStack.getItemStackOf(nms.getSecond());
 			slot = Slot.getSlot(nms.getFirst());
 		}
 

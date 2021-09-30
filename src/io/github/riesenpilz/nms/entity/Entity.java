@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -81,7 +82,7 @@ public abstract class Entity {
 		return entity;
 	}
 
-	public final int getID() {
+	public final int getId() {
 		return entity.getId();
 	}
 
@@ -91,7 +92,7 @@ public abstract class Entity {
 	}
 
 	public final World getWorld() {
-		return new World(entity.world);
+		return World.getWorldOf(entity.world);
 	}
 
 	public final void setWorld(World world) {
@@ -166,7 +167,8 @@ public abstract class Entity {
 	}
 
 	public final Location getLocation() {
-		return new Location(new World(entity.world).getWorld(), entity.locX(), entity.locY(), entity.locZ(), entity.yaw, entity.pitch);
+		return new Location(getWorld().getBukkit(), entity.locX(), entity.locY(), entity.locZ(), entity.yaw,
+				entity.pitch);
 	}
 
 	/**
@@ -199,4 +201,12 @@ public abstract class Entity {
 	 * public boolean glowing; <br>
 	 * 
 	 */
+
+	/**
+	 * Gets a new entity id for fake entities in packets.
+	 * @return new entity id
+	 */
+	public static int getNewEntityId() {
+		return Field.getConstant(Entity.class, "entityCount", AtomicInteger.class).incrementAndGet();
+	}
 }

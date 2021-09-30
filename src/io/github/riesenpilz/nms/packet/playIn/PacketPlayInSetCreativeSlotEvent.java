@@ -51,17 +51,17 @@ public class PacketPlayInSetCreativeSlotEvent extends PacketPlayInEvent {
 	public PacketPlayInSetCreativeSlotEvent(Player injectedPlayer, PacketPlayInSetCreativeSlot packet) {
 		super(injectedPlayer);
 		slot = packet.b();
-		itemStack = new ItemStack(packet.getItemStack());
+		itemStack = ItemStack.getItemStackOf(packet.getItemStack());
 	}
 
 	public PacketPlayInSetCreativeSlotEvent(Player injectedPlayer, int slot, org.bukkit.inventory.ItemStack itemStack) {
 		super(injectedPlayer);
 		this.slot = slot;
-		this.itemStack = new ItemStack(itemStack);
+		this.itemStack = ItemStack.getItemStackOf(itemStack);
 	}
 
 	public org.bukkit.inventory.ItemStack getItemStack() {
-		return itemStack.getItemStack();
+		return itemStack.getBukkit();
 	}
 
 	public int getSlot() {

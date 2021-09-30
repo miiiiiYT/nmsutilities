@@ -89,8 +89,8 @@ import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityEffectRemoveEv
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityEquipmentEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityHeadLookEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityMetadataEvent;
-import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityMoveEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityMoveAndRotationEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityMoveEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityPositionEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntityRotationEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutEntitySoundEvent;
@@ -126,7 +126,7 @@ import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutResourcePackEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutRespawnEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutScoreboardDisplayEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutScoreboardObjectiveEvent;
-import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutScoreboardTeamsEvent;
+import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutScoreboardTeamEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutScoreboardUpdateScoreEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSelectAdvancementTabEvent;
 import io.github.riesenpilz.nms.packet.playOut.PacketPlayOutSetCooldownEvent;
@@ -799,7 +799,7 @@ public class Injections implements Listener {
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();
 		} else if (msg instanceof PacketPlayOutScoreboardTeam) {
-			final PacketPlayOutEvent event = new PacketPlayOutScoreboardTeamsEvent(player,
+			final PacketPlayOutEvent event = new PacketPlayOutScoreboardTeamEvent(player,
 					(PacketPlayOutScoreboardTeam) msg);
 			Bukkit.getPluginManager().callEvent(event);
 			canceled = event.isCanceled();

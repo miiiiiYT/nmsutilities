@@ -6,10 +6,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
@@ -124,10 +124,20 @@ public class ServerWorld {
 		setWorldConfig(config);
 	}
 
+	/**
+	 * Unloads a deletes this world. If tpPlayersTo is NULL or the Location is in
+	 * the same world, all players in this world will be kicked.
+	 * 
+	 * @param tpPlayersTo the location where all players should be teleported to
+	 * @param message     the kick message or the message after the teleport.
+	 */
 	public void delete(@Nullable Location tpPlayersTo, String message) {
-		if (tpPlayersTo != null && !Objects.requireNonNull(tpPlayersTo.getWorld()).equals(world)) {
-			for (Player player : getPlayers())
+		Validate.notNull(message);
+		if (tpPlayersTo != null && !tpPlayersTo.getWorld().equals(world)) {
+			for (Player player : getPlayers()) {
 				player.teleport(tpPlayersTo);
+				player.sendMessage(message);
+			}
 			new BukkitRunnable() {
 
 				@Override
@@ -140,7 +150,7 @@ public class ServerWorld {
 					}
 
 				}
-			}.runTaskLater(Main.getPlugin(), 1);
+			}.runTask(Main.getPlugin());
 			return;
 		}
 		for (Player player : getPlayers())
@@ -157,7 +167,7 @@ public class ServerWorld {
 				}
 
 			}
-		}.runTaskLater(Main.getPlugin(), 1);
+		}.runTask(Main.getPlugin());
 	}
 
 	public File copyWorldTo(String newWorldName) {
@@ -178,7 +188,7 @@ public class ServerWorld {
 		return ((CraftWorld) world).getHandle();
 	}
 
-	public org.bukkit.World getWorld() {
+	public org.bukkit.World getBukkit() {
 		return world;
 	}
 }

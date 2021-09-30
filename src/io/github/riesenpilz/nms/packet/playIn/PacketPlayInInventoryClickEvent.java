@@ -54,7 +54,7 @@ public class PacketPlayInInventoryClickEvent extends PacketPlayInEvent {
 	public PacketPlayInInventoryClickEvent(Player injectedPlayer, PacketPlayInWindowClick packet) {
 		super(injectedPlayer);
 		clickType = InventoryClickType.getInventoryClickType(packet.g());
-		itemStack = new ItemStack(packet.f());
+		itemStack = ItemStack.getItemStackOf(packet.f());
 		action = packet.e();
 		windowID = packet.b();
 		slot = packet.c();

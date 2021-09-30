@@ -39,7 +39,7 @@ public class PacketPlayInEditBookEvent extends PacketPlayInEvent {
 
 	public PacketPlayInEditBookEvent(Player injectedPlayer, PacketPlayInBEdit packet) {
 		super(injectedPlayer);
-		book = new ItemStack(packet.b());
+		book = ItemStack.getItemStackOf(packet.b());
 		signing = packet.c();
 		hand = Hand.getByIndex(packet.d());
 	}

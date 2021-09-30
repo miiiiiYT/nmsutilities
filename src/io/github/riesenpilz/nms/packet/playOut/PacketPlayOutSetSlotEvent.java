@@ -38,7 +38,7 @@ public class PacketPlayOutSetSlotEvent extends PacketPlayOutEvent {
 		super(injectedPlayer);
 		windowID = Field.get(packet, "a", int.class);
 		slot = Field.get(packet, "b", int.class);
-		itemStack = new ItemStack(Field.get(packet, "c", net.minecraft.server.v1_16_R3.ItemStack.class));
+		itemStack = ItemStack.getItemStackOf(Field.get(packet, "c", net.minecraft.server.v1_16_R3.ItemStack.class));
 	}
 
 	public PacketPlayOutSetSlotEvent(Player injectedPlayer, int windowID, int slot, ItemStack itemStack) {

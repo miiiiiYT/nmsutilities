@@ -209,8 +209,8 @@ public class Block {
 		if (drops == null)
 			getNBTTag().remove("drops");
 		final NBTTagList dropList = getNBTTag().getOrDefNBTTagList("drops", new NBTTagList());
-		for (final org.bukkit.inventory.ItemStack itemStack : drops)
-			dropList.add(new ItemStack(itemStack).toTag());
+		for (final org.bukkit.inventory.ItemStack bukkit : drops)
+			dropList.add(ItemStack.getItemStackOf(bukkit).toNBTTag());
 	}
 
 	/**

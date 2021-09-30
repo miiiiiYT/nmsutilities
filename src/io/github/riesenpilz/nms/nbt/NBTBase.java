@@ -28,7 +28,12 @@ public abstract class NBTBase implements Cloneable {
 	public NBTType getType() {
 		return type;
 	}
-
+	
+	public boolean is(NBTType type) {
+		return this.type == type;
+	}
+	
+	
 	/**
 	 * Gets the stored data. Should be a instance of {@code getType().getClazz()}.
 	 * 

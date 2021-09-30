@@ -62,7 +62,7 @@ public class ChunkEvents implements Listener {
 	}
 
 	private int getOffset(Chunk chunk) {
-		return chunk.getChunk().getX() % 16 * 4 + chunk.getChunk().getZ() % 16;
+		return chunk.getBukkit().getX() % 16 * 4 + chunk.getBukkit().getZ() % 16;
 	}
 
 	@SuppressWarnings("resource")
