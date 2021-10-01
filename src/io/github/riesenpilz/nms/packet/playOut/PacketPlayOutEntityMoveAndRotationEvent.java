@@ -3,7 +3,6 @@ package io.github.riesenpilz.nms.packet.playOut;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import io.github.riesenpilz.nms.entity.WorldEntity;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
@@ -24,9 +23,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutRelEntityM
  * @author Martin
  *
  */
-public class PacketPlayOutEntityMoveAndRotationEvent extends PacketPlayOutEvent {
-
-	private int entityId;
+public class PacketPlayOutEntityMoveAndRotationEvent extends PacketPlayOutEntityEvent {
 
 	/**
 	 * Change in X position as (currentX * 32 - prevX * 32) * 128.
@@ -55,8 +52,7 @@ public class PacketPlayOutEntityMoveAndRotationEvent extends PacketPlayOutEvent 
 	private boolean onGround;
 
 	public PacketPlayOutEntityMoveAndRotationEvent(Player injectedPlayer, PacketPlayOutRelEntityMoveLook packet) {
-		super(injectedPlayer);
-		entityId = Field.get(packet, "a", int.class);
+		super(injectedPlayer, packet);
 		deltaX = Field.get(packet, "b", short.class);
 		deltaY = Field.get(packet, "c", short.class);
 		deltaZ = Field.get(packet, "d", short.class);
@@ -67,18 +63,13 @@ public class PacketPlayOutEntityMoveAndRotationEvent extends PacketPlayOutEvent 
 
 	public PacketPlayOutEntityMoveAndRotationEvent(Player injectedPlayer, int entityId, short deltaX, short deltaY,
 			short deltaZ, byte yaw, byte pitch, boolean onGround) {
-		super(injectedPlayer);
-		this.entityId = entityId;
+		super(injectedPlayer, entityId);
 		this.deltaX = deltaX;
 		this.deltaY = deltaY;
 		this.deltaZ = deltaZ;
 		this.yaw = yaw;
 		this.pitch = pitch;
 		this.onGround = onGround;
-	}
-
-	public WorldEntity getEntity() {
-		return new WorldEntity(entityId, getInjectedPlayer().getWorld());
 	}
 
 	public Location getFrom() {
@@ -88,10 +79,6 @@ public class PacketPlayOutEntityMoveAndRotationEvent extends PacketPlayOutEvent 
 	public Location getTo() {
 		return getFrom().clone().add(((double) deltaX) / 128 / 32, ((double) deltaY) / 128 / 32,
 				((double) deltaZ) / 128 / 32);
-	}
-
-	public int getEntityId() {
-		return entityId;
 	}
 
 	public short getDeltaX() {
@@ -120,7 +107,7 @@ public class PacketPlayOutEntityMoveAndRotationEvent extends PacketPlayOutEvent 
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutRelEntityMoveLook(entityId, deltaX, deltaY, deltaZ, yaw, pitch, onGround);
+		return new PacketPlayOutRelEntityMoveLook(getEntityId(), deltaX, deltaY, deltaZ, yaw, pitch, onGround);
 	}
 
 	@Override

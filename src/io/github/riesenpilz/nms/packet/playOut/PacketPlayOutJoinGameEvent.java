@@ -30,9 +30,7 @@ import net.minecraft.server.v1_16_R3.World;
  * @author Martin
  *
  */
-public class PacketPlayOutJoinGameEvent extends PacketPlayOutEvent {
-
-	private int playerId;
+public class PacketPlayOutJoinGameEvent extends PacketPlayOutEntityEvent {
 
 	/**
 	 * First 8 bytes of the SHA-256 hash of the world's seed. Used client side for
@@ -95,9 +93,8 @@ public class PacketPlayOutJoinGameEvent extends PacketPlayOutEvent {
 
 	@SuppressWarnings("unchecked")
 	public PacketPlayOutJoinGameEvent(Player injectedPlayer, PacketPlayOutLogin packet) {
-		super(injectedPlayer);
+		super(injectedPlayer, packet);
 
-		playerId = Field.get(packet, "a", int.class);
 		hashedSeed = Field.get(packet, "b", long.class);
 		hardcore = Field.get(packet, "c", boolean.class);
 		gamemode = PacketUtils.toGameMode(Field.get(packet, "d", EnumGamemode.class));
@@ -118,8 +115,7 @@ public class PacketPlayOutJoinGameEvent extends PacketPlayOutEvent {
 			GameMode gamemode, GameMode previousGamemode, Set<ResourceKey<World>> worlds, Dimension dimensionCodec,
 			DimensionManager dimension, ResourceKey<World> worldName, int maxPlayers, int viewDistance,
 			boolean reducedDebugInfo, boolean enableRespawnScreen, boolean debug, boolean flat) {
-		super(injectedPlayer);
-		this.playerId = playerId;
+		super(injectedPlayer, playerId);
 		this.hashedSeed = hashedSeed;
 		this.hardcore = hardcore;
 		this.gamemode = gamemode;
@@ -134,10 +130,6 @@ public class PacketPlayOutJoinGameEvent extends PacketPlayOutEvent {
 		this.enableRespawnScreen = enableRespawnScreen;
 		this.debug = debug;
 		this.flat = flat;
-	}
-
-	public int getPlayerId() {
-		return playerId;
 	}
 
 	public long getHashedSeed() {
@@ -198,7 +190,7 @@ public class PacketPlayOutJoinGameEvent extends PacketPlayOutEvent {
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutLogin(playerId, PacketUtils.toEnumGamemode(gamemode),
+		return new PacketPlayOutLogin(getEntityId(), PacketUtils.toEnumGamemode(gamemode),
 				PacketUtils.toEnumGamemode(previousGamemode), hashedSeed, hardcore, worlds, dimensionCodec, dimension,
 				worldName, maxPlayers, viewDistance, reducedDebugInfo, enableRespawnScreen, debug, flat);
 	}

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.HasText;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.md_5.bungee.api.ChatMessageType;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent;
@@ -25,7 +26,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutChat;
  * @author Martin
  *
  */
-public class PacketPlayOutMessageEvent extends PacketPlayOutEvent {
+public class PacketPlayOutMessageEvent extends PacketPlayOutEvent implements HasText {
 
 	private IChatBaseComponent message;
 	private ChatMessageType type;
@@ -53,7 +54,8 @@ public class PacketPlayOutMessageEvent extends PacketPlayOutEvent {
 		sender = Field.get(packet, "c", UUID.class);
 	}
 
-	public IChatBaseComponent getMessage() {
+	@Override
+	public IChatBaseComponent getText() {
 		return message;
 	}
 

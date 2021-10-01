@@ -3,6 +3,7 @@ package io.github.riesenpilz.nms.packet.playIn;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.HasBlockPosition;
 import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.BlockPropertyStructureMode;
@@ -24,7 +25,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayInStruct;
  * @author Martin
  *
  */
-public class PacketPlayInUpdateStructureBlockEvent extends PacketPlayInEvent {
+public class PacketPlayInUpdateStructureBlockEvent extends PacketPlayInEvent implements HasBlockPosition {
 
 	private Location blockLocation;
 	private UpdateType updateType;
@@ -93,6 +94,7 @@ public class PacketPlayInUpdateStructureBlockEvent extends PacketPlayInEvent {
 		this.seed = seed;
 	}
 
+	@Override
 	public Location getBlockLocation() {
 		return blockLocation;
 	}

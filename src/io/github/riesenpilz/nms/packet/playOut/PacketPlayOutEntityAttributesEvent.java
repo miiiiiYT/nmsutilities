@@ -22,28 +22,21 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutUpdateAttributes.AttributeSnap
  * @author Martin
  *
  */
-public class PacketPlayOutEntityAttributesEvent extends PacketPlayOutEvent {
+public class PacketPlayOutEntityAttributesEvent extends PacketPlayOutEntityEvent {
 
-	private int entityId;
     private List<AttributeSnapshot> attributes;
 
 	
 	@SuppressWarnings("unchecked")
 	public PacketPlayOutEntityAttributesEvent(Player injectedPlayer, PacketPlayOutUpdateAttributes packet) {
-		super(injectedPlayer);
+		super(injectedPlayer, packet);
 		
-		entityId = Field.get(packet, "a", int.class);
 		attributes = Field.get(packet, "b", List.class);
 	}
 
 	public PacketPlayOutEntityAttributesEvent(Player injectedPlayer, int entityId, List<AttributeSnapshot> attributes) {
-		super(injectedPlayer);
-		this.entityId = entityId;
+		super(injectedPlayer, entityId);
 		this.attributes = attributes;
-	}
-
-	public int getEntityId() {
-		return entityId;
 	}
 
 	public List<AttributeSnapshot> getAttributes() {
@@ -54,7 +47,7 @@ public class PacketPlayOutEntityAttributesEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutUpdateAttributes packet = new PacketPlayOutUpdateAttributes();
-		Field.set(packet, "a", entityId);
+		Field.set(packet, "a", getEntityId());
 		Field.get(packet, "b", List.class).addAll(attributes);
 		return packet;
 	}

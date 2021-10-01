@@ -19,33 +19,29 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutCombatEvent;
  * @author Martin
  *
  */
-public class PacketPlayOutCombatEndEvent extends PacketPlayOutEvent {
+public class PacketPlayOutCombatEndEvent extends PacketPlayOutEntityEvent {
 
-	/**
-	 * ID of the primary opponent of the ended combat, or -1 if there is no obvious
-	 * primary opponent.
-	 */
-	private int entityID;
 	/**
 	 * Length of the combat in ticks.
 	 */
 	private int duration;
 
-	public PacketPlayOutCombatEndEvent(Player injectedPlayer,
-			PacketPlayOutCombatEvent packet) {
-		super(injectedPlayer);
-		entityID = packet.c;
+	public PacketPlayOutCombatEndEvent(Player injectedPlayer, PacketPlayOutCombatEvent packet) {
+		super(injectedPlayer, packet.c);
 		duration = packet.d;
 	}
 
-	public PacketPlayOutCombatEndEvent(Player injectedPlayer, int entityID, int duration) {
-		super(injectedPlayer);
-		this.entityID = entityID;
+	public PacketPlayOutCombatEndEvent(Player injectedPlayer, int entityId, int duration) {
+		super(injectedPlayer, entityId);
 		this.duration = duration;
 	}
 
-	public int getEntityID() {
-		return entityID;
+	/**
+	 * ID of the primary opponent of the ended combat, or -1 if there is no obvious
+	 * primary opponent.
+	 */
+	public int getEntityId() {
+		return super.getEntityId();
 	}
 
 	public int getDuration() {
@@ -56,7 +52,7 @@ public class PacketPlayOutCombatEndEvent extends PacketPlayOutEvent {
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutCombatEvent packet = new PacketPlayOutCombatEvent();
 		packet.a = PacketPlayOutCombatEvent.EnumCombatEventType.END_COMBAT;
-		packet.c = entityID;
+		packet.c = getEntityId();
 		packet.d = duration;
 		return packet;
 	}

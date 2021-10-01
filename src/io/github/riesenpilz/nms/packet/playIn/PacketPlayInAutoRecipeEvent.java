@@ -3,8 +3,8 @@ package io.github.riesenpilz.nms.packet.playIn;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
-import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInAutoRecipe;
@@ -22,37 +22,29 @@ import net.minecraft.server.v1_16_R3.PacketPlayInAutoRecipe;
  * @author Martin
  *
  */
-public class PacketPlayInAutoRecipeEvent extends PacketPlayInEvent {
+public class PacketPlayInAutoRecipeEvent extends PacketPlayInInventoryEvent {
 
-	private int windowID;
-	private NamespacedKey recipeID;
+	private NamespacedKey recipeId;
 
 	/**
 	 * Affects the amount of items processed; true if shift is down when clicked.
 	 */
 	private boolean makeAll;
 
-	public PacketPlayInAutoRecipeEvent(Player injectedPlayer, int windowID, NamespacedKey recipeID, boolean makeAll) {
-		super(injectedPlayer);
-		this.windowID = windowID;
-		this.recipeID = recipeID;
-		this.makeAll = makeAll;
-	}
-
-	@SuppressWarnings("deprecation")
 	public PacketPlayInAutoRecipeEvent(Player injectedPlayer, PacketPlayInAutoRecipe packet) {
-		super(injectedPlayer);
-		windowID = packet.b();
-		recipeID = new NamespacedKey(packet.c().getNamespace(), packet.c().getKey());
+		super(injectedPlayer, packet.b());
+		recipeId = PacketUtils.toNamespacedKey(packet.c());
 		makeAll = packet.d();
 	}
 
-	public int getWindowID() {
-		return windowID;
+	public PacketPlayInAutoRecipeEvent(Player injectedPlayer, int windowID, NamespacedKey recipeId, boolean makeAll) {
+		super(injectedPlayer, windowID);
+		this.recipeId = recipeId;
+		this.makeAll = makeAll;
 	}
 
 	public NamespacedKey getRecipeID() {
-		return recipeID;
+		return recipeId;
 	}
 
 	public boolean isMakeAll() {
@@ -62,8 +54,8 @@ public class PacketPlayInAutoRecipeEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInAutoRecipe packet = new PacketPlayInAutoRecipe();
-		Field.set(packet, "a", windowID);
-		Field.set(packet, "b", new MinecraftKey(recipeID.getNamespace(), recipeID.getKey()));
+		Field.set(packet, "a", getInventoryId());
+		Field.set(packet, "b", PacketUtils.toMinecraftKey(recipeId));
 		Field.set(packet, "c", makeAll);
 		return packet;
 	}

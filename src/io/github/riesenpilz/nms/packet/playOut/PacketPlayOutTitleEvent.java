@@ -2,6 +2,7 @@ package io.github.riesenpilz.nms.packet.playOut;
 
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.HasText;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -19,7 +20,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutTitle.EnumTitleAction;
  * @author Martin
  *
  */
-public class PacketPlayOutTitleEvent extends PacketPlayOutEvent {
+public class PacketPlayOutTitleEvent extends PacketPlayOutEvent implements HasText {
 
 	private Mode mode;
 	private IChatBaseComponent text;
@@ -51,6 +52,7 @@ public class PacketPlayOutTitleEvent extends PacketPlayOutEvent {
 		return mode;
 	}
 
+	@Override
 	public IChatBaseComponent getText() {
 		return text;
 	}

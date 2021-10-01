@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nms.block.CommandBlock.CommandBlockType;
+import io.github.riesenpilz.nms.packet.HasBlockPosition;
 import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -20,7 +21,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayInSetCommandBlock;
  * @author Martin
  *
  */
-public class PacketPlayInUpdateCommandBlockEvent extends PacketPlayInEvent {
+public class PacketPlayInUpdateCommandBlockEvent extends PacketPlayInEvent implements HasBlockPosition {
 
 	private Location blockLocation;
 	private String command;
@@ -55,6 +56,7 @@ public class PacketPlayInUpdateCommandBlockEvent extends PacketPlayInEvent {
 		commandBlockType = type;
 	}
 
+	@Override
 	public Location getBlockLocation() {
 		return blockLocation;
 	}

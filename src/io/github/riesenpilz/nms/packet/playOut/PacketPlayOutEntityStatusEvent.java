@@ -21,9 +21,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntityStatus;
  * @author Martin
  *
  */
-public class PacketPlayOutEntityStatusEvent extends PacketPlayOutEvent {
-
-	private int entityID;
+public class PacketPlayOutEntityStatusEvent extends PacketPlayOutEntityEvent {
 
 	/**
 	 * See Entity statuses for a list of which statuses are valid for each type of
@@ -32,19 +30,13 @@ public class PacketPlayOutEntityStatusEvent extends PacketPlayOutEvent {
 	private byte entityStatus;
 
 	public PacketPlayOutEntityStatusEvent(Player injectedPlayer, PacketPlayOutEntityStatus packet) {
-		super(injectedPlayer);
-		entityID = Field.get(packet, "a", int.class);
+		super(injectedPlayer, packet);
 		entityStatus = Field.get(packet, "b", byte.class);
 	}
 
-	public PacketPlayOutEntityStatusEvent(Player injectedPlayer, int entityID, byte entityStatus) {
-		super(injectedPlayer);
-		this.entityID = entityID;
+	public PacketPlayOutEntityStatusEvent(Player injectedPlayer, int entityId, byte entityStatus) {
+		super(injectedPlayer, entityId);
 		this.entityStatus = entityStatus;
-	}
-
-	public int getEntityID() {
-		return entityID;
 	}
 
 	public byte getEntityStatus() {
@@ -54,7 +46,7 @@ public class PacketPlayOutEntityStatusEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutEntityStatus packet = new PacketPlayOutEntityStatus();
-		Field.set(packet, "a", entityID);
+		Field.set(packet, "a", getEntityId());
 		Field.set(packet, "b", entityStatus);
 		return packet;
 	}

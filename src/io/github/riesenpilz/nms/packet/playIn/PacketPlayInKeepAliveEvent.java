@@ -22,26 +22,26 @@ import net.minecraft.server.v1_16_R3.PacketPlayInKeepAlive;
  */
 public class PacketPlayInKeepAliveEvent extends PacketPlayInEvent {
 
-	public long keepAliveID;
+	public long keepAliveId;
 
 	public PacketPlayInKeepAliveEvent(Player injectedPlayer, PacketPlayInKeepAlive packet) {
 		super(injectedPlayer);
-		keepAliveID = packet.b();
+		keepAliveId = packet.b();
 	}
 
-	public PacketPlayInKeepAliveEvent(Player injectedPlayer, long keepAliveID) {
+	public PacketPlayInKeepAliveEvent(Player injectedPlayer, long keepAliveId) {
 		super(injectedPlayer);
-		this.keepAliveID = keepAliveID;
+		this.keepAliveId = keepAliveId;
 	}
 
-	public long getKeepAliveID() {
-		return keepAliveID;
+	public long getKeepAliveId() {
+		return keepAliveId;
 	}
 
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInKeepAlive packet = new PacketPlayInKeepAlive();
-		Field.set(packet, "a", keepAliveID);
+		Field.set(packet, "a", keepAliveId);
 		return packet;
 	}
 

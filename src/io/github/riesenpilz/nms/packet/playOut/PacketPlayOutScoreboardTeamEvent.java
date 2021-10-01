@@ -8,6 +8,7 @@ import java.util.Set;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.HasText;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.EnumChatFormat;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent;
@@ -27,7 +28,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutScoreboardTeam;
  * @author Martin
  *
  */
-public class PacketPlayOutScoreboardTeamEvent extends PacketPlayOutEvent {
+public class PacketPlayOutScoreboardTeamEvent extends PacketPlayOutEvent implements HasText {
 
 	/**
 	 * A unique name for the team. (Shared with scoreboard).(16 chars max.)
@@ -101,7 +102,10 @@ public class PacketPlayOutScoreboardTeamEvent extends PacketPlayOutEvent {
 		return name;
 	}
 
-	public IChatBaseComponent getDisplayName() {
+	/**
+	 * Display name
+	 */
+	public IChatBaseComponent getText() {
 		return displayName;
 	}
 

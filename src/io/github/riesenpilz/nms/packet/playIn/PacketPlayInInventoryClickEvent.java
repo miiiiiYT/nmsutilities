@@ -21,14 +21,9 @@ import net.minecraft.server.v1_16_R3.PacketPlayInWindowClick;
  * @author Martin
  *
  */
-public class PacketPlayInInventoryClickEvent extends PacketPlayInEvent {
+public class PacketPlayInInventoryClickEvent extends PacketPlayInInventoryEvent {
 
 	public static final int OUT_OF_BOUND = -999;
-
-	/**
-	 * The ID of the window which was clicked. 0 for player inventory.
-	 */
-	private int windowID;
 
 	/**
 	 * The clicked slot number. May be {@link #OUT_OF_BOUND}.
@@ -52,22 +47,20 @@ public class PacketPlayInInventoryClickEvent extends PacketPlayInEvent {
 	private InventoryClickType clickType;
 
 	public PacketPlayInInventoryClickEvent(Player injectedPlayer, PacketPlayInWindowClick packet) {
-		super(injectedPlayer);
+		super(injectedPlayer, packet.b());
 		clickType = InventoryClickType.getInventoryClickType(packet.g());
 		itemStack = ItemStack.getItemStackOf(packet.f());
 		action = packet.e();
-		windowID = packet.b();
 		slot = packet.c();
 		button = packet.d();
 	}
 
 	public PacketPlayInInventoryClickEvent(Player injectedPlayer, InventoryClickType clickType, ItemStack itemStack,
-			short action, int windowID, int slot, int button) {
-		super(injectedPlayer);
+			short action, int inventoryId, int slot, int button) {
+		super(injectedPlayer, inventoryId);
 		this.clickType = clickType;
 		this.itemStack = itemStack;
 		this.action = action;
-		this.windowID = windowID;
 		this.slot = slot;
 		this.button = button;
 	}
@@ -92,14 +85,10 @@ public class PacketPlayInInventoryClickEvent extends PacketPlayInEvent {
 		return button;
 	}
 
-	public int getWindowID() {
-		return windowID;
-	}
-
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInWindowClick packet = new PacketPlayInWindowClick();
-		Field.set(packet, "a", windowID);
+		Field.set(packet, "a", getInventoryId());
 		Field.set(packet, "slot", slot);
 		Field.set(packet, "button", button);
 		Field.set(packet, "d", action);

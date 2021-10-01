@@ -21,9 +21,13 @@ public class World {
 	}
 
 	public org.bukkit.World getBukkit() {
-		return isServerWorld() ? new ServerWorld((WorldServer)world).getBukkit():null;
+		Validate.isTrue(isServerWorld());
+		return ServerWorld.getWorldOf((WorldServer)world).getBukkit();
 	}
-	
+	public ServerWorld getServerWorld() {
+		Validate.isTrue(isServerWorld());
+		return ServerWorld.getWorldOf((WorldServer)world);
+	}
 	public boolean isServerWorld() {
 		return world instanceof WorldServer;
 	}

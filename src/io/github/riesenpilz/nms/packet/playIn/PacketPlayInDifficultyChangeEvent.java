@@ -3,7 +3,7 @@ package io.github.riesenpilz.nms.packet.playIn;
 import org.bukkit.Difficulty;
 import org.bukkit.entity.Player;
 
-import net.minecraft.server.v1_16_R3.EnumDifficulty;
+import io.github.riesenpilz.nms.packet.PacketUtils;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInDifficultyChange;
@@ -25,10 +25,9 @@ public class PacketPlayInDifficultyChangeEvent extends PacketPlayInEvent {
 
 	private Difficulty difficulty;
 
-	@SuppressWarnings("deprecation")
 	public PacketPlayInDifficultyChangeEvent(Player injectedPlayer, PacketPlayInDifficultyChange packet) {
 		super(injectedPlayer);
-		Difficulty.getByValue(packet.b().a());
+		difficulty = PacketUtils.toDifficulty(packet.b());
 	}
 
 	public PacketPlayInDifficultyChangeEvent(Player injectedPlayer, Difficulty difficulty) {
@@ -40,10 +39,9 @@ public class PacketPlayInDifficultyChangeEvent extends PacketPlayInEvent {
 		return difficulty;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
-		return new PacketPlayInDifficultyChange(EnumDifficulty.getById(difficulty.getValue()));
+		return new PacketPlayInDifficultyChange(PacketUtils.toEnumDifficulty(difficulty));
 	}
 
 	@Override

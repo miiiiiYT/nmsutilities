@@ -2,7 +2,6 @@ package io.github.riesenpilz.nms.packet.playIn;
 
 import org.bukkit.entity.Player;
 
-import io.github.riesenpilz.nms.entity.WorldEntity;
 import io.github.riesenpilz.nms.entity.player.PlayerAction;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -23,9 +22,8 @@ import net.minecraft.server.v1_16_R3.PacketPlayInEntityAction;
  * @author Martin
  *
  */
-public class PacketPlayInActionEvent extends PacketPlayInEvent {
+public class PacketPlayInActionEvent extends PacketPlayInEntityEvent {
 
-	private int playerID;
 
 	private PlayerAction action;
 
@@ -37,22 +35,16 @@ public class PacketPlayInActionEvent extends PacketPlayInEvent {
 	private int jumpBoost;
 
 	public PacketPlayInActionEvent(Player injectedPlayer, PacketPlayInEntityAction packet) {
-		super(injectedPlayer);
-		playerID = Field.get(packet, "a", int.class);
+		super(injectedPlayer, packet);
 		action = PlayerAction.getPlayerAction(packet.c());
 		jumpBoost = packet.d();
 
 	}
 
-	public PacketPlayInActionEvent(Player injectedPlayer, int playerID, PlayerAction action, int jumpBoost) {
-		super(injectedPlayer);
-		this.playerID = playerID;
+	public PacketPlayInActionEvent(Player injectedPlayer, int playerId, PlayerAction action, int jumpBoost) {
+		super(injectedPlayer, playerId);
 		this.action = action;
 		this.jumpBoost = jumpBoost;
-	}
-
-	public int getPlayerID() {
-		return playerID;
 	}
 
 	public PlayerAction getAction() {
@@ -66,7 +58,7 @@ public class PacketPlayInActionEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInEntityAction packet = new PacketPlayInEntityAction();
-		Field.set(packet, "a", new WorldEntity(getInjectedPlayer()).getID());
+		Field.set(packet, "a", getEntityId());
 		Field.set(packet, "animation", action.getNMS());
 		Field.set(packet, "c", jumpBoost);
 		return packet;

@@ -3,6 +3,7 @@ package io.github.riesenpilz.nms.packet.playOut;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.HasBlockPosition;
 import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.packet.playIn.PacketPlayInUpdateSignEvent;
 import io.github.riesenpilz.nms.reflections.Field;
@@ -26,7 +27,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutOpenSignEditor;
  * @author Martin
  *
  */
-public class PacketPlayOutOpenSignEditorEvent extends PacketPlayOutEvent {
+public class PacketPlayOutOpenSignEditorEvent extends PacketPlayOutEvent implements HasBlockPosition {
 
 	private Location blockPosition;
 
@@ -39,8 +40,9 @@ public class PacketPlayOutOpenSignEditorEvent extends PacketPlayOutEvent {
 		super(injectedPlayer);
 		this.blockPosition = blockPosition;
 	}
-
-	public Location getBlockPosition() {
+	
+	@Override
+	public Location getBlockLocation() {
 		return blockPosition;
 	}
 
@@ -58,4 +60,6 @@ public class PacketPlayOutOpenSignEditorEvent extends PacketPlayOutEvent {
 	public String getProtocolURLString() {
 		return "https://wiki.vg/Protocol#Open_Sign_Editor";
 	}
+
+	
 }

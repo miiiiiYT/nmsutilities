@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nms.entity.player.DigType;
+import io.github.riesenpilz.nms.packet.HasBlockPosition;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.IBlockData;
@@ -22,7 +23,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutBlockBreak;
  * @author Martin
  *
  */
-public class PacketPlayOutPlayerDiggingEvent extends PacketPlayOutEvent {
+public class PacketPlayOutPlayerDiggingEvent extends PacketPlayOutEvent implements HasBlockPosition {
 
 	private Location blockLocation;
 	private IBlockData blockData;

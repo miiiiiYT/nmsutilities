@@ -3,6 +3,7 @@ package io.github.riesenpilz.nms.packet.playOut;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
@@ -24,11 +25,10 @@ import net.minecraft.server.v1_16_R3.SoundEffect;
  * @author Martin
  *
  */
-public class PacketPlayOutEntitySoundEvent extends PacketPlayOutEvent {
+public class PacketPlayOutEntitySoundEvent extends PacketPlayOutEntityEvent {
 
 	private SoundEffect effect;
 	private SoundCategory category;
-	private int entityId;
 
 	/**
 	 * 1.0 is 100%, capped between 0.0 and 1.0 by Notchian clients.
@@ -41,21 +41,19 @@ public class PacketPlayOutEntitySoundEvent extends PacketPlayOutEvent {
 	private float pitch;
 
 	public PacketPlayOutEntitySoundEvent(Player injectedPlayer, PacketPlayOutEntitySound packet) {
-		super(injectedPlayer);
+		super(injectedPlayer, packet, "c");
 		effect = Field.get(packet, "a", SoundEffect.class);
-		category = SoundCategory
-				.valueOf(Field.get(packet, "b", net.minecraft.server.v1_16_R3.SoundCategory.class).name());
-		entityId = Field.get(packet, "c", int.class);
+		category = PacketUtils
+				.toSoundCategory(Field.get(packet, "b", net.minecraft.server.v1_16_R3.SoundCategory.class));
 		volume = Field.get(packet, "d", float.class);
 		pitch = Field.get(packet, "e", float.class);
 	}
 
 	public PacketPlayOutEntitySoundEvent(Player injectedPlayer, SoundEffect effect, SoundCategory category,
 			int entityId, float volume, float pitch) {
-		super(injectedPlayer);
+		super(injectedPlayer, entityId);
 		this.effect = effect;
 		this.category = category;
-		this.entityId = entityId;
 		this.volume = volume;
 		this.pitch = pitch;
 	}
@@ -66,10 +64,6 @@ public class PacketPlayOutEntitySoundEvent extends PacketPlayOutEvent {
 
 	public SoundCategory getCategory() {
 		return category;
-	}
-
-	public int getEntityId() {
-		return entityId;
 	}
 
 	public float getVolume() {
@@ -84,8 +78,8 @@ public class PacketPlayOutEntitySoundEvent extends PacketPlayOutEvent {
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutEntitySound packet = new PacketPlayOutEntitySound();
 		Field.set(packet, "a", effect);
-		Field.set(packet, "b", net.minecraft.server.v1_16_R3.SoundCategory.valueOf(category.name()));
-		Field.set(packet, "c", entityId);
+		Field.set(packet, "b", PacketUtils.toNMSSoundCategory(category));
+		Field.set(packet, "c", getEntityId());
 		Field.set(packet, "d", volume);
 		Field.set(packet, "e", pitch);
 		return packet;

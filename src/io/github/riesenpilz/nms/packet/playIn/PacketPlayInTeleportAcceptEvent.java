@@ -25,26 +25,26 @@ public class PacketPlayInTeleportAcceptEvent extends PacketPlayInEvent {
 	/**
 	 * The ID given by the Player Position And Look packet.
 	 */
-	private int teleportID;
+	private int teleportId;
 
 	public PacketPlayInTeleportAcceptEvent(Player injectedPlayer, PacketPlayInTeleportAccept packet) {
 		super(injectedPlayer);
-		teleportID = packet.b();
+		teleportId = packet.b();
 	}
 
-	public PacketPlayInTeleportAcceptEvent(Player injectedPlayer, int teleportID) {
+	public PacketPlayInTeleportAcceptEvent(Player injectedPlayer, int teleportId) {
 		super(injectedPlayer);
-		this.teleportID = teleportID;
+		this.teleportId = teleportId;
 	}
 
-	public int getTeleportID() {
-		return teleportID;
+	public int getTeleportId() {
+		return teleportId;
 	}
 
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInTeleportAccept packet = new PacketPlayInTeleportAccept();
-		Field.set(packet, "a", teleportID);
+		Field.set(packet, "a", teleportId);
 		return packet;
 	}
 

@@ -41,12 +41,12 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutPosition.EnumPlayerTeleportFla
  * @author Martin
  *
  */
-public class PacketPlayOutEntityPositionEvent extends PacketPlayOutEvent {
+public class PacketPlayOutPayerPositionEvent extends PacketPlayOutEvent {
 
 	/**
 	 * the target location. The different values can be relative or absolute
 	 * depending on
-	 * {@link PacketPlayOutEntityPositionEvent#absoluteOrRelativeFlags}. E.g
+	 * {@link PacketPlayOutPayerPositionEvent#absoluteOrRelativeFlags}. E.g
 	 * if X is set, the x value is relative and not absolute.
 	 */
 	private Location location;
@@ -54,7 +54,7 @@ public class PacketPlayOutEntityPositionEvent extends PacketPlayOutEvent {
 	private Set<PlayerTeleportFlags> absoluteOrRelativeFlags;
 	private int teleportId;
 
-	public PacketPlayOutEntityPositionEvent(Player injectedPlayer, PacketPlayOutPosition packet) {
+	public PacketPlayOutPayerPositionEvent(Player injectedPlayer, PacketPlayOutPosition packet) {
 		super(injectedPlayer);
 		location = new Location(injectedPlayer.getWorld(), Field.get(packet, "a", double.class),
 				Field.get(packet, "b", double.class), Field.get(packet, "c", double.class),
@@ -67,7 +67,7 @@ public class PacketPlayOutEntityPositionEvent extends PacketPlayOutEvent {
 		teleportId = Field.get(packet, "g", int.class);
 	}
 
-	public PacketPlayOutEntityPositionEvent(Player injectedPlayer, Location location,
+	public PacketPlayOutPayerPositionEvent(Player injectedPlayer, Location location,
 			Set<PlayerTeleportFlags> absoluteOrRelativeFlags, int teleportId) {
 		super(injectedPlayer);
 		this.location = location;

@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nms.block.BlockData;
+import io.github.riesenpilz.nms.packet.HasBlockPosition;
 import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Block;
@@ -29,28 +30,32 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutBlockAction;
  * @author Martin
  *
  */
-public class PacketPlayOutBlockActionEvent extends PacketPlayOutEvent {
+public class PacketPlayOutBlockActionEvent extends PacketPlayOutEvent implements HasBlockPosition {
 
 	private Location blockLocation;
-	private int actionID;
+	private int actionId;
 	private int actionParam;
 	private BlockData blockData;
 
 	public PacketPlayOutBlockActionEvent(Player injectedPlayer, PacketPlayOutBlockAction packet) {
 		super(injectedPlayer);
-		blockLocation = PacketUtils.toLocation(Field.get(packet, "a", BlockPosition.class),
-				injectedPlayer.getWorld());
-		actionID = Field.get(packet, "b", int.class);
+		blockLocation = PacketUtils.toLocation(Field.get(packet, "a", BlockPosition.class), injectedPlayer.getWorld());
+		actionId = Field.get(packet, "b", int.class);
 		actionParam = Field.get(packet, "c", int.class);
 		blockData = BlockData.getBlockDataOf(Field.get(packet, "d", Block.class));
 	}
 
-	public Location getBlockLocation() {
-		return blockLocation;
+	public PacketPlayOutBlockActionEvent(Player injectedPlayer, Location blockLocation, int actionId, int actionParam,
+			BlockData blockData) {
+		super(injectedPlayer);
+		this.blockLocation = blockLocation;
+		this.actionId = actionId;
+		this.actionParam = actionParam;
+		this.blockData = blockData;
 	}
 
-	public int getActionID() {
-		return actionID;
+	public int getActionId() {
+		return actionId;
 	}
 
 	public int getActionParam() {
@@ -62,9 +67,13 @@ public class PacketPlayOutBlockActionEvent extends PacketPlayOutEvent {
 	}
 
 	@Override
+	public Location getBlockLocation() {
+		return blockLocation;
+	}
+
+	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutBlockAction(PacketUtils.toBlockPosition(blockLocation), blockData.getNMS(), actionParam,
-				actionID);
+		return new PacketPlayOutBlockAction(PacketUtils.toBlockPosition(blockLocation), blockData.getNMS(), actionParam, actionId);
 	}
 
 	@Override
@@ -76,4 +85,5 @@ public class PacketPlayOutBlockActionEvent extends PacketPlayOutEvent {
 	public String getProtocolURLString() {
 		return "https://wiki.vg/Protocol#Block_Action";
 	}
+
 }

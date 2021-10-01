@@ -20,9 +20,8 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutOpenWindowMerchant;
  * @author Martin
  *
  */
-public class PacketPlayOutTradeListEvent extends PacketPlayOutEvent {
+public class PacketPlayOutTradeListEvent extends PacketPlayOutInventoryEvent {
 
-	private int inventoryId;
 	private MerchantRecipeList tardeList;
 
 	/**
@@ -51,9 +50,8 @@ public class PacketPlayOutTradeListEvent extends PacketPlayOutEvent {
 	private boolean restock;
 
 	public PacketPlayOutTradeListEvent(Player injectedPlayer, PacketPlayOutOpenWindowMerchant packet) {
-		super(injectedPlayer);
+		super(injectedPlayer, packet);
 
-		inventoryId = Field.get(packet, "a", int.class);
 		tardeList = Field.get(packet, "b", MerchantRecipeList.class);
 		villagerLevel = Field.get(packet, "c", int.class);
 		xp = Field.get(packet, "d", int.class);
@@ -61,8 +59,14 @@ public class PacketPlayOutTradeListEvent extends PacketPlayOutEvent {
 		restock = Field.get(packet, "f", boolean.class);
 	}
 
-	public int getInventoryId() {
-		return inventoryId;
+	public PacketPlayOutTradeListEvent(Player injectedPlayer, int inventoryId, MerchantRecipeList tardeList,
+			int villagerLevel, int xp, boolean regularVillager, boolean restock) {
+		super(injectedPlayer, inventoryId);
+		this.tardeList = tardeList;
+		this.villagerLevel = villagerLevel;
+		this.xp = xp;
+		this.regularVillager = regularVillager;
+		this.restock = restock;
 	}
 
 	public MerchantRecipeList getTardeList() {
@@ -87,7 +91,8 @@ public class PacketPlayOutTradeListEvent extends PacketPlayOutEvent {
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutOpenWindowMerchant(inventoryId, tardeList, villagerLevel, xp, regularVillager, restock);
+		return new PacketPlayOutOpenWindowMerchant(getInventoryId(), tardeList, villagerLevel, xp, regularVillager,
+				restock);
 	}
 
 	@Override

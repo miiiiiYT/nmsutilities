@@ -22,13 +22,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutOpenWindow;
  * @author Martin
  *
  */
-public class PacketPlayOutInventoryOpenEvent extends PacketPlayOutEvent {
-
-	/**
-	 * A unique id number for the window to be displayed. Notchian server
-	 * implementation is a counter, starting at 1.
-	 */
-	private int windowID;
+public class PacketPlayOutInventoryOpenEvent extends PacketPlayOutInventoryEvent {
 
 	/**
 	 * The window type to use for display. Contained in the minecraft:menu registry;
@@ -38,21 +32,16 @@ public class PacketPlayOutInventoryOpenEvent extends PacketPlayOutEvent {
 	private IChatBaseComponent title;
 
 	public PacketPlayOutInventoryOpenEvent(Player injectedPlayer, PacketPlayOutOpenWindow packet) {
-		super(injectedPlayer);
-		windowID =Field.get(packet, "a", int.class);
-		windowType =Field.get(packet, "b", int.class);
-		title =Field.get(packet, "c", IChatBaseComponent.class);
+		super(injectedPlayer, packet);
+		windowType = Field.get(packet, "b", int.class);
+		title = Field.get(packet, "c", IChatBaseComponent.class);
 	}
 
-	public PacketPlayOutInventoryOpenEvent(Player injectedPlayer, int windowID, int windowType, IChatBaseComponent title) {
-		super(injectedPlayer);
-		this.windowID = windowID;
+	public PacketPlayOutInventoryOpenEvent(Player injectedPlayer, int inventoryId, int windowType,
+			IChatBaseComponent title) {
+		super(injectedPlayer, inventoryId);
 		this.windowType = windowType;
 		this.title = title;
-	}
-
-	public int getWindowID() {
-		return windowID;
 	}
 
 	public int getWindowType() {
@@ -66,7 +55,7 @@ public class PacketPlayOutInventoryOpenEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutOpenWindow packet = new PacketPlayOutOpenWindow();
-		Field.set(packet, "a", windowID);
+		Field.set(packet, "a", getInventoryId());
 		Field.set(packet, "b", windowType);
 		Field.set(packet, "c", title);
 		return packet;

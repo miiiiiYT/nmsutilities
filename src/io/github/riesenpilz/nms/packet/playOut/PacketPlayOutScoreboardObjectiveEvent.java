@@ -3,6 +3,7 @@ package io.github.riesenpilz.nms.packet.playOut;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.RenderType;
 
+import io.github.riesenpilz.nms.packet.HasText;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 import net.minecraft.server.v1_16_R3.IScoreboardCriteria.EnumScoreboardHealthDisplay;
@@ -23,7 +24,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutScoreboardObjective;
  * @author Martin
  *
  */
-public class PacketPlayOutScoreboardObjectiveEvent extends PacketPlayOutEvent {
+public class PacketPlayOutScoreboardObjectiveEvent extends PacketPlayOutEvent implements HasText {
 
 	/**
 	 * A unique name for the objective.
@@ -62,8 +63,11 @@ public class PacketPlayOutScoreboardObjectiveEvent extends PacketPlayOutEvent {
 	public String getName() {
 		return name;
 	}
-
-	public IChatBaseComponent getDisplayName() {
+	
+	/**
+	 * Display name
+	 */
+	public IChatBaseComponent getText() {
 		return displayName;
 	}
 

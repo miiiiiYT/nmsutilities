@@ -19,9 +19,8 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutEntityLook
  * @author Martin
  *
  */
-public class PacketPlayOutEntityRotationEvent extends PacketPlayOutEvent {
+public class PacketPlayOutEntityRotationEvent extends PacketPlayOutEntityEvent {
 
-	private int entityID;
 	/**
 	 * New angle, not a delta.
 	 */
@@ -34,24 +33,19 @@ public class PacketPlayOutEntityRotationEvent extends PacketPlayOutEvent {
 	private boolean onGround;
 
 	public PacketPlayOutEntityRotationEvent(Player injectedPlayer, PacketPlayOutEntityLook packet) {
-		super(injectedPlayer);
-		entityID = Field.get(packet, "a", int.class);
+		super(injectedPlayer, packet);
 		yaw = Field.get(packet, "e", byte.class);
 		pitch = Field.get(packet, "f", byte.class);
 		onGround = Field.get(packet, "g", boolean.class);
 	}
 
-	public PacketPlayOutEntityRotationEvent(Player injectedPlayer, int entityID, byte yaw, byte pitch, boolean onGround) {
-		super(injectedPlayer);
-		this.entityID = entityID;
+	public PacketPlayOutEntityRotationEvent(Player injectedPlayer, int entityId, byte yaw, byte pitch, boolean onGround) {
+		super(injectedPlayer, entityId);
 		this.yaw = yaw;
 		this.pitch = pitch;
 		this.onGround = onGround;
 	}
 
-	public int getEntityID() {
-		return entityID;
-	}
 
 	public byte getYaw() {
 		return yaw;
@@ -67,7 +61,7 @@ public class PacketPlayOutEntityRotationEvent extends PacketPlayOutEvent {
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutEntityLook(entityID, yaw, pitch, onGround);
+		return new PacketPlayOutEntityLook(getEntityId(), yaw, pitch, onGround);
 	}
 
 	@Override

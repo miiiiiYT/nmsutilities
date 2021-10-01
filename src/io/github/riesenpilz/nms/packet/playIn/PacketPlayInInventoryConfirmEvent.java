@@ -23,12 +23,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayInTransaction;
  * @author Martin
  *
  */
-public class PacketPlayInInventoryConfirmEvent extends PacketPlayInEvent {
-
-	/**
-	 * The ID of the window that the action occurred in.
-	 */
-	private int windowID;
+public class PacketPlayInInventoryConfirmEvent extends PacketPlayInInventoryEvent {
 
 	/**
 	 * Every action that is to be accepted has a unique number. This number is an
@@ -42,22 +37,16 @@ public class PacketPlayInInventoryConfirmEvent extends PacketPlayInEvent {
 	private boolean accepted;
 
 	public PacketPlayInInventoryConfirmEvent(Player injectedPlayer, PacketPlayInTransaction packet) {
-		super(injectedPlayer);
-		windowID = packet.b();
+		super(injectedPlayer, packet.b());
 		actionNumber = packet.c();
 		accepted = Field.get(packet, "c", boolean.class);
 	}
 
-	public PacketPlayInInventoryConfirmEvent(Player injectedPlayer, int windowID, short actionNumber,
+	public PacketPlayInInventoryConfirmEvent(Player injectedPlayer, int inventoryId, short actionNumber,
 			boolean accepted) {
-		super(injectedPlayer);
-		this.windowID = windowID;
+		super(injectedPlayer, inventoryId);
 		this.actionNumber = actionNumber;
 		this.accepted = accepted;
-	}
-
-	public int getWindowID() {
-		return windowID;
 	}
 
 	public short getActionNumber() {
@@ -71,7 +60,7 @@ public class PacketPlayInInventoryConfirmEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInTransaction packet = new PacketPlayInTransaction();
-		Field.set(packet, "a", windowID);
+		Field.set(packet, "a", getInventoryId());
 		Field.set(packet, "b", actionNumber);
 		Field.set(packet, "c", accepted);
 		return packet;

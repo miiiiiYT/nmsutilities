@@ -19,43 +19,32 @@ import net.minecraft.server.v1_16_R3.PacketPlayInEntityNBTQuery;
  * @author Martin
  *
  */
-public class PacketPlayInEntityNBTQueryEvent extends PacketPlayInEvent {
+public class PacketPlayInEntityNBTQueryEvent extends PacketPlayInEntityEvent {
 
 	/**
 	 * An incremental ID so that the client can verify that the response matches.
 	 */
 	private int transactionID;
 
-	/**
-	 * The ID of the entity to query.
-	 */
-	private int entityID;
-
 	public PacketPlayInEntityNBTQueryEvent(Player injectedPlayer, PacketPlayInEntityNBTQuery packet) {
-		super(injectedPlayer);
+		super(injectedPlayer, packet.c());
 		transactionID = packet.b();
-		entityID = packet.c();
 	}
 
-	public PacketPlayInEntityNBTQueryEvent(Player injectedPlayer, int transactionID, int entityID) {
-		super(injectedPlayer);
+	public PacketPlayInEntityNBTQueryEvent(Player injectedPlayer, int transactionID, int entityId) {
+		super(injectedPlayer, entityId);
 		this.transactionID = transactionID;
-		this.entityID = entityID;
 	}
 
 	public int getTransactionID() {
 		return transactionID;
 	}
 
-	public int getEntityID() {
-		return entityID;
-	}
-
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInEntityNBTQuery packet = new PacketPlayInEntityNBTQuery();
 		Field.set(packet, "a", transactionID);
-		Field.set(packet, "b", entityID);
+		Field.set(packet, "b", getEntityId());
 		return packet;
 	}
 

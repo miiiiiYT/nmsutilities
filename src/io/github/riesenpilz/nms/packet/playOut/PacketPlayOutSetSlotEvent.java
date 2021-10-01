@@ -28,28 +28,21 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutSetSlot;
  * @author Martin
  *
  */
-public class PacketPlayOutSetSlotEvent extends PacketPlayOutEvent {
+public class PacketPlayOutSetSlotEvent extends PacketPlayOutInventoryEvent {
 
-	private int windowID;
 	private int slot;
 	private ItemStack itemStack;
 
 	public PacketPlayOutSetSlotEvent(Player injectedPlayer, PacketPlayOutSetSlot packet) {
-		super(injectedPlayer);
-		windowID = Field.get(packet, "a", int.class);
+		super(injectedPlayer, packet);
 		slot = Field.get(packet, "b", int.class);
 		itemStack = ItemStack.getItemStackOf(Field.get(packet, "c", net.minecraft.server.v1_16_R3.ItemStack.class));
 	}
 
-	public PacketPlayOutSetSlotEvent(Player injectedPlayer, int windowID, int slot, ItemStack itemStack) {
-		super(injectedPlayer);
-		this.windowID = windowID;
+	public PacketPlayOutSetSlotEvent(Player injectedPlayer, int inventoryId, int slot, ItemStack itemStack) {
+		super(injectedPlayer, inventoryId);
 		this.slot = slot;
 		this.itemStack = itemStack;
-	}
-
-	public int getWindowID() {
-		return windowID;
 	}
 
 	public int getSlot() {
@@ -62,7 +55,7 @@ public class PacketPlayOutSetSlotEvent extends PacketPlayOutEvent {
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutSetSlot(windowID, slot, itemStack.getNMS());
+		return new PacketPlayOutSetSlot(getInventoryId(), slot, itemStack.getNMS());
 	}
 
 	@Override

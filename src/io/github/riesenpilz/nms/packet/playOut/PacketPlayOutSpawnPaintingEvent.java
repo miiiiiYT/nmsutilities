@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.EnumDirection;
@@ -26,9 +27,8 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutSpawnEntityPainting;
  * @author Martin
  *
  */
-public class PacketPlayOutSpawnPaintingEvent extends PacketPlayOutEvent {
+public class PacketPlayOutSpawnPaintingEvent extends PacketPlayOutEntityEvent {
 
-	private int entityID;
 	private UUID uuid;
 
 	/**
@@ -43,30 +43,22 @@ public class PacketPlayOutSpawnPaintingEvent extends PacketPlayOutEvent {
 
 	private Art art;
 
-	public PacketPlayOutSpawnPaintingEvent(Player injectedPlayer, int entityID, UUID uuid, Location location,
+	@SuppressWarnings("deprecation")
+	public PacketPlayOutSpawnPaintingEvent(Player injectedPlayer, PacketPlayOutSpawnEntityPainting packet) {
+		super(injectedPlayer, packet);
+		uuid = Field.get(packet, "b", UUID.class);
+		location = PacketUtils.toLocation(Field.get(packet, "c", BlockPosition.class), injectedPlayer.getWorld());
+		facing = PacketUtils.toBlockFace(Field.get(packet, "d", EnumDirection.class));
+		art = Art.getById(Field.get(packet, "e", int.class));
+	}
+
+	public PacketPlayOutSpawnPaintingEvent(Player injectedPlayer, int entityId, UUID uuid, Location location,
 			BlockFace facing, Art art) {
-		super(injectedPlayer);
-		this.entityID = entityID;
+		super(injectedPlayer, entityId);
 		this.uuid = uuid;
 		this.location = location;
 		this.facing = facing;
 		this.art = art;
-	}
-
-	@SuppressWarnings("deprecation")
-	public PacketPlayOutSpawnPaintingEvent(Player injectedPlayer, PacketPlayOutSpawnEntityPainting packet) {
-		super(injectedPlayer);
-		entityID = (int) new Field(PacketPlayOutSpawnEntityPainting.class, "a").get(packet);
-		uuid = (UUID) new Field(PacketPlayOutSpawnEntityPainting.class, "b").get(packet);
-		final BlockPosition pos = (BlockPosition) new Field(PacketPlayOutSpawnEntityPainting.class, "c").get(packet);
-		location = new Location(injectedPlayer.getWorld(), pos.getX(), pos.getY(), pos.getZ());
-		facing = BlockFace
-				.valueOf(((EnumDirection) new Field(PacketPlayOutSpawnEntityPainting.class, "d").get(packet)).name());
-		art = Art.getById((int) new Field(PacketPlayOutSpawnEntityPainting.class, "e").get(packet));
-	}
-
-	public int getEntityID() {
-		return entityID;
 	}
 
 	public UUID getUuid() {
@@ -89,12 +81,11 @@ public class PacketPlayOutSpawnPaintingEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutSpawnEntityPainting packet = new PacketPlayOutSpawnEntityPainting();
-		new Field(PacketPlayOutSpawnEntityPainting.class, "a").set(packet, entityID);
-		new Field(PacketPlayOutSpawnEntityPainting.class, "b").set(packet, uuid);
-		new Field(PacketPlayOutSpawnEntityPainting.class, "c").set(packet,
-				new BlockPosition(location.getX(), location.getYaw(), location.getZ()));
-		new Field(PacketPlayOutSpawnEntityPainting.class, "d").set(packet, EnumDirection.valueOf(facing.name()));
-		new Field(PacketPlayOutSpawnEntityPainting.class, "e").set(packet, art.getId());
+		Field.set(packet, "a", getEntityId());
+		Field.set(packet, "b", uuid);
+		Field.set(packet, "c", PacketUtils.toBlockPosition(location));
+		Field.set(packet, "d", PacketUtils.toEnumDirection(facing));
+		Field.set(packet, "e", art.getId());
 		return packet;
 	}
 

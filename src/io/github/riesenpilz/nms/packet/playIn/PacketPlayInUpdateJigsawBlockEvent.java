@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.HasBlockPosition;
 import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
@@ -23,7 +24,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayInSetJigsaw;
  * @author Martin
  *
  */
-public class PacketPlayInUpdateJigsawBlockEvent extends PacketPlayInEvent {
+public class PacketPlayInUpdateJigsawBlockEvent extends PacketPlayInEvent implements HasBlockPosition {
 
 	private Location blockLocation;
 	private NamespacedKey name;
@@ -59,6 +60,7 @@ public class PacketPlayInUpdateJigsawBlockEvent extends PacketPlayInEvent {
 		jointType = type;
 	}
 
+	@Override
 	public Location getBlockLocation() {
 		return blockLocation;
 	}

@@ -40,7 +40,7 @@ public class BlockData {
 	}
 	
 	public io.github.riesenpilz.nms.block.Block setBlock(Location loc) {
-		nms.c(new ServerWorld(loc.getWorld()).getNMS(), PacketUtils.toBlockPosition(loc));
+		nms.c(ServerWorld.getWorldOf(loc.getWorld()).getNMS(), PacketUtils.toBlockPosition(loc));
 		return io.github.riesenpilz.nms.block.Block.getBlockOf(loc);
 	}
 

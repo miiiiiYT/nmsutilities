@@ -24,16 +24,14 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntityEquipment;
  * @author Martin
  *
  */
-public class PacketPlayOutEntityEquipmentEvent extends PacketPlayOutEvent {
+public class PacketPlayOutEntityEquipmentEvent extends PacketPlayOutEntityEvent {
 
-	private int entityId;
 	private List<Equipment> equimpent;
 
 	@SuppressWarnings("unchecked")
 	public PacketPlayOutEntityEquipmentEvent(Player injectedPlayer, PacketPlayOutEntityEquipment packet) {
-		super(injectedPlayer);
+		super(injectedPlayer, packet);
 		
-		entityId = Field.get(packet, "a", int.class);
 		final List<Pair<EnumItemSlot, net.minecraft.server.v1_16_R3.ItemStack>> nms = Field.get(packet, "b", List.class);
 		equimpent = new ArrayList<>();
 		for (Pair<EnumItemSlot, net.minecraft.server.v1_16_R3.ItemStack> nmsEquipment : nms)
@@ -41,13 +39,8 @@ public class PacketPlayOutEntityEquipmentEvent extends PacketPlayOutEvent {
 	}
 
 	public PacketPlayOutEntityEquipmentEvent(Player injectedPlayer, int entityId, List<Equipment> equimpent) {
-		super(injectedPlayer);
-		this.entityId = entityId;
+		super(injectedPlayer, entityId);
 		this.equimpent = equimpent;
-	}
-
-	public int getEntityId() {
-		return entityId;
 	}
 
 	public List<Equipment> getEquimpent() {
@@ -59,7 +52,7 @@ public class PacketPlayOutEntityEquipmentEvent extends PacketPlayOutEvent {
 		final List<Pair<EnumItemSlot, net.minecraft.server.v1_16_R3.ItemStack>> nms = new ArrayList<>();
 		for (Equipment equipment : this.equimpent)
 			nms.add(equipment.getNMS());
-		return new PacketPlayOutEntityEquipment(entityId, nms);
+		return new PacketPlayOutEntityEquipment(getEntityId(), nms);
 	}
 
 	@Override

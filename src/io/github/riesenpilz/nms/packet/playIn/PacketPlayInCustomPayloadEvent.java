@@ -4,7 +4,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nms.packet.PacketDataSerializer;
-import net.minecraft.server.v1_16_R3.MinecraftKey;
+import io.github.riesenpilz.nms.packet.PacketUtils;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInCustomPayload;
@@ -69,10 +69,9 @@ public class PacketPlayInCustomPayloadEvent extends PacketPlayInEvent {
 	 */
 	private PacketDataSerializer data;
 
-	@SuppressWarnings("deprecation")
 	public PacketPlayInCustomPayloadEvent(Player injectedPlayer, PacketPlayInCustomPayload packet) {
 		super(injectedPlayer);
-		channel = new NamespacedKey(packet.tag.getNamespace(), packet.tag.getKey());
+		channel = PacketUtils.toNamespacedKey(packet.tag);
 		data = new PacketDataSerializer(packet.data);
 	}
 
@@ -93,7 +92,7 @@ public class PacketPlayInCustomPayloadEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInCustomPayload packet = new PacketPlayInCustomPayload();
-		packet.tag = new MinecraftKey(channel.getNamespace(), channel.getKey());
+		packet.tag = PacketUtils.toMinecraftKey(channel);
 		packet.data = data.getNMS();
 		return packet;
 	}

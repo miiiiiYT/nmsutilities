@@ -3,6 +3,7 @@ package io.github.riesenpilz.nms.packet.playIn;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.HasBlockPosition;
 import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -21,12 +22,12 @@ import net.minecraft.server.v1_16_R3.PacketPlayInTileNBTQuery;
  * @author Martin
  *
  */
-public class PacketPlayInBlockNBTQueryEvent extends PacketPlayInEvent {
+public class PacketPlayInBlockNBTQueryEvent extends PacketPlayInEvent implements HasBlockPosition {
 
 	/**
 	 * An incremental ID so that the client can verify that the response matches.
 	 */
-	private int transactionID;
+	private int transactionId;
 
 	/**
 	 * The location of the block to check.
@@ -35,20 +36,21 @@ public class PacketPlayInBlockNBTQueryEvent extends PacketPlayInEvent {
 
 	public PacketPlayInBlockNBTQueryEvent(Player injectedPlayer, PacketPlayInTileNBTQuery packet) {
 		super(injectedPlayer);
-		transactionID = packet.b();
+		transactionId = packet.b();
 		blockLocation = PacketUtils.toLocation(packet.c(), injectedPlayer.getWorld());
 	}
 
-	public PacketPlayInBlockNBTQueryEvent(Player injectedPlayer, Location blockLocation, int transactionID) {
+	public PacketPlayInBlockNBTQueryEvent(Player injectedPlayer, Location blockLocation, int transactionId) {
 		super(injectedPlayer);
-		this.transactionID = transactionID;
+		this.transactionId = transactionId;
 		this.blockLocation = blockLocation;
 	}
 
-	public int getTransactionID() {
-		return transactionID;
+	public int getTransactionId() {
+		return transactionId;
 	}
 
+	@Override
 	public Location getBlockLocation() {
 		return blockLocation;
 	}
@@ -56,7 +58,7 @@ public class PacketPlayInBlockNBTQueryEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInTileNBTQuery packet = new PacketPlayInTileNBTQuery();
-		Field.set(packet, "a", transactionID);
+		Field.set(packet, "a", transactionId);
 		Field.set(packet, "b", PacketUtils.toBlockPosition(blockLocation));
 		return packet;
 	}

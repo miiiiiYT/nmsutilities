@@ -2,11 +2,12 @@ package io.github.riesenpilz.nms.entity;
 
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
-
-import com.google.gson.JsonObject;
 
 import io.github.riesenpilz.nms.nbt.NBTTag;
 import io.github.riesenpilz.nms.world.ServerWorld;
@@ -15,23 +16,38 @@ import net.minecraft.server.v1_16_R3.NBTTagCompound;
 import net.minecraft.server.v1_16_R3.WorldServer;
 
 public class WorldEntity {
-	private final org.bukkit.entity.Entity entity;
+	private final org.bukkit.entity.Entity bukkit;
 
-	public WorldEntity(org.bukkit.entity.Entity entity) {
-		this.entity = entity;
+	protected WorldEntity(org.bukkit.entity.Entity bukkit) {
+		Validate.notNull(bukkit);
+		this.bukkit = bukkit;
 	}
 
-	public WorldEntity(int entityID, org.bukkit.World world) {
-		final WorldServer nmsWorld = new ServerWorld(world).getNMS();
-		this.entity = Bukkit.getEntity(nmsWorld.getEntity(entityID).getUniqueID());
+	protected WorldEntity(UUID uuid) {
+		this.bukkit = Bukkit.getEntity(uuid);
 	}
 
-	public WorldEntity(UUID uuid) {
-		this.entity = Bukkit.getEntity(uuid);
+	public static WorldEntity getWorldEntity(UUID uuid) {
+		return new WorldEntity(uuid);
+	}
+
+	public static WorldEntity getWorldEntity(org.bukkit.entity.Entity bukkit) {
+		return new WorldEntity(bukkit);
+	}
+
+	public static WorldEntity getWorldEntity(int entityId, org.bukkit.World world) {
+		Validate.notNull(world);
+		final WorldServer nmsWorld = ServerWorld.getWorldOf(world).getNMS();
+		return new WorldEntity(Bukkit.getEntity(nmsWorld.getEntity(entityId).getUniqueID()));
+	}
+
+	public static WorldEntity getWorldEntity(net.minecraft.server.v1_16_R3.Entity nms) {
+		Validate.notNull(nms);
+		return new WorldEntity(nms.getUniqueID());
 	}
 
 	public net.minecraft.server.v1_16_R3.Entity getNMS() {
-		return ((CraftEntity) entity).getHandle();
+		return ((CraftEntity) bukkit).getHandle();
 	}
 
 	public void loadFromNBTTag(NBTTag nbtTag) {
@@ -42,30 +58,12 @@ public class WorldEntity {
 		return NBTTag.getNBTTagOf(getNMS().save(new NBTTagCompound()));
 	}
 
-	@Deprecated
-	public void setTags(JsonObject jsonObject) {
-		JsonObject config = getWorld().getConfig("entities");
-		config.add(getUUIDString(), jsonObject);
-		getWorld().setConfig("entities", config);
-	}
-
-	@Deprecated
-	public JsonObject getTags() {
-		final JsonObject config = getWorld().getConfig("entities");
-		return config.has(getUUIDString()) ? config.getAsJsonObject(getUUIDString()) : new JsonObject();
-	}
-
-	@Deprecated
-	public void removePermaTag() {
-		setTags(null);
-	}
-
 	public ServerWorld getWorld() {
-		return new ServerWorld(getBukkitEntity().getWorld());
+		return ServerWorld.getWorldOf(getBukkit().getWorld());
 	}
 
-	public org.bukkit.entity.Entity getBukkitEntity() {
-		return entity;
+	public org.bukkit.entity.Entity getBukkit() {
+		return bukkit;
 	}
 
 	public Entity getEntity() {
@@ -73,19 +71,19 @@ public class WorldEntity {
 	}
 
 	public String getUUIDString() {
-		return getBukkitEntity().getUniqueId().toString();
+		return getBukkit().getUniqueId().toString();
 	}
 
-	public int getID() {
-		return entity.getEntityId();
+	public int getId() {
+		return bukkit.getEntityId();
 	}
 
 	public Chunk getChunk() {
-		return new Chunk(entity.getLocation().getChunk());
+		return new Chunk(bukkit.getLocation().getChunk());
 	}
 
 	public Location getLocation() {
-		return entity.getLocation();
+		return bukkit.getLocation();
 	}
 
 	public NBTTag getNBTTag() {
@@ -94,7 +92,7 @@ public class WorldEntity {
 		return blockTags.getOrDefNBTTag(getUUIDString(), new NBTTag());
 	}
 
-	public void setNBTTag(NBTTag tag) {
+	public void setNBTTag(@Nullable NBTTag tag) {
 		final NBTTag allNBTTags = getChunk().getAllNBTTags();
 		final NBTTag blockTags = allNBTTags.getOrDefNBTTag("entity", new NBTTag());
 		blockTags.setNBTTag(getUUIDString(), tag);

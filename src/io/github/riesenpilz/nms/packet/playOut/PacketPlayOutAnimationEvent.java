@@ -19,17 +19,44 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutAnimation;
  * @author Martin
  *
  */
-public class PacketPlayOutAnimationEvent extends PacketPlayOutEvent {
+public class PacketPlayOutAnimationEvent extends PacketPlayOutEntityEvent {
+
+	private Animation animation;
+
+	public PacketPlayOutAnimationEvent(Player injectedPlayer, PacketPlayOutAnimation packet) {
+		super(injectedPlayer, packet);
+		animation = Animation.getByID(Field.get(packet, "b", int.class));
+	}
+
+	public PacketPlayOutAnimationEvent(Player injectedPlayer, Animation animation, int entityId) {
+		super(injectedPlayer, entityId);
+		this.animation = animation;
+	}
+
+	public Animation getAnimation() {
+		return animation;
+	}
+
+	@Override
+	public Packet<PacketListenerPlayOut> getNMS() {
+		final PacketPlayOutAnimation packet = new PacketPlayOutAnimation();
+		new Field(packet.getClass(), "a").set(packet, getEntityId());
+		new Field(packet.getClass(), "b").set(packet, animation.getId());
+		return packet;
+	}
+
+	@Override
+	public int getPacketID() {
+		return 0x05;
+	}
+
+	@Override
+	public String getProtocolURLString() {
+		return "https://wiki.vg/Protocol#Entity_Animation_.28clientbound.29";
+	}
 
 	public enum Animation {
 		CRITICAL_EFFECT(4), LEAVE_BED(2), MAGIC_CRITICAL_EFFECT(5), SWING_MAIN_ARM(0), SWING_OFFHAND(3), TAKE_DAMAGE(1);
-
-		public static Animation getByID(int id) {
-			for (Animation animation : values())
-				if (animation.getId() == id)
-					return animation;
-			return null;
-		}
 
 		private int id;
 
@@ -40,47 +67,13 @@ public class PacketPlayOutAnimationEvent extends PacketPlayOutEvent {
 		public int getId() {
 			return id;
 		}
-	}
 
-	private Animation animation;
+		public static Animation getByID(int id) {
+			for (Animation animation : values())
+				if (animation.getId() == id)
+					return animation;
+			return null;
+		}
 
-	private int playerID;
-
-	public PacketPlayOutAnimationEvent(Player injectedPlayer, Animation animation, int playerID) {
-		super(injectedPlayer);
-		this.animation = animation;
-		this.playerID = playerID;
-	}
-
-	public PacketPlayOutAnimationEvent(Player injectedPlayer, PacketPlayOutAnimation packet) {
-		super(injectedPlayer);
-		playerID = (int) new Field(packet.getClass(), "a").get(packet);
-		animation = Animation.getByID((int) new Field(packet.getClass(), "a").get(packet));
-	}
-
-	public Animation getAnimation() {
-		return animation;
-	}
-
-	@Override
-	public Packet<PacketListenerPlayOut> getNMS() {
-		final PacketPlayOutAnimation packet = new PacketPlayOutAnimation();
-		new Field(packet.getClass(), "a").set(packet, playerID);
-		new Field(packet.getClass(), "b").set(packet, animation.getId());
-		return packet;
-	}
-
-	@Override
-	public int getPacketID() {
-		return 0x05;
-	}
-
-	public int getPlayerID() {
-		return playerID;
-	}
-
-	@Override
-	public String getProtocolURLString() {
-		return "https://wiki.vg/Protocol#Entity_Animation_.28clientbound.29";
 	}
 }

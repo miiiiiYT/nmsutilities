@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nms.block.BlockData;
+import io.github.riesenpilz.nms.packet.HasBlockPosition;
 import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.BlockPosition;
@@ -31,7 +32,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutBlockChange;
  * @author Martin
  *
  */
-public class PacketPlayOutBlockChangeEvent extends PacketPlayOutEvent {
+public class PacketPlayOutBlockChangeEvent extends PacketPlayOutEvent implements HasBlockPosition {
 
 	private Location blockLocation;
 	private BlockData blockData;
@@ -40,6 +41,12 @@ public class PacketPlayOutBlockChangeEvent extends PacketPlayOutEvent {
 		super(injectedPlayer);
 		blockLocation = PacketUtils.toLocation(Field.get(packet, "a", BlockPosition.class), injectedPlayer.getWorld());
 		blockData = BlockData.getBlockDataOf(Field.get(packet, "b", IBlockData.class));
+	}
+
+	public PacketPlayOutBlockChangeEvent(Player injectedPlayer, Location blockLocation, BlockData blockData) {
+		super(injectedPlayer);
+		this.blockLocation = blockLocation;
+		this.blockData = blockData;
 	}
 
 	public Location getBlockLocation() {

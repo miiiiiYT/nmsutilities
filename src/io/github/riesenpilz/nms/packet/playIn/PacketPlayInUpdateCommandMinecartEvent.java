@@ -17,9 +17,8 @@ import net.minecraft.server.v1_16_R3.PacketPlayInSetCommandMinecart;
  * @author Martin
  *
  */
-public class PacketPlayInUpdateCommandMinecartEvent extends PacketPlayInEvent {
+public class PacketPlayInUpdateCommandMinecartEvent extends PacketPlayInEntityEvent {
 
-	private int entityID;
 	private String command;
 
 	/**
@@ -29,22 +28,16 @@ public class PacketPlayInUpdateCommandMinecartEvent extends PacketPlayInEvent {
 	private boolean trackOutput;
 
 	public PacketPlayInUpdateCommandMinecartEvent(Player injectedPlayer, PacketPlayInSetCommandMinecart packet) {
-		super(injectedPlayer);
-		entityID = Field.get(packet, "a", int.class);
+		super(injectedPlayer, packet);
 		command = packet.b();
 		trackOutput = packet.c();
 	}
 
-	public PacketPlayInUpdateCommandMinecartEvent(Player injectedPlayer, int entityID, String command,
+	public PacketPlayInUpdateCommandMinecartEvent(Player injectedPlayer, int entityId, String command,
 			boolean trackOutput) {
-		super(injectedPlayer);
-		this.entityID = entityID;
+		super(injectedPlayer, entityId);
 		this.command = command;
 		this.trackOutput = trackOutput;
-	}
-
-	public int getEntityID() {
-		return entityID;
 	}
 
 	public String getCommand() {
@@ -58,7 +51,7 @@ public class PacketPlayInUpdateCommandMinecartEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInSetCommandMinecart packet = new PacketPlayInSetCommandMinecart();
-		Field.set(packet, "a", entityID);
+		Field.set(packet, "a", getEntityId());
 		Field.set(packet, "b", command);
 		Field.set(packet, "c", trackOutput);
 		return packet;

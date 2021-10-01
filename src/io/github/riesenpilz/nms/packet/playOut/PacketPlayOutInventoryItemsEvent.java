@@ -29,28 +29,21 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutWindowItems;
  * @author Martin
  *
  */
-public class PacketPlayOutInventoryItemsEvent extends PacketPlayOutEvent {
+public class PacketPlayOutInventoryItemsEvent extends PacketPlayOutInventoryEvent {
 
-	private int windowID;
 	private List<ItemStack> itemStacks;
 
 	public PacketPlayOutInventoryItemsEvent(Player injectedPlayer, PacketPlayOutWindowItems packet) {
-		super(injectedPlayer);
-		windowID = Field.get(packet, "a", int.class);
+		super(injectedPlayer, packet);
 		@SuppressWarnings("unchecked")
-		List<net.minecraft.server.v1_16_R3.ItemStack> itemStacks2 = Field.get(packet, "a", List.class);
-		for (net.minecraft.server.v1_16_R3.ItemStack itemStack : itemStacks2)
-			itemStacks.add(ItemStack.getItemStackOf(itemStack));
+		List<net.minecraft.server.v1_16_R3.ItemStack> nmsItemStacks = Field.get(packet, "a", List.class);
+		for (net.minecraft.server.v1_16_R3.ItemStack nmsItemStack : nmsItemStacks)
+			itemStacks.add(ItemStack.getItemStackOf(nmsItemStack));
 	}
 
-	public PacketPlayOutInventoryItemsEvent(Player injectedPlayer, int windowID, List<ItemStack> itemStacks) {
-		super(injectedPlayer);
-		this.windowID = windowID;
+	public PacketPlayOutInventoryItemsEvent(Player injectedPlayer, int inventoryId, List<ItemStack> itemStacks) {
+		super(injectedPlayer, inventoryId);
 		this.itemStacks = itemStacks;
-	}
-
-	public int getWindowID() {
-		return windowID;
 	}
 
 	public List<ItemStack> getItemStacks() {
@@ -65,7 +58,7 @@ public class PacketPlayOutInventoryItemsEvent extends PacketPlayOutEvent {
 			ItemStack itemStack = itemStacks.get(i);
 			itemStacks2.set(i, itemStack == null ? new ItemStack(Material.AIR).getNMS() : itemStack.getNMS());
 		}
-		return new PacketPlayOutWindowItems(windowID, itemStacks2);
+		return new PacketPlayOutWindowItems(getInventoryId(), itemStacks2);
 	}
 
 	@Override

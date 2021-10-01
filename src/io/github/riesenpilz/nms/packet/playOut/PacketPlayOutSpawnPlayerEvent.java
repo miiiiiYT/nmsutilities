@@ -9,7 +9,6 @@ import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
 import net.minecraft.server.v1_16_R3.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.server.v1_16_R3.PacketPlayOutSpawnEntity;
 
 /**
  * https://wiki.vg/Protocol#Spawn_Player<br>
@@ -47,33 +46,24 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutSpawnEntity;
  * @author Martin
  *
  */
-public class PacketPlayOutSpawnPlayerEvent extends PacketPlayOutEvent {
+public class PacketPlayOutSpawnPlayerEvent extends PacketPlayOutEntityEvent {
 
-	private int entityID;
 	private UUID uuid;
 	private Location location;
 
-	PacketPlayOutSpawnPlayerEvent(Player injectedPlayer, int entityID, UUID uuid, Location location) {
-		super(injectedPlayer);
-		this.entityID = entityID;
+	PacketPlayOutSpawnPlayerEvent(Player injectedPlayer, int entityId, UUID uuid, Location location) {
+		super(injectedPlayer, entityId);
 		this.uuid = uuid;
 		this.location = location;
 	}
 
 	public PacketPlayOutSpawnPlayerEvent(Player injectedPlayer, PacketPlayOutNamedEntitySpawn packet) {
-		super(injectedPlayer);
-		entityID = (int) new Field(PacketPlayOutSpawnEntity.class, "a").get(packet);
-		uuid = (UUID) new Field(PacketPlayOutSpawnEntity.class, "b").get(packet);
-		location = new Location(injectedPlayer.getWorld(),
-				(double) new Field(PacketPlayOutSpawnEntity.class, "c").get(packet),
-				(double) new Field(PacketPlayOutSpawnEntity.class, "d").get(packet),
-				(double) new Field(PacketPlayOutSpawnEntity.class, "e").get(packet),
-				((float) (((byte) new Field(PacketPlayOutSpawnEntity.class, "f").get(packet)) / 256)) * 360,
-				((float) (((byte) new Field(PacketPlayOutSpawnEntity.class.arrayType(), "g").get(packet)) / 256)) * 360);
-	}
-
-	public int getEntityID() {
-		return entityID;
+		super(injectedPlayer, packet);
+		uuid = Field.get(packet, "b", UUID.class);
+		location = new Location(injectedPlayer.getWorld(), Field.get(packet, "c", double.class),
+				Field.get(packet, "d", double.class), Field.get(packet, "e", double.class),
+				((float) (Field.get(packet, "f", int.class) / 256f)) * 360,
+				((float) (Field.get(packet, "g", int.class) / 256f)) * 360);
 	}
 
 	public UUID getUuid() {
@@ -87,13 +77,13 @@ public class PacketPlayOutSpawnPlayerEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn();
-		new Field(PacketPlayOutNamedEntitySpawn.class, "a").set(packet, entityID);
-		new Field(PacketPlayOutNamedEntitySpawn.class, "b").set(packet, uuid);
-		new Field(PacketPlayOutNamedEntitySpawn.class, "c").set(packet, location.getX());
-		new Field(PacketPlayOutNamedEntitySpawn.class, "d").set(packet, location.getY());
-		new Field(PacketPlayOutNamedEntitySpawn.class, "e").set(packet, location.getZ());
-		new Field(PacketPlayOutNamedEntitySpawn.class, "f").set(packet, (byte) ((int) location.getYaw() * 256 / 360));
-		new Field(PacketPlayOutNamedEntitySpawn.class, "g").set(packet, (byte) ((int) location.getPitch() * 256 / 360));
+		Field.set(packet, "a", getEntityId());
+		Field.set(packet, "b", uuid);
+		Field.set(packet, "c", location.getX());
+		Field.set(packet, "d", location.getY());
+		Field.set(packet, "e", location.getZ());
+		Field.set(packet, "f", (byte) ((int) location.getYaw() * 256 / 360));
+		Field.set(packet, "g", (byte) ((int) location.getPitch() * 256 / 360));
 		return packet;
 	}
 

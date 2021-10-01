@@ -3,7 +3,6 @@ package io.github.riesenpilz.nms.packet.playOut;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import io.github.riesenpilz.nms.entity.WorldEntity;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
@@ -13,7 +12,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutRelEntityM
  * https://wiki.vg/Protocol#Entity_Position
  * <p>
  * This packet is sent by the server when an entity moves less then 8 blocks; if
- * an entity moves more than 8 blocks {@link PacketPlayOutEntityPositionEvent}
+ * an entity moves more than 8 blocks {@link PacketPlayOutPayerPositionEvent}
  * should be sent instead.
  * <p>
  * This packet allows at most 8 blocks movement in any direction, because short
@@ -26,9 +25,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutRelEntityM
  * @author Martin
  *
  */
-public class PacketPlayOutEntityMoveEvent extends PacketPlayOutEvent {
-
-	private int entityId;
+public class PacketPlayOutEntityMoveEvent extends PacketPlayOutEntityEvent {
 
 	/**
 	 * Change in X position as (currentX * 32 - prevX * 32) * 128.
@@ -47,8 +44,7 @@ public class PacketPlayOutEntityMoveEvent extends PacketPlayOutEvent {
 	private boolean onGround;
 
 	public PacketPlayOutEntityMoveEvent(Player injectedPlayer, PacketPlayOutRelEntityMove packet) {
-		super(injectedPlayer);
-		entityId = Field.get(packet, "a", int.class);
+		super(injectedPlayer, packet);
 		deltaX = Field.get(packet, "b", short.class);
 		deltaY = Field.get(packet, "c", short.class);
 		deltaZ = Field.get(packet, "d", short.class);
@@ -57,20 +53,11 @@ public class PacketPlayOutEntityMoveEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutEntityMoveEvent(Player injectedPlayer, int entityId, short deltaX, short deltaY, short deltaZ,
 			boolean onGround) {
-		super(injectedPlayer);
-		this.entityId = entityId;
+		super(injectedPlayer, entityId);
 		this.deltaX = deltaX;
 		this.deltaY = deltaY;
 		this.deltaZ = deltaZ;
 		this.onGround = onGround;
-	}
-
-	public int getEntityId() {
-		return entityId;
-	}
-
-	public WorldEntity getEntity() {
-		return new WorldEntity(entityId, getInjectedPlayer().getWorld());
 	}
 
 	public Location getFrom() {
@@ -100,7 +87,7 @@ public class PacketPlayOutEntityMoveEvent extends PacketPlayOutEvent {
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutRelEntityMove(entityId, deltaX, deltaY, deltaZ, onGround);
+		return new PacketPlayOutRelEntityMove(getEntityId(), deltaX, deltaY, deltaZ, onGround);
 	}
 
 	@Override

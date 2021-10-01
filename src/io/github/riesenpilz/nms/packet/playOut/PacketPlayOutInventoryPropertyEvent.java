@@ -20,28 +20,21 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutWindowData;
  * @author Martin
  *
  */
-public class PacketPlayOutInventoryPropertyEvent extends PacketPlayOutEvent {
+public class PacketPlayOutInventoryPropertyEvent extends PacketPlayOutInventoryEvent {
 
-	private int windowID;
 	private int property;
 	private int value;
 
 	public PacketPlayOutInventoryPropertyEvent(Player injectedPlayer, PacketPlayOutWindowData packet) {
-		super(injectedPlayer);
-		windowID = Field.get(packet, "a", int.class);
+		super(injectedPlayer, packet);
 		property = Field.get(packet, "b", int.class);
 		value = Field.get(packet, "c", int.class);
 	}
 
-	public PacketPlayOutInventoryPropertyEvent(Player injectedPlayer, int windowID, int property, int value) {
-		super(injectedPlayer);
-		this.windowID = windowID;
+	public PacketPlayOutInventoryPropertyEvent(Player injectedPlayer, int inventoryId, int property, int value) {
+		super(injectedPlayer, inventoryId);
 		this.property = property;
 		this.value = value;
-	}
-
-	public int getWindowID() {
-		return windowID;
 	}
 
 	public int getProperty() {
@@ -54,7 +47,7 @@ public class PacketPlayOutInventoryPropertyEvent extends PacketPlayOutEvent {
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutWindowData(windowID, value, property);
+		return new PacketPlayOutWindowData(getInventoryId(), value, property);
 	}
 
 	@Override

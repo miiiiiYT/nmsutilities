@@ -19,41 +19,40 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutAttachEntity;
  * @author Martin
  *
  */
-public class PacketPlayOutEntityAttachEvent extends PacketPlayOutEvent {
-
-	private int attachedEntity;
+public class PacketPlayOutEntityAttachEvent extends PacketPlayOutEntityEvent {
 
 	/**
 	 * ID of the entity holding the lead. Set to -1 to detach.
 	 */
-	private int holdingEntity;
+	private int holdingEntityId;
 
 	public PacketPlayOutEntityAttachEvent(Player injectedPlayer, PacketPlayOutAttachEntity packet) {
-		super(injectedPlayer);
+		super(injectedPlayer, packet);
 
-		attachedEntity = Field.get(packet, "a", int.class);
-		holdingEntity = Field.get(packet, "b", int.class);
+		holdingEntityId = Field.get(packet, "b", int.class);
 	}
 
-	public PacketPlayOutEntityAttachEvent(Player injectedPlayer, int attachedEntity, int holdingEntity) {
-		super(injectedPlayer);
-		this.attachedEntity = attachedEntity;
-		this.holdingEntity = holdingEntity;
+	public PacketPlayOutEntityAttachEvent(Player injectedPlayer, int attachedEntityId, int holdingEntityId) {
+		super(injectedPlayer, attachedEntityId);
+		this.holdingEntityId = holdingEntityId;
 	}
 
-	public int getAttachedEntity() {
-		return attachedEntity;
+	/**
+	 * Attached entity id
+	 */
+	public int getEntityId() {
+		return super.getEntityId();
 	}
 
-	public int getHoldingEntity() {
-		return holdingEntity;
+	public int getHoldingEntityId() {
+		return holdingEntityId;
 	}
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutAttachEntity packet = new PacketPlayOutAttachEntity();
-		Field.set(packet, "a", attachedEntity);
-		Field.set(packet, "b", holdingEntity);
+		Field.set(packet, "a", getEntityId());
+		Field.set(packet, "b", holdingEntityId);
 		return packet;
 	}
 

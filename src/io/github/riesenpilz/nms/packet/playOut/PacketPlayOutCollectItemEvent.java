@@ -26,10 +26,9 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutCollect;
  * @author Martin
  *
  */
-public class PacketPlayOutCollectItemEvent extends PacketPlayOutEvent {
+public class PacketPlayOutCollectItemEvent extends PacketPlayOutEntityEvent {
 
 	private int collectedEntityId;
-	private int collectorEntityId;
 
 	/**
 	 * Seems to be 1 for XP orbs, otherwise the number of items in the stack.
@@ -37,27 +36,27 @@ public class PacketPlayOutCollectItemEvent extends PacketPlayOutEvent {
 	private int count;
 
 	public PacketPlayOutCollectItemEvent(Player injectedPlayer, PacketPlayOutCollect packet) {
-		super(injectedPlayer);
+		super(injectedPlayer, packet, "b");
 
 		collectedEntityId = Field.get(packet, "a", int.class);
-		collectorEntityId = Field.get(packet, "b", int.class);
 		count = Field.get(packet, "c", int.class);
 	}
 
 	public PacketPlayOutCollectItemEvent(Player injectedPlayer, int collectedEntityId, int collectorEntityId,
 			int count) {
-		super(injectedPlayer);
+		super(injectedPlayer, collectorEntityId);
 		this.collectedEntityId = collectedEntityId;
-		this.collectorEntityId = collectorEntityId;
 		this.count = count;
 	}
 
 	public int getCollectedEntityId() {
 		return collectedEntityId;
 	}
-
-	public int getCollectorEntityId() {
-		return collectorEntityId;
+	/**
+	 * collecotor entity ID
+	 */
+	public int getEntityId() {
+		return super.getEntityId();
 	}
 
 	public int getCount() {
@@ -66,7 +65,7 @@ public class PacketPlayOutCollectItemEvent extends PacketPlayOutEvent {
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutCollect(collectedEntityId, collectorEntityId, count);
+		return new PacketPlayOutCollect(collectedEntityId, getEntityId(), count);
 	}
 
 	@Override

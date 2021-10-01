@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nms.nbt.NBTTag;
+import io.github.riesenpilz.nms.packet.HasBlockPosition;
 import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.BlockPosition;
@@ -24,7 +25,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutTileEntityData;
  * @author Martin
  *
  */
-public class PacketPlayOutBlockEntityDataEvent extends PacketPlayOutEvent {
+public class PacketPlayOutBlockEntityDataEvent extends PacketPlayOutEvent implements HasBlockPosition {
 
 	private Location blockLocation;
 	private BlockAction action;
@@ -32,10 +33,9 @@ public class PacketPlayOutBlockEntityDataEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutBlockEntityDataEvent(Player injectedPlayer, PacketPlayOutTileEntityData packet) {
 		super(injectedPlayer);
-		blockLocation = PacketUtils.toLocation((BlockPosition) new Field(packet.getClass(), "a").get(packet),
-				injectedPlayer.getWorld());
-		action = BlockAction.getByID((int) new Field(packet.getClass(), "b").get(packet));
-		nbtTag = NBTTag.getNBTTagOf((NBTTagCompound) new Field(packet.getClass(), "c").get(packet));
+		blockLocation = PacketUtils.toLocation(Field.get(packet, "a", BlockPosition.class), injectedPlayer.getWorld());
+		action = BlockAction.getByID(Field.get(packet.getClass(), "b", int.class));
+		nbtTag = NBTTag.getNBTTagOf(Field.get(packet.getClass(), "c", NBTTagCompound.class));
 	}
 
 	public PacketPlayOutBlockEntityDataEvent(Player injectedPlayer, Location blockLocation, BlockAction action,
@@ -46,6 +46,7 @@ public class PacketPlayOutBlockEntityDataEvent extends PacketPlayOutEvent {
 		this.nbtTag = nbtTag;
 	}
 
+	@Override
 	public Location getBlockLocation() {
 		return blockLocation;
 	}

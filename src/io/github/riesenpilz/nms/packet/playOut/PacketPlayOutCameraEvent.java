@@ -40,32 +40,28 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutCamera;
  * @author Martin
  *
  */
-public class PacketPlayOutCameraEvent extends PacketPlayOutEvent {
+public class PacketPlayOutCameraEvent extends PacketPlayOutEntityEvent {
+
+	public PacketPlayOutCameraEvent(Player injectedPlayer, PacketPlayOutCamera packet) {
+		super(injectedPlayer, packet);
+		
+	}
+
+	public PacketPlayOutCameraEvent(Player injectedPlayer, int targetEntityId) {
+		super(injectedPlayer, targetEntityId);
+	}
 
 	/**
 	 * ID of the entity to set the client's camera to.
 	 */
-	private int targetEntityId;
-	
-	public PacketPlayOutCameraEvent(Player injectedPlayer, PacketPlayOutCamera packet) {
-		super(injectedPlayer);
-		
-		targetEntityId = Field.get(packet, "a", int.class);
-	}
-
-	public PacketPlayOutCameraEvent(Player injectedPlayer, int targetEntityId) {
-		super(injectedPlayer);
-		this.targetEntityId = targetEntityId;
-	}
-
-	public int getTargetEntityId() {
-		return targetEntityId;
+	public int getEntityId() {
+		return super.getEntityId();
 	}
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutCamera packet = new PacketPlayOutCamera();
-		Field.set(packet, "a", targetEntityId);
+		Field.set(packet, "a", getEntityId());
 		return packet;
 	}
 

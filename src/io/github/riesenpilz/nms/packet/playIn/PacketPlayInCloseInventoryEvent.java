@@ -2,7 +2,6 @@ package io.github.riesenpilz.nms.packet.playIn;
 
 import org.bukkit.entity.Player;
 
-import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInCloseWindow;
@@ -21,31 +20,21 @@ import net.minecraft.server.v1_16_R3.PacketPlayInCloseWindow;
  * @author Martin
  *
  */
-public class PacketPlayInCloseInventoryEvent extends PacketPlayInEvent {
-
-	/**
-	 * This is the ID of the window that was closed. 0 for player inventory.
-	 */
-	private int windowID;
+public class PacketPlayInCloseInventoryEvent extends PacketPlayInInventoryEvent {
 
 	public PacketPlayInCloseInventoryEvent(Player injectedPlayer, PacketPlayInCloseWindow packet) {
-		super(injectedPlayer);
-		windowID = Field.get(packet, "id", int.class);
+		super(injectedPlayer, packet, "id");
 
 	}
 
-	public PacketPlayInCloseInventoryEvent(Player injectedPlayer, int windowID) {
-		super(injectedPlayer);
-		this.windowID = windowID;
+	public PacketPlayInCloseInventoryEvent(Player injectedPlayer, int inventoryId) {
+		super(injectedPlayer, inventoryId);
 	}
 
-	public int getWindowID() {
-		return windowID;
-	}
 
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
-		return new PacketPlayInCloseWindow(windowID);
+		return new PacketPlayInCloseWindow(getInventoryId());
 	}
 
 	@Override

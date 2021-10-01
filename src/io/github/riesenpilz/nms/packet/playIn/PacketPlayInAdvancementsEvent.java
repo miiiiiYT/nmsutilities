@@ -3,8 +3,8 @@ package io.github.riesenpilz.nms.packet.playIn;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
-import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInAdvancements;
@@ -26,23 +26,22 @@ public class PacketPlayInAdvancementsEvent extends PacketPlayInEvent {
 	/**
 	 * Only present if status is Opened tab.
 	 */
-	private NamespacedKey tabID;
+	private NamespacedKey tabId;
 
-	public PacketPlayInAdvancementsEvent(Player injectedPlayer, Status status, NamespacedKey tabID) {
-		super(injectedPlayer);
-		this.tabID = tabID;
-		this.status = status;
-	}
-
-	@SuppressWarnings("deprecation")
 	public PacketPlayInAdvancementsEvent(Player injectedPlayer, PacketPlayInAdvancements packet) {
 		super(injectedPlayer);
-		tabID = new NamespacedKey(packet.d().getNamespace(), packet.d().getKey());
+		tabId = PacketUtils.toNamespacedKey(packet.d());
 		status = Status.getStatus(packet.c());
 	}
 
-	public NamespacedKey getTabID() {
-		return tabID;
+	public PacketPlayInAdvancementsEvent(Player injectedPlayer, Status status, NamespacedKey tabId) {
+		super(injectedPlayer);
+		this.tabId = tabId;
+		this.status = status;
+	}
+
+	public NamespacedKey getTabId() {
+		return tabId;
 	}
 
 	public Status getStatus() {
@@ -53,7 +52,7 @@ public class PacketPlayInAdvancementsEvent extends PacketPlayInEvent {
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInAdvancements packet = new PacketPlayInAdvancements();
 		Field.set(packet, "a", status.getNMS());
-		Field.set(packet, "b", new MinecraftKey(tabID.getNamespace(), tabID.getKey()));
+		Field.set(packet, "b", PacketUtils.toMinecraftKey(tabId));
 		return packet;
 	}
 

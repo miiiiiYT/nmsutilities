@@ -7,6 +7,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.EntityTypes;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -26,9 +27,8 @@ import net.minecraft.server.v1_16_R3.Vec3D;
  * @author Martin
  *
  */
-public class PacketPlayOutSpawnEntityEvent extends PacketPlayOutEvent {
+public class PacketPlayOutSpawnEntityEvent extends PacketPlayOutEntityEvent {
 
-	private int entityID;
 	private UUID uuid;
 	private Location location;
 
@@ -45,37 +45,28 @@ public class PacketPlayOutSpawnEntityEvent extends PacketPlayOutEvent {
 	 */
 	private int data;
 
-	public PacketPlayOutSpawnEntityEvent(Player injectedPlayer, int entityID, UUID uuid, Location location,
+	public PacketPlayOutSpawnEntityEvent(Player injectedPlayer, PacketPlayOutSpawnEntity packet) {
+		super(injectedPlayer, packet);
+		uuid = Field.get(packet, "b", UUID.class);
+		location = new Location(injectedPlayer.getWorld(), Field.get(packet, "c", double.class),
+				Field.get(packet, "d", double.class), Field.get(packet, "e", double.class),
+				((float) (Field.get(packet, "i", int.class) / 256f)) * 360,
+				((float) (Field.get(packet, "j", int.class) / 256f)) * 360);
+		type = PacketUtils.toEntityType((Field.get(packet, "k", EntityTypes.class)));
+		velocity = new Vector((double) (Field.get(packet, "f", int.class) / 8000D),
+				(double) (Field.get(packet, "g", int.class) / 8000D),
+				(double) (Field.get(packet, "h", int.class) / 8000D));
+		data = Field.get(packet, "l", int.class);
+	}
+
+	public PacketPlayOutSpawnEntityEvent(Player injectedPlayer, int entityId, UUID uuid, Location location,
 			EntityType type, Vector velocity, int data) {
-		super(injectedPlayer);
-		this.entityID = entityID;
+		super(injectedPlayer, entityId);
 		this.uuid = uuid;
 		this.location = location;
 		this.type = type;
 		this.velocity = velocity;
 		this.data = data;
-	}
-
-	@SuppressWarnings("deprecation")
-	public PacketPlayOutSpawnEntityEvent(Player injectedPlayer, PacketPlayOutSpawnEntity packet) {
-		super(injectedPlayer);
-		entityID = (int) new Field(PacketPlayOutSpawnEntity.class, "a").get(packet);
-		uuid = (UUID) new Field(PacketPlayOutSpawnEntity.class, "b").get(packet);
-		location = new Location(injectedPlayer.getWorld(),
-				(double) new Field(PacketPlayOutSpawnEntity.class, "c").get(packet),
-				(double) new Field(PacketPlayOutSpawnEntity.class, "d").get(packet),
-				(double) new Field(PacketPlayOutSpawnEntity.class, "e").get(packet),
-				((float) (((int) new Field(PacketPlayOutSpawnEntity.class, "i").get(packet)) / 256)) * 360,
-				((float) (((int) new Field(PacketPlayOutSpawnEntity.class, "j").get(packet)) / 256)) * 360);
-		type = EntityType.fromName(((EntityTypes<?>) new Field(PacketPlayOutSpawnEntity.class, "k").get(packet)).f());
-		velocity = new Vector((double) ((int) new Field(PacketPlayOutSpawnEntity.class, "f").get(packet) / 8000),
-				(double) ((int) new Field(PacketPlayOutSpawnEntity.class, "g").get(packet) / 8000),
-				(double) ((int) new Field(PacketPlayOutSpawnEntity.class, "h").get(packet) / 8000));
-		data = (int) new Field(PacketPlayOutSpawnEntity.class, "l").get(packet);
-	}
-
-	public int getEntityID() {
-		return entityID;
 	}
 
 	public UUID getUuid() {
@@ -98,11 +89,10 @@ public class PacketPlayOutSpawnEntityEvent extends PacketPlayOutEvent {
 		return data;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutSpawnEntity(entityID, uuid, location.getX(), location.getY(), location.getZ(),
-				location.getYaw(), location.getPitch(), EntityTypes.a(type.getName()).get(), data,
+		return new PacketPlayOutSpawnEntity(getEntityId(), uuid, location.getX(), location.getY(), location.getZ(),
+				location.getYaw(), location.getPitch(), PacketUtils.toEntityTypes(type), data,
 				new Vec3D(velocity.getX(), velocity.getY(), velocity.getZ()));
 	}
 

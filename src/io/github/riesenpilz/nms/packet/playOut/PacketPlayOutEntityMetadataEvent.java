@@ -26,30 +26,23 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntityMetadata;
  * @author Martin
  *
  */
-public class PacketPlayOutEntityMetadataEvent extends PacketPlayOutEvent {
+public class PacketPlayOutEntityMetadataEvent extends PacketPlayOutEntityEvent {
 
-	private int entityId;
 	private List<DataWatcherItem<?>> metadata;
 
 	@SuppressWarnings("unchecked")
 	public PacketPlayOutEntityMetadataEvent(Player injectedPlayer, PacketPlayOutEntityMetadata packet) {
-		super(injectedPlayer);
+		super(injectedPlayer, packet);
 
-		entityId = Field.get(packet, "a", int.class);
-		final List<DataWatcher.Item<?>> nmsItems = Field.get(packet, "a", List.class);
+		final List<DataWatcher.Item<?>> nmsItems = Field.get(packet, "b", List.class);
 		metadata = new ArrayList<>();
 		for (DataWatcher.Item<?> nmsItem : nmsItems)
 			metadata.add(DataWatcherItem.getDataWatcherItemFrom(nmsItem));
 	}
 
 	public PacketPlayOutEntityMetadataEvent(Player injectedPlayer, int entityId, List<DataWatcherItem<?>> metadata) {
-		super(injectedPlayer);
-		this.entityId = entityId;
+		super(injectedPlayer, entityId);
 		this.metadata = metadata;
-	}
-
-	public int getEntityId() {
-		return entityId;
 	}
 
 	public List<DataWatcherItem<?>> getMetadata() {
@@ -59,7 +52,7 @@ public class PacketPlayOutEntityMetadataEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutEntityMetadata packet = new PacketPlayOutEntityMetadata();
-		Field.set(packet, "a", entityId);
+		Field.set(packet, "a", getEntityId());
 		Field.set(packet, "b", metadata);
 		return packet;
 	}

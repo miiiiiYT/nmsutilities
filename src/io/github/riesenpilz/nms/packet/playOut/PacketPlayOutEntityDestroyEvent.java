@@ -22,7 +22,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntityDestroy;
 public class PacketPlayOutEntityDestroyEvent extends PacketPlayOutEvent {
 
 	/**
-	 * The list of entities of destroy.
+	 * The list of entities to destroy.
 	 */
 	private int[] entityIds;
 

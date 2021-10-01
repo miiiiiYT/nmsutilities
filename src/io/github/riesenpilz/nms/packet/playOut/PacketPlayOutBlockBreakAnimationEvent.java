@@ -3,6 +3,7 @@ package io.github.riesenpilz.nms.packet.playOut;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.HasBlockPosition;
 import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.BlockPosition;
@@ -34,36 +35,26 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutBlockBreakAnimation;
  * @author Martin
  *
  */
-public class PacketPlayOutBlockBreakAnimationEvent extends PacketPlayOutEvent {
+public class PacketPlayOutBlockBreakAnimationEvent extends PacketPlayOutEntityEvent implements HasBlockPosition {
 
-	/**
-	 * Entity ID of the entity breaking the block.
-	 */
-	private int entityID;
 	private Location blockLocation;
 	private int destroyStage;
 
 	public PacketPlayOutBlockBreakAnimationEvent(Player injectedPlayer, PacketPlayOutBlockBreakAnimation packet) {
-		super(injectedPlayer);
-		entityID = (int) new Field(packet.getClass(), "a").get(packet);
-		blockLocation = PacketUtils.toLocation((BlockPosition) new Field(packet.getClass(), "b").get(packet),
-				injectedPlayer.getWorld());
-		destroyStage = (int) new Field(packet.getClass(), "c").get(packet);
+		super(injectedPlayer, packet);
+		blockLocation = PacketUtils.toLocation(Field.get(packet, "b", BlockPosition.class), injectedPlayer.getWorld());
+		destroyStage = Field.get(packet, "c", int.class);
 
 	}
 
-	public PacketPlayOutBlockBreakAnimationEvent(Player injectedPlayer, int entityID, Location blockLocation,
+	public PacketPlayOutBlockBreakAnimationEvent(Player injectedPlayer, int entityId, Location blockLocation,
 			int destroyStage) {
-		super(injectedPlayer);
-		this.entityID = entityID;
+		super(injectedPlayer, entityId);
 		this.blockLocation = blockLocation;
 		this.destroyStage = destroyStage;
 	}
 
-	public int getEntityID() {
-		return entityID;
-	}
-
+	@Override
 	public Location getBlockLocation() {
 		return blockLocation;
 	}
@@ -74,7 +65,8 @@ public class PacketPlayOutBlockBreakAnimationEvent extends PacketPlayOutEvent {
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutBlockBreakAnimation(entityID, PacketUtils.toBlockPosition(blockLocation), destroyStage);
+		return new PacketPlayOutBlockBreakAnimation(getEntityId(), PacketUtils.toBlockPosition(blockLocation),
+				destroyStage);
 	}
 
 	@Override

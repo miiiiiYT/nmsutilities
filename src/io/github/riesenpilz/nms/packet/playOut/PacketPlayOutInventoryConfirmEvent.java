@@ -22,27 +22,22 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutTransaction;
  * @author Martin
  *
  */
-public class PacketPlayOutInventoryConfirmEvent extends PacketPlayOutEvent {
-	
-	private int windowID;
+public class PacketPlayOutInventoryConfirmEvent extends PacketPlayOutInventoryEvent {
+
 	private short actionNumber;
 	private boolean accept;
+
 	public PacketPlayOutInventoryConfirmEvent(Player injectedPlayer, PacketPlayOutTransaction packet) {
-		super(injectedPlayer);
-		windowID = Field.get(packet, "a", int.class);
+		super(injectedPlayer, packet);
 		actionNumber = Field.get(packet, "b", short.class);
 		accept = Field.get(packet, "c", boolean.class);
 	}
 
-	public PacketPlayOutInventoryConfirmEvent(Player injectedPlayer, int windowID, short actionNumber, boolean accept) {
-		super(injectedPlayer);
-		this.windowID = windowID;
+	public PacketPlayOutInventoryConfirmEvent(Player injectedPlayer, int inventoryId, short actionNumber,
+			boolean accept) {
+		super(injectedPlayer, inventoryId);
 		this.actionNumber = actionNumber;
 		this.accept = accept;
-	}
-
-	public int getWindowID() {
-		return windowID;
 	}
 
 	public short getActionNumber() {
@@ -55,7 +50,7 @@ public class PacketPlayOutInventoryConfirmEvent extends PacketPlayOutEvent {
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutTransaction(windowID, actionNumber, accept);
+		return new PacketPlayOutTransaction(getInventoryId(), actionNumber, accept);
 	}
 
 	@Override

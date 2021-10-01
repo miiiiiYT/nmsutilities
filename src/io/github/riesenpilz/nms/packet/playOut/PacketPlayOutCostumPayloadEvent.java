@@ -3,6 +3,7 @@ package io.github.riesenpilz.nms.packet.playOut;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -39,11 +40,9 @@ public class PacketPlayOutCostumPayloadEvent extends PacketPlayOutEvent {
 	 */
 	private PacketDataSerializer data;
 
-	@SuppressWarnings("deprecation")
 	public PacketPlayOutCostumPayloadEvent(Player injectedPlayer, PacketPlayOutCustomPayload packet) {
 		super(injectedPlayer);
-		final MinecraftKey minecraftKey = Field.get(packet, "r", MinecraftKey.class);
-		key = new NamespacedKey(minecraftKey.getNamespace(), minecraftKey.getKey());
+		key = PacketUtils.toNamespacedKey(Field.get(packet, "r", MinecraftKey.class));
 	}
 
 	public NamespacedKey getKey() {
@@ -56,7 +55,7 @@ public class PacketPlayOutCostumPayloadEvent extends PacketPlayOutEvent {
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutCustomPayload(new MinecraftKey(key.getNamespace(), key.getKey()), data);
+		return new PacketPlayOutCustomPayload(PacketUtils.toMinecraftKey(key), data);
 	}
 
 	@Override

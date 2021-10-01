@@ -17,9 +17,8 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntityEffect;
  * @author Martin
  *
  */
-public class PacketPlayOutEntityEffectEvent extends PacketPlayOutEvent {
+public class PacketPlayOutEntityEffectEvent extends PacketPlayOutEntityEvent {
 
-	private int entityId;
 	private byte effectId;
 	private byte amplifier;
 	private int duartion;
@@ -42,8 +41,7 @@ public class PacketPlayOutEntityEffectEvent extends PacketPlayOutEvent {
 	private byte bitMask;
 
 	public PacketPlayOutEntityEffectEvent(Player injectedPlayer, PacketPlayOutEntityEffect packet) {
-		super(injectedPlayer);
-		entityId = Field.get(packet, "a", int.class);
+		super(injectedPlayer, packet);
 		effectId = Field.get(packet, "b", byte.class);
 		amplifier = Field.get(packet, "c", byte.class);
 		duartion = Field.get(packet, "d", int.class);
@@ -52,16 +50,11 @@ public class PacketPlayOutEntityEffectEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutEntityEffectEvent(Player injectedPlayer, int entityId, byte effectId, byte amplifier,
 			int duartion, byte bitMask) {
-		super(injectedPlayer);
-		this.entityId = entityId;
+		super(injectedPlayer, entityId);
 		this.effectId = effectId;
 		this.amplifier = amplifier;
 		this.duartion = duartion;
 		this.bitMask = bitMask;
-	}
-
-	public int getEntityId() {
-		return entityId;
 	}
 
 	public byte getEffectId() {
@@ -83,7 +76,7 @@ public class PacketPlayOutEntityEffectEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutEntityEffect packet = new PacketPlayOutEntityEffect();
-		Field.set(packet, "a", entityId);
+		Field.set(packet, "a", getEntityId());
 		Field.set(packet, "b", effectId);
 		Field.set(packet, "c", amplifier);
 		Field.set(packet, "d", duartion);

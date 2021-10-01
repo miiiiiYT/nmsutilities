@@ -23,9 +23,8 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntityHeadRotation;
  * @author Martin
  *
  */
-public class PacketPlayOutEntityHeadLookEvent extends PacketPlayOutEvent {
+public class PacketPlayOutEntityHeadLookEvent extends PacketPlayOutEntityEvent {
 
-	private int entityId;
 	
 	/**
 	 * New angle, not a delta.
@@ -33,21 +32,16 @@ public class PacketPlayOutEntityHeadLookEvent extends PacketPlayOutEvent {
 	private byte angle;
 	
 	public PacketPlayOutEntityHeadLookEvent(Player injectedPlayer, PacketPlayOutEntityHeadRotation packet) {
-		super(injectedPlayer);
+		super(injectedPlayer, packet);
 		
-		entityId = Field.get(packet, "a", int.class);
 		angle = Field.get(packet, "b", byte.class);
 	}
 
 	public PacketPlayOutEntityHeadLookEvent(Player injectedPlayer, int entityId, byte angle) {
-		super(injectedPlayer);
-		this.entityId = entityId;
+		super(injectedPlayer, entityId);
 		this.angle = angle;
 	}
 
-	public int getEntityId() {
-		return entityId;
-	}
 
 	public byte getAngle() {
 		return angle;
@@ -56,7 +50,7 @@ public class PacketPlayOutEntityHeadLookEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutEntityHeadRotation packet = new PacketPlayOutEntityHeadRotation();
-		Field.set(packet, "a", entityId);
+		Field.set(packet, "a", getEntityId());
 		Field.set(packet, "b", angle);
 		return packet;
 	}

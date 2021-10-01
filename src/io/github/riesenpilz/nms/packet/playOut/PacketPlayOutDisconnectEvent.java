@@ -2,6 +2,7 @@ package io.github.riesenpilz.nms.packet.playOut;
 
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.HasText;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -21,7 +22,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutKickDisconnect;
  * @author Martin
  *
  */
-public class PacketPlayOutDisconnectEvent extends PacketPlayOutEvent {
+public class PacketPlayOutDisconnectEvent extends PacketPlayOutEvent implements HasText {
 
 	/**
 	 * Displayed to the client when the connection terminates.
@@ -38,7 +39,8 @@ public class PacketPlayOutDisconnectEvent extends PacketPlayOutEvent {
 		this.reason = reason;
 	}
 
-	public IChatBaseComponent getReason() {
+	@Override
+	public IChatBaseComponent getText() {
 		return reason;
 	}
 

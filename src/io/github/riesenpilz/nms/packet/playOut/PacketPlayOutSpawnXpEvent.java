@@ -20,9 +20,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutSpawnEntityExperienceOrb;
  * @author Martin
  *
  */
-public class PacketPlayOutSpawnXpEvent extends PacketPlayOutEvent {
-
-	private int entityID;
+public class PacketPlayOutSpawnXpEvent extends PacketPlayOutEntityEvent {
 
 	private Location location;
 
@@ -31,25 +29,17 @@ public class PacketPlayOutSpawnXpEvent extends PacketPlayOutEvent {
 	 */
 	private int count;
 
-	public PacketPlayOutSpawnXpEvent(Player injectedPlayer, int entityID, Location location, int count) {
-		super(injectedPlayer);
-		this.entityID = entityID;
+	public PacketPlayOutSpawnXpEvent(Player injectedPlayer, int entityId, Location location, int count) {
+		super(injectedPlayer, entityId);
 		this.location = location;
 		this.count = count;
 	}
 
 	public PacketPlayOutSpawnXpEvent(Player injectedPlayer, PacketPlayOutSpawnEntityExperienceOrb packet) {
-		super(injectedPlayer);
-		entityID = (int) new Field(PacketPlayOutSpawnEntityExperienceOrb.class, "a").get(packet);
-		location = new Location(injectedPlayer.getWorld(),
-				(double) new Field(PacketPlayOutSpawnEntityExperienceOrb.class, "b").get(packet),
-				(double) new Field(PacketPlayOutSpawnEntityExperienceOrb.class, "c").get(packet),
-				(double) new Field(PacketPlayOutSpawnEntityExperienceOrb.class, "d").get(packet));
-		count = (int) new Field(PacketPlayOutSpawnEntityExperienceOrb.class, "e").get(packet);
-	}
-
-	public int getEntityID() {
-		return entityID;
+		super(injectedPlayer, packet);
+		location = new Location(injectedPlayer.getWorld(), Field.get(packet, "b", double.class),
+				Field.get(packet, "c", double.class), Field.get(packet, "d", double.class));
+		count = Field.get(packet, "e", int.class);
 	}
 
 	public Location getLocation() {
@@ -63,11 +53,11 @@ public class PacketPlayOutSpawnXpEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutSpawnEntityExperienceOrb packet = new PacketPlayOutSpawnEntityExperienceOrb();
-		new Field(PacketPlayOutSpawnEntityExperienceOrb.class, "a").set(packet, entityID);
-		new Field(PacketPlayOutSpawnEntityExperienceOrb.class, "b").set(packet, location.getX());
-		new Field(PacketPlayOutSpawnEntityExperienceOrb.class, "c").set(packet, location.getY());
-		new Field(PacketPlayOutSpawnEntityExperienceOrb.class, "d").set(packet, location.getZ());
-		new Field(PacketPlayOutSpawnEntityExperienceOrb.class, "e").set(packet, count);
+		Field.set(packet, "a", getEntityId());
+		Field.set(packet, "b", location.getX());
+		Field.set(packet, "c", location.getY());
+		Field.set(packet, "d", location.getZ());
+		Field.set(packet, "e", count);
 		return packet;
 	}
 

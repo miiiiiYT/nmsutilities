@@ -20,9 +20,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntityTeleport;
  * @author Martin
  *
  */
-public class PacketPlayOutEntityTeleportEvent extends PacketPlayOutEvent {
-
-	private int entityId;
+public class PacketPlayOutEntityTeleportEvent extends PacketPlayOutEntityEvent {
 
 	private Location location;
 
@@ -38,9 +36,8 @@ public class PacketPlayOutEntityTeleportEvent extends PacketPlayOutEvent {
 	private boolean onGround;
 
 	public PacketPlayOutEntityTeleportEvent(Player injectedPlayer, PacketPlayOutEntityTeleport packet) {
-		super(injectedPlayer);
+		super(injectedPlayer, packet);
 
-		entityId = Field.get(packet, "a", int.class);
 		location = new Location(injectedPlayer.getWorld(), Field.get(packet, "b", double.class),
 				Field.get(packet, "c", double.class), Field.get(packet, "d", double.class));
 		yaw = Field.get(packet, "e", byte.class);
@@ -50,16 +47,11 @@ public class PacketPlayOutEntityTeleportEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutEntityTeleportEvent(Player injectedPlayer, int entityId, Location location, byte yaw,
 			byte pitch, boolean onGround) {
-		super(injectedPlayer);
-		this.entityId = entityId;
+		super(injectedPlayer, entityId);
 		this.location = location;
 		this.yaw = yaw;
 		this.pitch = pitch;
 		this.onGround = onGround;
-	}
-
-	public int getEntityId() {
-		return entityId;
 	}
 
 	public Location getLocation() {
@@ -81,7 +73,7 @@ public class PacketPlayOutEntityTeleportEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport();
-		Field.set(packet, "a", entityId);
+		Field.set(packet, "a", getEntityId());
 		Field.set(packet, "b", location.getX());
 		Field.set(packet, "c", location.getY());
 		Field.set(packet, "d", location.getZ());

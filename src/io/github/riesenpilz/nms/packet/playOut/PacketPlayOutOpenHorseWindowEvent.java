@@ -2,6 +2,7 @@ package io.github.riesenpilz.nms.packet.playOut;
 
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.entity.WorldEntity;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
@@ -20,41 +21,36 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutOpenWindowHorse;
  * @author Martin
  *
  */
-public class PacketPlayOutOpenHorseWindowEvent extends PacketPlayOutEvent {
+public class PacketPlayOutOpenHorseWindowEvent extends PacketPlayOutInventoryEvent {
 
-	private int windowID;
 	private int slots;
-	private int entityID;
+	private int entityId;
 
 	public PacketPlayOutOpenHorseWindowEvent(Player injectedPlayer, PacketPlayOutOpenWindowHorse packet) {
-		super(injectedPlayer);
-		windowID = Field.get(packet, "a", int.class);
+		super(injectedPlayer, packet);
 		slots = Field.get(packet, "b", int.class);
-		entityID = Field.get(packet, "c", int.class);
+		entityId = Field.get(packet, "c", int.class);
 	}
 
-	public PacketPlayOutOpenHorseWindowEvent(Player injectedPlayer, int windowID, int slots, int entityID) {
-		super(injectedPlayer);
-		this.windowID = windowID;
+	public PacketPlayOutOpenHorseWindowEvent(Player injectedPlayer, int inventoryId, int slots, int entityId) {
+		super(injectedPlayer, inventoryId);
 		this.slots = slots;
-		this.entityID = entityID;
-	}
-
-	public int getWindowID() {
-		return windowID;
+		this.entityId = entityId;
 	}
 
 	public int getSlots() {
 		return slots;
 	}
 
-	public int getEntityID() {
-		return entityID;
+	public int getEntityId() {
+		return entityId;
 	}
-
+	public WorldEntity getEntity() {
+		return WorldEntity.getWorldEntity(entityId, getInjectedPlayer().getWorld());
+	}
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutOpenWindowHorse(windowID, slots, entityID);
+		return new PacketPlayOutOpenWindowHorse(getInventoryId(), slots, entityId);
 	}
 
 	@Override

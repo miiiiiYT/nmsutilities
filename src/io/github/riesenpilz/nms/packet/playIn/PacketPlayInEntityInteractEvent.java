@@ -32,9 +32,8 @@ import net.minecraft.server.v1_16_R3.PacketPlayInUseEntity.EnumEntityUseAction;
  * @author Martin
  *
  */
-public class PacketPlayInEntityInteractEvent extends PacketPlayInEvent {
+public class PacketPlayInEntityInteractEvent extends PacketPlayInEntityEvent {
 
-	private int entityID;
 	private EntityUseAction action;
 	private Vector vector;
 
@@ -46,25 +45,19 @@ public class PacketPlayInEntityInteractEvent extends PacketPlayInEvent {
 	private boolean sneaking;
 
 	public PacketPlayInEntityInteractEvent(Player injectedPlayer, PacketPlayInUseEntity packet) {
-		super(injectedPlayer);
-		entityID = Field.get(packet, "a", int.class);
+		super(injectedPlayer, packet);
 		vector = EntityUseAction.INTERACT_AT.equals(action) ? PacketUtils.toVetor(packet.d()) : new Vector();
 		hand = !EntityUseAction.ATTACK.equals(action) ? Hand.getHand(packet.c()) : null;
 		sneaking = packet.e();
 	}
 
-	public PacketPlayInEntityInteractEvent(Player injectedPlayer, int entityID, EntityUseAction action, Vector vector,
+	public PacketPlayInEntityInteractEvent(Player injectedPlayer, int entityId, EntityUseAction action, Vector vector,
 			Hand hand, boolean sneaking) {
-		super(injectedPlayer);
-		this.entityID = entityID;
+		super(injectedPlayer, entityId);
 		this.action = action;
 		this.vector = vector;
 		this.hand = hand;
 		this.sneaking = sneaking;
-	}
-
-	public int getEntityID() {
-		return entityID;
 	}
 
 	public EntityUseAction getAction() {
@@ -86,7 +79,7 @@ public class PacketPlayInEntityInteractEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInUseEntity packet = new PacketPlayInUseEntity();
-		Field.set(packet, "a", entityID);
+		Field.set(packet, "a", getEntityId());
 		Field.set(packet, "b", action.getNMS());
 		Field.set(packet, "c", PacketUtils.toVec3D(vector));
 		Field.set(packet, "d", hand.getNMS());

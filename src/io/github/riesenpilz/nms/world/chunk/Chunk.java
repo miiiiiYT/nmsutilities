@@ -23,7 +23,7 @@ public class Chunk {
 	}
 
 	public ServerWorld getWorld() {
-		return new ServerWorld(bukkitChunk.getWorld());
+		return ServerWorld.getWorldOf(bukkitChunk.getWorld());
 	}
 
 	public Location getLocation() {

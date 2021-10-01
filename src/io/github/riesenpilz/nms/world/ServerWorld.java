@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.entity.Player;
@@ -31,16 +32,23 @@ import net.minecraft.server.v1_16_R3.WorldServer;
 
 @SuppressWarnings("deprecation")
 public class ServerWorld {
-	private final org.bukkit.World world;
+	private final org.bukkit.World bukkit;
 
-	public ServerWorld(org.bukkit.World world) {
-		this.world = world;
+	protected ServerWorld(org.bukkit.World bukkit) {
+		Validate.notNull(bukkit);
+		this.bukkit = bukkit;
 	}
 
-	public ServerWorld(net.minecraft.server.v1_16_R3.WorldServer nms) {
-		this.world = Bukkit.getWorld(nms.uuid);
+	protected ServerWorld(net.minecraft.server.v1_16_R3.WorldServer nms) {
+		Validate.notNull(nms);
+		this.bukkit = Bukkit.getWorld(nms.uuid);
 	}
-
+	public static ServerWorld getWorldOf(WorldServer nms) {
+		return new ServerWorld(nms);
+	}
+	public static ServerWorld getWorldOf(World bukkit) {
+		return new ServerWorld(bukkit);
+	}
 	private JsonObject getWorldConfig() {
 		return getConfig("worldConfig");
 	}
@@ -50,7 +58,7 @@ public class ServerWorld {
 	}
 
 	public Chunk getChunk(Location location) {
-		return new Chunk(world.getChunkAt(location));
+		return new Chunk(bukkit.getChunkAt(location));
 	}
 
 	public JsonObject getConfig(String name) {
@@ -92,7 +100,7 @@ public class ServerWorld {
 	}
 
 	public File getFolder() {
-		return world.getWorldFolder();
+		return bukkit.getWorldFolder();
 	}
 
 	@Deprecated
@@ -133,7 +141,7 @@ public class ServerWorld {
 	 */
 	public void delete(@Nullable Location tpPlayersTo, String message) {
 		Validate.notNull(message);
-		if (tpPlayersTo != null && !tpPlayersTo.getWorld().equals(world)) {
+		if (tpPlayersTo != null && !tpPlayersTo.getWorld().equals(bukkit)) {
 			for (Player player : getPlayers()) {
 				player.teleport(tpPlayersTo);
 				player.sendMessage(message);
@@ -142,7 +150,7 @@ public class ServerWorld {
 
 				@Override
 				public void run() {
-					Bukkit.unloadWorld(world, false);
+					Bukkit.unloadWorld(bukkit, false);
 					try {
 						FileUtils.forceDelete(getFolder());
 					} catch (IOException e) {
@@ -159,7 +167,7 @@ public class ServerWorld {
 
 			@Override
 			public void run() {
-				Bukkit.unloadWorld(world, false);
+				Bukkit.unloadWorld(bukkit, false);
 				try {
 					FileUtils.forceDelete(getFolder());
 				} catch (IOException e) {
@@ -181,14 +189,16 @@ public class ServerWorld {
 	}
 
 	public List<Player> getPlayers() {
-		return world.getPlayers();
+		return bukkit.getPlayers();
 	}
 
 	public WorldServer getNMS() {
-		return ((CraftWorld) world).getHandle();
+		return ((CraftWorld) bukkit).getHandle();
 	}
 
 	public org.bukkit.World getBukkit() {
-		return world;
+		return bukkit;
 	}
+
+	
 }

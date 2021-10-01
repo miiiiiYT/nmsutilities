@@ -24,46 +24,37 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutSpawnEntityLiving;
  * @author Martin
  *
  */
-public class PacketPlayOutSpawnLivingEntityEvent extends PacketPlayOutEvent {
+public class PacketPlayOutSpawnLivingEntityEvent extends PacketPlayOutEntityEvent {
 
-	private int entityID;
 	private UUID uuid;
 	private Location location;
 	private EntityType type;
 	private Vector velocity;
 	private float headPitch;
 
-	public PacketPlayOutSpawnLivingEntityEvent(Player injectedPlayer, int entityID, UUID uuid, Location location,
+	@SuppressWarnings("deprecation")
+	public PacketPlayOutSpawnLivingEntityEvent(Player injectedPlayer, PacketPlayOutSpawnEntityLiving packet) {
+		super(injectedPlayer, packet);
+		uuid = Field.get(packet, "b", UUID.class);
+		type = EntityType.fromId(Field.get(packet, "c", int.class));
+		location = new Location(injectedPlayer.getWorld(), Field.get(packet, "d", double.class),
+				Field.get(packet, "e", double.class), Field.get(packet, "f", double.class),
+				((float) (Field.get(packet, "j", int.class) / 256f)) * 360,
+				((float) (Field.get(packet, "k", int.class) / 256f)) * 360);
+		headPitch = ((float) (Field.get(packet, "l", byte.class) / 256f)) * 360;
+		velocity = new Vector((double) (Field.get(packet, "g", int.class) / 8000D),
+				(double) (Field.get(packet, "h", int.class) / 8000D),
+				(double) (Field.get(packet, "i", int.class) / 8000D));
+	}
+
+	public PacketPlayOutSpawnLivingEntityEvent(Player injectedPlayer, int entityId, UUID uuid, Location location,
 			EntityType type, Vector velocity, float headPitch) {
-		super(injectedPlayer);
-		this.entityID = entityID;
+		super(injectedPlayer, entityId);
 		this.uuid = uuid;
 		this.location = location;
 		this.type = type;
 		this.velocity = velocity;
 		this.headPitch = headPitch;
-	}
-
-	@SuppressWarnings("deprecation")
-	public PacketPlayOutSpawnLivingEntityEvent(Player injectedPlayer, PacketPlayOutSpawnEntityLiving packet) {
-		super(injectedPlayer);
-		entityID = (int) new Field(PacketPlayOutSpawnEntityLiving.class, "a").get(packet);
-		uuid = (UUID) new Field(PacketPlayOutSpawnEntityLiving.class, "b").get(packet);
-		type = EntityType.fromId((int) new Field(PacketPlayOutSpawnEntityLiving.class, "c").get(packet));
-		location = new Location(injectedPlayer.getWorld(),
-				(double) new Field(PacketPlayOutSpawnEntityLiving.class, "d").get(packet),
-				(double) new Field(PacketPlayOutSpawnEntityLiving.class, "e").get(packet),
-				(double) new Field(PacketPlayOutSpawnEntityLiving.class, "f").get(packet),
-				((float) (((byte) new Field(PacketPlayOutSpawnEntityLiving.class, "j").get(packet)) / 256)) * 360,
-				((float) (((byte) new Field(PacketPlayOutSpawnEntityLiving.class, "k").get(packet)) / 256)) * 360);
-		headPitch = ((float) (((byte) new Field(PacketPlayOutSpawnEntityLiving.class, "l").get(packet)) / 256)) * 360;
-		velocity = new Vector((double) ((int) new Field(PacketPlayOutSpawnEntityLiving.class, "g").get(packet) / 8000),
-				(double) ((int) new Field(PacketPlayOutSpawnEntityLiving.class, "h").get(packet) / 8000),
-				(double) ((int) new Field(PacketPlayOutSpawnEntityLiving.class, "i").get(packet) / 8000));
-	}
-
-	public int getEntityID() {
-		return entityID;
 	}
 
 	public UUID getUuid() {
@@ -90,18 +81,18 @@ public class PacketPlayOutSpawnLivingEntityEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutSpawnEntityLiving packet = new PacketPlayOutSpawnEntityLiving();
-		new Field(PacketPlayOutSpawnEntityLiving.class, "a").set(packet, entityID);
-		new Field(PacketPlayOutSpawnEntityLiving.class, "b").set(packet, uuid);
-		new Field(PacketPlayOutSpawnEntityLiving.class, "c").set(packet, type.getTypeId());
-		new Field(PacketPlayOutSpawnEntityLiving.class, "d").set(packet, location.getX());
-		new Field(PacketPlayOutSpawnEntityLiving.class, "e").set(packet, location.getY());
-		new Field(PacketPlayOutSpawnEntityLiving.class, "f").set(packet, location.getZ());
-		new Field(PacketPlayOutSpawnEntityLiving.class, "g").set(packet, velocity.getX() * 8000);
-		new Field(PacketPlayOutSpawnEntityLiving.class, "h").set(packet, velocity.getY() * 8000);
-		new Field(PacketPlayOutSpawnEntityLiving.class, "i").set(packet, velocity.getZ() * 8000);
-		new Field(PacketPlayOutSpawnEntityLiving.class, "j").set(packet, (byte) location.getYaw() * 256 / 360);
-		new Field(PacketPlayOutSpawnEntityLiving.class, "k").set(packet, (byte) location.getPitch() * 256 / 360);
-		new Field(PacketPlayOutSpawnEntityLiving.class, "l").set(packet, (byte) headPitch * 256 / 360);
+		Field.set(packet, "a", getEntityId());
+		Field.set(packet, "b", uuid);
+		Field.set(packet, "c", type.getTypeId());
+		Field.set(packet, "d", location.getX());
+		Field.set(packet, "e", location.getY());
+		Field.set(packet, "f", location.getZ());
+		Field.set(packet, "g", velocity.getX() * 8000);
+		Field.set(packet, "h", velocity.getY() * 8000);
+		Field.set(packet, "i", velocity.getZ() * 8000);
+		Field.set(packet, "j", (byte) location.getYaw() * 256 / 360);
+		Field.set(packet, "k", (byte) location.getPitch() * 256 / 360);
+		Field.set(packet, "l", (byte) headPitch * 256 / 360);
 		return packet;
 	}
 

@@ -20,12 +20,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayInEnchantItem;
  * @author Martin
  *
  */
-public class PacketPlayInClickInventoryButtonEvent extends PacketPlayInEvent {
-
-	/**
-	 * The ID of the window sent by Open Window.
-	 */
-	private int windowID;
+public class PacketPlayInClickInventoryButtonEvent extends PacketPlayInInventoryEvent {
 
 	/**
 	 * Meaning depends on window type.
@@ -33,19 +28,13 @@ public class PacketPlayInClickInventoryButtonEvent extends PacketPlayInEvent {
 	private int buttonID;
 
 	public PacketPlayInClickInventoryButtonEvent(Player injectedPlayer, PacketPlayInEnchantItem packet) {
-		super(injectedPlayer);
-		windowID = packet.b();
+		super(injectedPlayer, packet.b());
 		buttonID = packet.c();
 	}
 
-	public PacketPlayInClickInventoryButtonEvent(Player injectedPlayer, int windowID, int buttonID) {
-		super(injectedPlayer);
-		this.windowID = windowID;
+	public PacketPlayInClickInventoryButtonEvent(Player injectedPlayer, int inventoryId, int buttonID) {
+		super(injectedPlayer, inventoryId);
 		this.buttonID = buttonID;
-	}
-
-	public int getWindowID() {
-		return windowID;
 	}
 
 	public int getButtonID() {
@@ -55,7 +44,7 @@ public class PacketPlayInClickInventoryButtonEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInEnchantItem packet = new PacketPlayInEnchantItem();
-		Field.set(packet, "a", windowID);
+		Field.set(packet, "a", getInventoryId());
 		Field.set(packet, "b", buttonID);
 		return packet;
 	}

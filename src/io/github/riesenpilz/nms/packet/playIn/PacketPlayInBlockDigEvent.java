@@ -6,6 +6,7 @@ import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nms.entity.player.DigType;
+import io.github.riesenpilz.nms.packet.HasBlockPosition;
 import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -26,7 +27,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayInBlockDig;
  * @author Martin
  *
  */
-public class PacketPlayInBlockDigEvent extends PacketPlayInEvent {
+public class PacketPlayInBlockDigEvent extends PacketPlayInEvent implements HasBlockPosition {
 
 	private Location blockLocation;
 
@@ -47,8 +48,7 @@ public class PacketPlayInBlockDigEvent extends PacketPlayInEvent {
 
 	public PacketPlayInBlockDigEvent(Player injectedPlayer, PacketPlayInBlockDig packet) {
 		super(injectedPlayer);
-		blockLocation = new Location(injectedPlayer.getWorld(), packet.b().getX(), packet.b().getY(),
-				packet.b().getZ());
+		blockLocation = PacketUtils.toLocation(packet.b(), injectedPlayer.getWorld());
 		blockFace = CraftBlock.notchToBlockFace(packet.c());
 		digType = DigType.getPlayerDigType(packet.d());
 	}
@@ -57,6 +57,7 @@ public class PacketPlayInBlockDigEvent extends PacketPlayInEvent {
 		return blockFace;
 	}
 
+	@Override
 	public Location getBlockLocation() {
 		return blockLocation;
 	}

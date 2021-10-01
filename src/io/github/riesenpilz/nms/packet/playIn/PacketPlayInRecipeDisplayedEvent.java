@@ -3,8 +3,8 @@ package io.github.riesenpilz.nms.packet.playIn;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
-import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInRecipeDisplayed;
@@ -23,27 +23,26 @@ import net.minecraft.server.v1_16_R3.PacketPlayInRecipeDisplayed;
  */
 public class PacketPlayInRecipeDisplayedEvent extends PacketPlayInEvent {
 
-	private NamespacedKey recipeID;
+	private NamespacedKey recipeId;
 
-	@SuppressWarnings("deprecation")
 	public PacketPlayInRecipeDisplayedEvent(Player injectedPlayer, PacketPlayInRecipeDisplayed packet) {
 		super(injectedPlayer);
-		recipeID = new NamespacedKey(packet.b().getNamespace(), packet.b().getKey());
+		recipeId = PacketUtils.toNamespacedKey(packet.b());
 	}
 
 	public PacketPlayInRecipeDisplayedEvent(Player injectedPlayer, NamespacedKey recipeID) {
 		super(injectedPlayer);
-		this.recipeID = recipeID;
+		this.recipeId = recipeID;
 	}
 
 	public NamespacedKey getRecipeID() {
-		return recipeID;
+		return recipeId;
 	}
 
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInRecipeDisplayed packet = new PacketPlayInRecipeDisplayed();
-		Field.set(packet, "a", new MinecraftKey(recipeID.getNamespace(), recipeID.getKey()));
+		Field.set(packet, "a", PacketUtils.toMinecraftKey(recipeId));
 		return packet;
 	}
 
