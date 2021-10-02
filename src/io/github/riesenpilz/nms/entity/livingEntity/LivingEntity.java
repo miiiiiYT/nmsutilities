@@ -6,18 +6,19 @@ import io.github.riesenpilz.nms.entity.WorldEntity;
 import net.minecraft.server.v1_16_R3.EntityLiving;
 
 public class LivingEntity extends WorldEntity {
-    private final org.bukkit.entity.LivingEntity livingEntity;
 
-    public LivingEntity(org.bukkit.entity.LivingEntity livingEntity) {
-        super(livingEntity);
-        this.livingEntity = livingEntity;
+    protected LivingEntity(org.bukkit.entity.LivingEntity bukkit) {
+        super(bukkit);
     }
-
-    public org.bukkit.entity.LivingEntity getLivingEntity() {
-        return livingEntity;
+    public static LivingEntity getLivingEntityOf(org.bukkit.entity.LivingEntity bukkit) {
+		return new LivingEntity(bukkit);
+	}
+    @Override
+    public org.bukkit.entity.LivingEntity getBukkit() {
+    	return (org.bukkit.entity.LivingEntity) super.getBukkit();
     }
 
     public EntityLiving getNMS() {
-        return ((CraftLivingEntity) livingEntity).getHandle();
+        return ((CraftLivingEntity) getBukkit()).getHandle();
     }
 }

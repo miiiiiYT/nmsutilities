@@ -44,11 +44,11 @@ public class PacketPlayOutEntityMoveEvent extends PacketPlayOutEntityEvent {
 	private boolean onGround;
 
 	public PacketPlayOutEntityMoveEvent(Player injectedPlayer, PacketPlayOutRelEntityMove packet) {
-		super(injectedPlayer, packet);
-		deltaX = Field.get(packet, "b", short.class);
-		deltaY = Field.get(packet, "c", short.class);
-		deltaZ = Field.get(packet, "d", short.class);
-		onGround = Field.get(packet, "g", boolean.class);
+		super(injectedPlayer, Field.getFromSuper(packet, "a", int.class));
+		deltaX = Field.getFromSuper(packet, "b", short.class);
+		deltaY = Field.getFromSuper(packet, "c", short.class);
+		deltaZ = Field.getFromSuper(packet, "d", short.class);
+		onGround = Field.getFromSuper(packet, "g", boolean.class);
 	}
 
 	public PacketPlayOutEntityMoveEvent(Player injectedPlayer, int entityId, short deltaX, short deltaY, short deltaZ,

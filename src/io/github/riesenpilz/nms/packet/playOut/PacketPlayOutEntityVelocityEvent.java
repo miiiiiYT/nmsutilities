@@ -23,16 +23,15 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntityVelocity;
  */
 public class PacketPlayOutEntityVelocityEvent extends PacketPlayOutEntityEvent {
 
-	private short velocityX;
-	private short velocityY;
-	private short velocityZ;
-	
+	private int velocityX;
+	private int velocityY;
+	private int velocityZ;
+
 	public PacketPlayOutEntityVelocityEvent(Player injectedPlayer, PacketPlayOutEntityVelocity packet) {
 		super(injectedPlayer, packet);
-		
-		velocityX = Field.get(packet, "b", short.class);
-		velocityY = Field.get(packet, "c", short.class);
-		velocityZ = Field.get(packet, "d", short.class);
+		velocityX = Field.get(packet, "b", int.class);
+		velocityY = Field.get(packet, "c", int.class);
+		velocityZ = Field.get(packet, "d", int.class);
 	}
 
 	public PacketPlayOutEntityVelocityEvent(Player injectedPlayer, int entityId, short velocityX, short velocityY,
@@ -43,16 +42,15 @@ public class PacketPlayOutEntityVelocityEvent extends PacketPlayOutEntityEvent {
 		this.velocityZ = velocityZ;
 	}
 
-
-	public short getVelocityX() {
+	public int getVelocityX() {
 		return velocityX;
 	}
 
-	public short getVelocityY() {
+	public int getVelocityY() {
 		return velocityY;
 	}
 
-	public short getVelocityZ() {
+	public int getVelocityZ() {
 		return velocityZ;
 	}
 

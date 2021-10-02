@@ -67,7 +67,8 @@ public class PacketPlayOutParticleEvent extends PacketPlayOutEvent {
 		offsetY = Field.get(packet, "e", float.class);
 		offsetZ = Field.get(packet, "f", float.class);
 		data = Field.get(packet, "g", float.class);
-		longDistance = Field.get(packet, "h", boolean.class);
+		count = Field.get(packet, "h", int.class);
+		longDistance = Field.get(packet, "i", boolean.class);
 		particleParam = Field.get(packet, "j", ParticleParam.class);
 	}
 

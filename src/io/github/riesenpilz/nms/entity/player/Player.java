@@ -8,23 +8,35 @@ import net.minecraft.server.v1_16_R3.EntityPlayer;
 import net.minecraft.server.v1_16_R3.PlayerConnection;
 
 public class Player extends LivingEntity {
-	private final org.bukkit.entity.Player player;
-	public Player(org.bukkit.entity.Player player) {
-		super(player);
-		this.player = player;
+
+	protected Player(org.bukkit.entity.Player bukkit) {
+		super(bukkit);
 	}
+
+	public static Player getPlayerOf(org.bukkit.entity.Player bukkit) {
+		return new Player(bukkit);
+	}
+
+	@Override
+	public org.bukkit.entity.Player getBukkit() {
+		return (org.bukkit.entity.Player) super.getBukkit();
+	}
+
 	@Override
 	public EntityPlayer getNMS() {
-		return  ((CraftPlayer) player).getHandle();
+		return ((CraftPlayer) getBukkit()).getHandle();
 	}
-	
+
 	public ChannelPipeline getChannelPipeline() {
-		 return getPlayerConnection().networkManager.channel.pipeline();
+		return getPlayerConnection().networkManager.channel.pipeline();
 	}
+
 	public PlayerConnection getPlayerConnection() {
 		return getNMS().playerConnection;
 	}
-	public org.bukkit.entity.Player getPlayer() {
-		return player;
+
+	public String getName() {
+		return getBukkit().getName();
 	}
+
 }

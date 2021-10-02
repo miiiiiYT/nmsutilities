@@ -3,8 +3,10 @@ package io.github.riesenpilz.nms.packet.playOut;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nms.block.BlockData;
 import io.github.riesenpilz.nms.entity.player.DigType;
 import io.github.riesenpilz.nms.packet.HasBlockPosition;
+import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.reflections.Field;
 import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.IBlockData;
@@ -26,7 +28,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutBlockBreak;
 public class PacketPlayOutPlayerDiggingEvent extends PacketPlayOutEvent implements HasBlockPosition {
 
 	private Location blockLocation;
-	private IBlockData blockData;
+	private BlockData blockData;
 
 	/**
 	 * Only {@link DigType#START_DESTROY_BLOCK},
@@ -35,26 +37,19 @@ public class PacketPlayOutPlayerDiggingEvent extends PacketPlayOutEvent implemen
 	 */
 	private DigType status;
 
-	/**
-	 * True if the digging succeeded; false if the client should undo any changes it
-	 * made locally.
-	 */
-	private boolean successful;
 
 	public PacketPlayOutPlayerDiggingEvent(Player injectedPlayer, PacketPlayOutBlockBreak packet) {
 		super(injectedPlayer);
-		status = DigType.getPlayerDigType((EnumPlayerDigType) new Field(packet.getClass(), "a").get(packet));
-		BlockPosition pos = (BlockPosition) new Field(packet.getClass(), "a").get(packet);
-		blockLocation = new Location(injectedPlayer.getWorld(), pos.getX(), pos.getY(), pos.getZ());
-		blockData = (IBlockData) new Field(packet.getClass(), "d").get(packet);
-		successful = (boolean) new Field(packet.getClass(), "e").get(packet);
+		status = DigType.getPlayerDigType(Field.get(packet, "a", EnumPlayerDigType.class));
+		blockLocation = PacketUtils.toLocation(Field.get(packet, "c", BlockPosition.class), injectedPlayer.getWorld());
+		blockData = BlockData.getBlockDataOf(Field.get(packet, "d", IBlockData.class));
 	}
 
 	public Location getBlockLocation() {
 		return blockLocation;
 	}
 
-	public IBlockData getBlockData() {
+	public BlockData getBlockData() {
 		return blockData;
 	}
 
@@ -62,15 +57,11 @@ public class PacketPlayOutPlayerDiggingEvent extends PacketPlayOutEvent implemen
 		return status;
 	}
 
-	public boolean isSuccessful() {
-		return successful;
-	}
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutBlockBreak(
-				new BlockPosition(blockLocation.getX(), blockLocation.getY(), blockLocation.getZ()), blockData,
-				status.getNMS(), successful, null/* Unused */);
+		return new PacketPlayOutBlockBreak(PacketUtils.toBlockPosition(blockLocation),
+				blockData.getNMS().getBlockData(), status.getNMS(), true, null/* Unused */);
 	}
 
 	@Override

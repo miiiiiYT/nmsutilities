@@ -39,8 +39,8 @@ public class PacketPlayOutSpawnLivingEntityEvent extends PacketPlayOutEntityEven
 		type = EntityType.fromId(Field.get(packet, "c", int.class));
 		location = new Location(injectedPlayer.getWorld(), Field.get(packet, "d", double.class),
 				Field.get(packet, "e", double.class), Field.get(packet, "f", double.class),
-				((float) (Field.get(packet, "j", int.class) / 256f)) * 360,
-				((float) (Field.get(packet, "k", int.class) / 256f)) * 360);
+				((float) (Field.get(packet, "j", byte.class) / 256f)) * 360,
+				((float) (Field.get(packet, "k", byte.class) / 256f)) * 360);
 		headPitch = ((float) (Field.get(packet, "l", byte.class) / 256f)) * 360;
 		velocity = new Vector((double) (Field.get(packet, "g", int.class) / 8000D),
 				(double) (Field.get(packet, "h", int.class) / 8000D),

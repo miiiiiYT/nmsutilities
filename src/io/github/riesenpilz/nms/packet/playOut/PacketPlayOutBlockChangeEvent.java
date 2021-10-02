@@ -40,7 +40,7 @@ public class PacketPlayOutBlockChangeEvent extends PacketPlayOutEvent implements
 	public PacketPlayOutBlockChangeEvent(Player injectedPlayer, PacketPlayOutBlockChange packet) {
 		super(injectedPlayer);
 		blockLocation = PacketUtils.toLocation(Field.get(packet, "a", BlockPosition.class), injectedPlayer.getWorld());
-		blockData = BlockData.getBlockDataOf(Field.get(packet, "b", IBlockData.class));
+		blockData = BlockData.getBlockDataOf(Field.get(packet, "block", IBlockData.class));
 	}
 
 	public PacketPlayOutBlockChangeEvent(Player injectedPlayer, Location blockLocation, BlockData blockData) {

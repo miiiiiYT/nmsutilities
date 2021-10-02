@@ -60,7 +60,7 @@ public class PacketPlayOutPayerPositionEvent extends PacketPlayOutEvent {
 				Field.get(packet, "b", double.class), Field.get(packet, "c", double.class),
 				Field.get(packet, "d", float.class), Field.get(packet, "e", float.class));
 		@SuppressWarnings("unchecked")
-		Set<EnumPlayerTeleportFlags> nmsAbsoluteOrRelativeFlags = Field.get(packet, "d", Set.class);
+		Set<EnumPlayerTeleportFlags> nmsAbsoluteOrRelativeFlags = Field.get(packet, "f", Set.class);
 		for (EnumPlayerTeleportFlags nmsAbsoluteOrRelativeFlag : nmsAbsoluteOrRelativeFlags)
 			absoluteOrRelativeFlags.add(PlayerTeleportFlags.getPlayerTeleportFlags(nmsAbsoluteOrRelativeFlag));
 

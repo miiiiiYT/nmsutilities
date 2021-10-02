@@ -50,6 +50,7 @@ public class PacketPlayOutAdvancementsEvent extends PacketPlayOutEvent {
 
 		advancements = new HashMap<>();
 		identifiers = new HashSet<>();
+		progresses = new HashMap<>();
 
 		final Map<MinecraftKey, SerializedAdvancement> nmsAdvancements = Field.get(packet, "b", Map.class);
 		for (Entry<MinecraftKey, SerializedAdvancement> entry : nmsAdvancements.entrySet())

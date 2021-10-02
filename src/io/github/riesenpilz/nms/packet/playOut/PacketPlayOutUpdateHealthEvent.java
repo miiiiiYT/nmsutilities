@@ -45,7 +45,7 @@ public class PacketPlayOutUpdateHealthEvent extends PacketPlayOutEvent {
 		super(injectedPlayer);
 		health = Field.get(packet, "a", float.class);
 		food = Field.get(packet, "b", int.class);
-		saturation = Field.get(packet, "d", float.class);
+		saturation = Field.get(packet, "c", float.class);
 	}
 
 	public PacketPlayOutUpdateHealthEvent(Player injectedPlayer, float health, int food, float saturation) {

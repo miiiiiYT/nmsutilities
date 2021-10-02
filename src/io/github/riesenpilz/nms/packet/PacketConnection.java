@@ -1,6 +1,6 @@
 package io.github.riesenpilz.nms.packet;
 
-import org.bukkit.entity.Player;
+import io.github.riesenpilz.nms.entity.player.Player;
 
 public class PacketConnection {
 	private final Player player;
@@ -10,10 +10,10 @@ public class PacketConnection {
 	}
 
 	public void sendPacketToClient(PacketOutEvent packet) {
-		new io.github.riesenpilz.nms.entity.player.Player(player).getPlayerConnection().sendPacket(packet.getNMS());
+		player.getPlayerConnection().sendPacket(packet.getNMS());
 	}
 
 	public void sendPacketToServer(PacketInEvent packet) {
-		new io.github.riesenpilz.nms.entity.player.Player(player).getChannelPipeline().fireChannelRead(packet.getNMS());
+		player.getChannelPipeline().fireChannelRead(packet.getNMS());
 	}
 }

@@ -52,13 +52,13 @@ public class PacketPlayOutEntityMoveAndRotationEvent extends PacketPlayOutEntity
 	private boolean onGround;
 
 	public PacketPlayOutEntityMoveAndRotationEvent(Player injectedPlayer, PacketPlayOutRelEntityMoveLook packet) {
-		super(injectedPlayer, packet);
-		deltaX = Field.get(packet, "b", short.class);
-		deltaY = Field.get(packet, "c", short.class);
-		deltaZ = Field.get(packet, "d", short.class);
-		yaw = Field.get(packet, "e", byte.class);
-		pitch = Field.get(packet, "f", byte.class);
-		onGround = Field.get(packet, "g", boolean.class);
+		super(injectedPlayer, Field.getFromSuper(packet, "a", int.class));
+		deltaX = Field.getFromSuper(packet, "b", short.class);
+		deltaY = Field.getFromSuper(packet, "c", short.class);
+		deltaZ = Field.getFromSuper(packet, "d", short.class);
+		yaw = Field.getFromSuper(packet, "e", byte.class);
+		pitch = Field.getFromSuper(packet, "f", byte.class);
+		onGround = Field.getFromSuper(packet, "g", boolean.class);
 	}
 
 	public PacketPlayOutEntityMoveAndRotationEvent(Player injectedPlayer, int entityId, short deltaX, short deltaY,

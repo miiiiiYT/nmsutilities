@@ -38,7 +38,9 @@ public class WorldEntity {
 	public static WorldEntity getWorldEntity(int entityId, org.bukkit.World world) {
 		Validate.notNull(world);
 		final WorldServer nmsWorld = ServerWorld.getWorldOf(world).getNMS();
-		return new WorldEntity(Bukkit.getEntity(nmsWorld.getEntity(entityId).getUniqueID()));
+		final net.minecraft.server.v1_16_R3.Entity nmsEntity = nmsWorld.getEntity(entityId);
+		Validate.notNull(nmsEntity);
+		return new WorldEntity(Bukkit.getEntity(nmsEntity.getUniqueID()));
 	}
 
 	public static WorldEntity getWorldEntity(net.minecraft.server.v1_16_R3.Entity nms) {

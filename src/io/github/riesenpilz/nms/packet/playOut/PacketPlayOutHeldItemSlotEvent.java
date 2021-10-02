@@ -24,12 +24,12 @@ public class PacketPlayOutHeldItemSlotEvent extends PacketPlayOutEvent {
 	/**
 	 * The slot which the player has selected (0–8).
 	 */
-	private byte slot;
+	private int slot;
 
 	public PacketPlayOutHeldItemSlotEvent(Player injectedPlayer, PacketPlayOutHeldItemSlot packet) {
 		super(injectedPlayer);
 
-		slot = Field.get(packet, "a", byte.class);
+		slot = Field.get(packet, "a", int.class);
 	}
 
 	public PacketPlayOutHeldItemSlotEvent(Player injectedPlayer, byte slot) {
@@ -37,7 +37,7 @@ public class PacketPlayOutHeldItemSlotEvent extends PacketPlayOutEvent {
 		this.slot = slot;
 	}
 
-	public byte getSlot() {
+	public int getSlot() {
 		return slot;
 	}
 

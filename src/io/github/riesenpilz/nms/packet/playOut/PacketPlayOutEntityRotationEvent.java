@@ -33,19 +33,19 @@ public class PacketPlayOutEntityRotationEvent extends PacketPlayOutEntityEvent {
 	private boolean onGround;
 
 	public PacketPlayOutEntityRotationEvent(Player injectedPlayer, PacketPlayOutEntityLook packet) {
-		super(injectedPlayer, packet);
-		yaw = Field.get(packet, "e", byte.class);
-		pitch = Field.get(packet, "f", byte.class);
-		onGround = Field.get(packet, "g", boolean.class);
+		super(injectedPlayer, Field.getFromSuper(packet, "a", int.class));
+		yaw = Field.getFromSuper(packet, "e", byte.class);
+		pitch = Field.getFromSuper(packet, "f", byte.class);
+		onGround = Field.getFromSuper(packet, "g", boolean.class);
 	}
 
-	public PacketPlayOutEntityRotationEvent(Player injectedPlayer, int entityId, byte yaw, byte pitch, boolean onGround) {
+	public PacketPlayOutEntityRotationEvent(Player injectedPlayer, int entityId, byte yaw, byte pitch,
+			boolean onGround) {
 		super(injectedPlayer, entityId);
 		this.yaw = yaw;
 		this.pitch = pitch;
 		this.onGround = onGround;
 	}
-
 
 	public byte getYaw() {
 		return yaw;
