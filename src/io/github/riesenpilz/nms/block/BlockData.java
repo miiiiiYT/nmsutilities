@@ -8,6 +8,7 @@ import io.github.riesenpilz.nms.packet.PacketUtils;
 import io.github.riesenpilz.nms.world.ServerWorld;
 import net.minecraft.server.v1_16_R3.Block;
 import net.minecraft.server.v1_16_R3.IBlockData;
+import net.minecraft.server.v1_16_R3.Material;
 
 public class BlockData {
 	private final Block nms;
@@ -34,14 +35,18 @@ public class BlockData {
 	public static BlockData getBlockDataOf(IBlockData nms) {
 		return new BlockData(nms);
 	}
-	
+
 	public static BlockData getBlockDataOf(org.bukkit.block.Block block) {
 		return new BlockData(block);
 	}
-	
+
 	public io.github.riesenpilz.nms.block.Block setBlock(Location loc) {
 		nms.c(ServerWorld.getWorldOf(loc.getWorld()).getNMS(), PacketUtils.toBlockPosition(loc));
 		return io.github.riesenpilz.nms.block.Block.getBlockOf(loc);
+	}
+
+	public Material getNMSMaterial() {
+		return nms.getBlockData().getMaterial();
 	}
 
 	public Block getNMS() {

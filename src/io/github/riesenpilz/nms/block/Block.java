@@ -12,7 +12,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Container;
 import org.bukkit.block.data.Directional;
 import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
+import org.bukkit.event.block.BlockBreakEvent;
 
+import io.github.riesenpilz.nms.entity.player.Player;
 import io.github.riesenpilz.nms.inventory.ItemStack;
 import io.github.riesenpilz.nms.nbt.NBTBase;
 import io.github.riesenpilz.nms.nbt.NBTTag;
@@ -258,5 +260,12 @@ public class Block {
 	 */
 	public org.bukkit.block.Block getBukkit() {
 		return block;
+	}
+	
+	public boolean breakBlock(Player player) {
+		BlockBreakEvent e = new BlockBreakEvent(block, player.getBukkit());
+		if (!e.isCancelled())
+			setMaterial(Material.AIR);
+		return e.isCancelled();
 	}
 }

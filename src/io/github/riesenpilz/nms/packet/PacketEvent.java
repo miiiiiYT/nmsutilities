@@ -60,10 +60,12 @@ public abstract class PacketEvent extends Event {
 		return handlers;
 	}
 
-	public Player getInjectedPlayer() {
+	public Player getBukkit() {
 		return injectedPlayer;
 	}
-
+	public io.github.riesenpilz.nms.entity.player.Player getPlayer() {
+		return io.github.riesenpilz.nms.entity.player.Player.getPlayerOf(injectedPlayer);
+	}
 	public abstract Packet<?> getNMS();
 
 	public abstract int getPacketID();

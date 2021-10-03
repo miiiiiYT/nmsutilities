@@ -207,6 +207,6 @@ public abstract class Entity {
 	 * @return new entity id
 	 */
 	public static int getNewEntityId() {
-		return Field.getConstant(Entity.class, "entityCount", AtomicInteger.class).incrementAndGet();
+		return Field.getConstant(net.minecraft.server.v1_16_R3.Entity.class, "entityCount", AtomicInteger.class).incrementAndGet();
 	}
 }

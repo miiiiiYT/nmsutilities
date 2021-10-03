@@ -35,13 +35,19 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutBlockBreakAnimation;
  * @author Martin
  *
  */
-public class PacketPlayOutBlockBreakAnimationEvent extends PacketPlayOutEntityEvent implements HasBlockPosition {
+public class PacketPlayOutBlockBreakAnimationEvent extends PacketPlayOutEvent implements HasBlockPosition {
 
+	private int entityId;
 	private Location blockLocation;
+
+	/**
+	 * 0 - 9
+	 */
 	private int destroyStage;
 
 	public PacketPlayOutBlockBreakAnimationEvent(Player injectedPlayer, PacketPlayOutBlockBreakAnimation packet) {
-		super(injectedPlayer, packet);
+		super(injectedPlayer);
+		entityId = Field.get(packet, "a", int.class);
 		blockLocation = PacketUtils.toLocation(Field.get(packet, "b", BlockPosition.class), injectedPlayer.getWorld());
 		destroyStage = Field.get(packet, "c", int.class);
 
@@ -49,9 +55,14 @@ public class PacketPlayOutBlockBreakAnimationEvent extends PacketPlayOutEntityEv
 
 	public PacketPlayOutBlockBreakAnimationEvent(Player injectedPlayer, int entityId, Location blockLocation,
 			int destroyStage) {
-		super(injectedPlayer, entityId);
+		super(injectedPlayer);
+		this.entityId = entityId;
 		this.blockLocation = blockLocation;
 		this.destroyStage = destroyStage;
+	}
+
+	public int getEntityId() {
+		return entityId;
 	}
 
 	@Override
@@ -65,8 +76,7 @@ public class PacketPlayOutBlockBreakAnimationEvent extends PacketPlayOutEntityEv
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutBlockBreakAnimation(getEntityId(), PacketUtils.toBlockPosition(blockLocation),
-				destroyStage);
+		return new PacketPlayOutBlockBreakAnimation(entityId, PacketUtils.toBlockPosition(blockLocation), destroyStage);
 	}
 
 	@Override

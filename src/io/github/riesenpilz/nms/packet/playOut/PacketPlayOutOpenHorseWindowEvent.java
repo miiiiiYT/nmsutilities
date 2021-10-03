@@ -46,7 +46,7 @@ public class PacketPlayOutOpenHorseWindowEvent extends PacketPlayOutInventoryEve
 		return entityId;
 	}
 	public WorldEntity getEntity() {
-		return WorldEntity.getWorldEntity(entityId, getInjectedPlayer().getWorld());
+		return WorldEntity.getWorldEntity(entityId, getBukkit().getWorld());
 	}
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {

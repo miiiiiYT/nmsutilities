@@ -204,7 +204,6 @@ public class Injections implements Listener {
 		try {
 			PacketInEvent event = clazz.getConstructor(org.bukkit.entity.Player.class, msg.getClass())
 					.newInstance(player1.getBukkit(), msg);
-			System.out.println(event.getEventName());
 			Bukkit.getPluginManager().callEvent(event);
 			return event.isCanceled();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException

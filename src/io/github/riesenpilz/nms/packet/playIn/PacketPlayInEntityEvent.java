@@ -30,7 +30,7 @@ public abstract class PacketPlayInEntityEvent extends PacketPlayInEvent {
 	}
 
 	public WorldEntity getEntity() {
-		return WorldEntity.getWorldEntity(entityId, getInjectedPlayer().getWorld());
+		return WorldEntity.getWorldEntity(entityId, getBukkit().getWorld());
 	}
 
 }
