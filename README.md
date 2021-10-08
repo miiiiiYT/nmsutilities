@@ -1,6 +1,7 @@
 # nmsutilities
  
 This plugin redefines all NMS packets events.
+We have a discord: https://discord.gg/UeXcVTyT6s
 
 ## Usage
 
