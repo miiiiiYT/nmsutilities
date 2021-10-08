@@ -1,8 +1,11 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import java.util.ArrayList;
+
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
+import net.minecraft.server.v1_16_R3.MerchantRecipe;
 import net.minecraft.server.v1_16_R3.MerchantRecipeList;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
@@ -72,7 +75,9 @@ public class PacketPlayOutTradeListEvent extends PacketPlayOutInventoryEvent {
 	public MerchantRecipeList getTardeList() {
 		return tardeList;
 	}
-
+	public ArrayList<MerchantRecipe> getTardeArray() {
+		return tardeList;
+	}
 	public int getVillagerLevel() {
 		return villagerLevel;
 	}

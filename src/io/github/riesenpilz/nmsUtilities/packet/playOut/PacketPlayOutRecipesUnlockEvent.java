@@ -1,13 +1,21 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
+import com.mojang.datafixers.util.Pair;
+
+import io.github.riesenpilz.nmsUtilities.inventory.RecipeBookType;
+import io.github.riesenpilz.nmsUtilities.nbt.NBTTag;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
+import net.minecraft.server.v1_16_R3.NBTTagCompound;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
 import net.minecraft.server.v1_16_R3.PacketPlayOutRecipes;
@@ -32,7 +40,7 @@ public class PacketPlayOutRecipesUnlockEvent extends PacketPlayOutEvent {
 	 * Only present if {@link PacketPlayOutRecipesUnlockEvent#a} is INIT
 	 */
 	private List<NamespacedKey> recipeIds1;
-	private RecipeBookSettings settings;
+	private Set<RecipeBookSetting> settings;
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public PacketPlayOutRecipesUnlockEvent(Player injectedPlayer, PacketPlayOutRecipes packet) {
@@ -46,7 +54,7 @@ public class PacketPlayOutRecipesUnlockEvent extends PacketPlayOutEvent {
 		recipeIds1 = new ArrayList<>();
 		for (MinecraftKey minecraftKey : nmsRecipeIds1)
 			recipeIds1.add(new NamespacedKey(minecraftKey.getNamespace(), minecraftKey.getKey()));
-		settings = Field.get(packet, "d", RecipeBookSettings.class);
+		settings = RecipeBookSetting.getRecipeBookSettingsOf(Field.get(packet, "d", RecipeBookSettings.class));
 	}
 
 	@Override
@@ -60,11 +68,12 @@ public class PacketPlayOutRecipesUnlockEvent extends PacketPlayOutEvent {
 		for (NamespacedKey namespacedKey : recipeIds1)
 			nmsRecipeIds1.add(new MinecraftKey(namespacedKey.getNamespace(), namespacedKey.getKey()));
 
-		return new PacketPlayOutRecipes(action.getNMS(), nmsRecipeIds, nmsRecipeIds1, settings);
+		return new PacketPlayOutRecipes(action.getNMS(), nmsRecipeIds, nmsRecipeIds1,
+				RecipeBookSetting.getNMS(settings));
 	}
 
 	public PacketPlayOutRecipesUnlockEvent(Player injectedPlayer, Action action, List<NamespacedKey> recipeIds,
-			List<NamespacedKey> recipeIds1, RecipeBookSettings settings) {
+			List<NamespacedKey> recipeIds1, Set<RecipeBookSetting> settings) {
 		super(injectedPlayer);
 		this.action = action;
 		this.recipeIds = recipeIds;
@@ -84,7 +93,7 @@ public class PacketPlayOutRecipesUnlockEvent extends PacketPlayOutEvent {
 		return recipeIds1;
 	}
 
-	public RecipeBookSettings getSettings() {
+	public Set<RecipeBookSetting> getSettings() {
 		return settings;
 	}
 
@@ -96,6 +105,47 @@ public class PacketPlayOutRecipesUnlockEvent extends PacketPlayOutEvent {
 	@Override
 	public String getProtocolURLString() {
 		return "https://wiki.vg/Protocol#Unlock_Recipes";
+	}
+
+	public static class RecipeBookSetting {
+
+		private RecipeBookType type;
+		private boolean open;
+		private boolean filtering;
+
+		public RecipeBookSetting(RecipeBookType type, boolean open, boolean filtering) {
+			this.type = type;
+			this.open = open;
+			this.filtering = filtering;
+		}
+
+		public static RecipeBookSettings getNMS(Set<RecipeBookSetting> recipeBookSettings) {
+			final RecipeBookSettings nms = new RecipeBookSettings();
+			for (RecipeBookSetting setting : recipeBookSettings) {
+				if (setting.open)
+					nms.a(setting.type.getNMS(), true);
+				if (setting.filtering)
+					nms.a(setting.type.getNMS(), true);
+			}
+			return nms;
+		}
+
+		public static Set<RecipeBookSetting> getRecipeBookSettingsOf(RecipeBookSettings nms) {
+			Set<RecipeBookSetting> recipeBookSettings = new HashSet<>();
+			@SuppressWarnings("unchecked")
+			final Map<net.minecraft.server.v1_16_R3.RecipeBookType, Pair<String, String>> keys = Field
+					.getConstant(RecipeBookSettings.class, "a", Map.class);
+
+			final NBTTagCompound nmsTag = new NBTTagCompound();
+			nms.b(nmsTag);
+			final NBTTag tag = NBTTag.getNBTTagOf(nmsTag);
+
+			keys.forEach((type, pair) -> {
+				recipeBookSettings.add(new RecipeBookSetting(RecipeBookType.getRecipeBookType(type),
+						tag.getBoolean(pair.getFirst()), tag.getBoolean(pair.getSecond())));
+			});
+			return recipeBookSettings;
+		}
 	}
 
 	public enum Action {

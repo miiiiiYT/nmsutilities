@@ -3,6 +3,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 import org.bukkit.EntityEffect;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.MobEffectList;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -23,13 +24,10 @@ public class PacketPlayOutEntityEffectRemoveEvent extends PacketPlayOutEntityEve
 
 	private EntityEffect effect;
 
-	@SuppressWarnings("deprecation")
 	public PacketPlayOutEntityEffectRemoveEvent(Player injectedPlayer, PacketPlayOutRemoveEntityEffect packet) {
 		super(injectedPlayer, packet);
+		effect = PacketUtils.toEntityEffect(Field.get(packet, "b", MobEffectList.class));
 
-		for (EntityEffect effect : EntityEffect.values())
-			if (effect.getData() == MobEffectList.getId(Field.get(packet, "b", MobEffectList.class)))
-				this.effect = effect;
 	}
 
 	public PacketPlayOutEntityEffectRemoveEvent(Player injectedPlayer, int entityId, EntityEffect effect) {
@@ -37,15 +35,13 @@ public class PacketPlayOutEntityEffectRemoveEvent extends PacketPlayOutEntityEve
 		this.effect = effect;
 	}
 
-
 	public EntityEffect getEffect() {
 		return effect;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutRemoveEntityEffect(getEntityId(), MobEffectList.fromId(effect.getData()));
+		return new PacketPlayOutRemoveEntityEffect(getEntityId(), PacketUtils.toMobEffectList(effect));
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 
@@ -31,7 +32,7 @@ public class PacketPlayOutEntitySoundEvent extends PacketPlayOutEntityEvent {
 	/**
 	 * @see SoundEffects
 	 */
-	private SoundEffect effect;
+	private Sound sound;
 	private SoundCategory category;
 
 	/**
@@ -46,24 +47,24 @@ public class PacketPlayOutEntitySoundEvent extends PacketPlayOutEntityEvent {
 
 	public PacketPlayOutEntitySoundEvent(Player injectedPlayer, PacketPlayOutEntitySound packet) {
 		super(injectedPlayer, packet, "c");
-		effect = Field.get(packet, "a", SoundEffect.class);
+		sound = PacketUtils.toSound(Field.get(packet, "a", SoundEffect.class));
 		category = PacketUtils
 				.toSoundCategory(Field.get(packet, "b", net.minecraft.server.v1_16_R3.SoundCategory.class));
 		volume = Field.get(packet, "d", float.class);
 		pitch = Field.get(packet, "e", float.class);
 	}
 
-	public PacketPlayOutEntitySoundEvent(Player injectedPlayer, SoundEffect effect, SoundCategory category,
-			int entityId, float volume, float pitch) {
+	public PacketPlayOutEntitySoundEvent(Player injectedPlayer, Sound sound, SoundCategory category, int entityId,
+			float volume, float pitch) {
 		super(injectedPlayer, entityId);
-		this.effect = effect;
+		this.sound = sound;
 		this.category = category;
 		this.volume = volume;
 		this.pitch = pitch;
 	}
 
-	public SoundEffect getEffect() {
-		return effect;
+	public Sound getEffect() {
+		return sound;
 	}
 
 	public SoundCategory getCategory() {
@@ -81,7 +82,7 @@ public class PacketPlayOutEntitySoundEvent extends PacketPlayOutEntityEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutEntitySound packet = new PacketPlayOutEntitySound();
-		Field.set(packet, "a", effect);
+		Field.set(packet, "a", PacketUtils.toSoundEffect(sound));
 		Field.set(packet, "b", PacketUtils.toNMSSoundCategory(category));
 		Field.set(packet, "c", getEntityId());
 		Field.set(packet, "d", volume);

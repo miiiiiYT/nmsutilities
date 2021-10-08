@@ -1,8 +1,10 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.block.BlockData;
+import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.IBlockData;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -25,7 +27,7 @@ import net.minecraft.server.v1_16_R3.SectionPosition;
  */
 public class PacketPlayOutMultiBlockChangeEvent extends PacketPlayOutEvent {
 
-	private SectionPosition position;
+	private Location position;
 
 	/**
 	 * The relative block position in the chunk section (4 bits for x, z, and y,
@@ -42,7 +44,7 @@ public class PacketPlayOutMultiBlockChangeEvent extends PacketPlayOutEvent {
 	public PacketPlayOutMultiBlockChangeEvent(Player injectedPlayer, PacketPlayOutMultiBlockChange packet) {
 		super(injectedPlayer);
 		
-		position = Field.get(packet, "a", SectionPosition.class);
+		position = PacketUtils.toLocation(Field.get(packet, "a", SectionPosition.class), injectedPlayer.getWorld()) ;
 		relativePositions = Field.get(packet, "b", short[].class);
 		IBlockData[] iBlockDatas = Field.get(packet, "c", IBlockData[].class);
 		blockDatas = new BlockData[iBlockDatas.length];
@@ -54,7 +56,7 @@ public class PacketPlayOutMultiBlockChangeEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutMultiBlockChange packet = new PacketPlayOutMultiBlockChange();
-		Field.set(packet, "a", position);
+		Field.set(packet, "a", PacketUtils.toSectionPosition(position));
 		Field.set(packet, "b", relativePositions);
 		
 		IBlockData[] iBlockDatas = new IBlockData[blockDatas.length];

@@ -36,7 +36,7 @@ public class PacketPlayOutStopSoundEvent extends PacketPlayOutEvent {
 	public PacketPlayOutStopSoundEvent(Player injectedPlayer, PacketPlayOutStopSound packet) {
 		super(injectedPlayer);
 
-		sound = getSound(Field.get(packet, "a", MinecraftKey.class).getKey());
+		sound = PacketUtils.toSound(Field.get(packet, "a", MinecraftKey.class));
 		category = PacketUtils
 				.toSoundCategory(Field.get(packet, "b", net.minecraft.server.v1_16_R3.SoundCategory.class));
 	}
@@ -53,13 +53,6 @@ public class PacketPlayOutStopSoundEvent extends PacketPlayOutEvent {
 
 	public SoundCategory getCategory() {
 		return category;
-	}
-
-	private Sound getSound(String key) {
-		for (Sound sound : Sound.values())
-			if (sound.getKey().getKey().equals(key))
-				return sound;
-		return null;
 	}
 
 	@Override

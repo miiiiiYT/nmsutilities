@@ -1,4 +1,4 @@
 name: NMSUtilities
-version: A0.1.8
-main: io.github.riesenpilz.nms.Main
+version: B0.2.0
+main: io.github.riesenpilz.nmsUtilities.Main
 api-version: 1.13

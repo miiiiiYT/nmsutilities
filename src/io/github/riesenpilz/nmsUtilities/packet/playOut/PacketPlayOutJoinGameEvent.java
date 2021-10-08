@@ -108,7 +108,7 @@ public class PacketPlayOutJoinGameEvent extends PacketPlayOutEntityEvent {
 			worlds.add(PacketUtils.toNamespacedKey(nmsWorldName.a()));
 		dimensionCodec = Field.get(packet, "g", IRegistryCustom.Dimension.class);
 		dimension = Field.get(packet, "h", DimensionManager.class);
-		worldName = PacketUtils.toNamespacedKey(Field.get(packet, "i", ResourceKey.class).a());
+		worldName = PacketUtils.toNamespacedKey(Field.get(packet, "i", ResourceKey.class));
 		maxPlayers = Field.get(packet, "j", int.class);
 		viewDistance = Field.get(packet, "k", int.class);
 		reducedDebugInfo = Field.get(packet, "l", boolean.class);

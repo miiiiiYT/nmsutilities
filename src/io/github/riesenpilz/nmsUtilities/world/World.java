@@ -15,7 +15,9 @@ public class World {
 	public static World getWorldOf(net.minecraft.server.v1_16_R3.World nms) {
 		return new World(nms);
 	}
-	
+	public static World getWorldOf(org.bukkit.World bukkit) {
+		return ServerWorld.getWorldOf(bukkit).getWorld();
+	}
 	public net.minecraft.server.v1_16_R3.World getNMS() {
 		return world;
 	}

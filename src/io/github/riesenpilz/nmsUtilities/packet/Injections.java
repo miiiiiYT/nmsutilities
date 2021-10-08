@@ -179,7 +179,8 @@ public class Injections implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
-		injectPlayer(Player.getPlayerOf(e.getPlayer()));
+		final Player player = Player.getPlayerOf(e.getPlayer());
+		injectPlayer(player);
 	}
 
 	@EventHandler

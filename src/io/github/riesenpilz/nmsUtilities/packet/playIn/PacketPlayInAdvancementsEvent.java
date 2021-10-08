@@ -1,5 +1,7 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import javax.annotation.Nullable;
+
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
@@ -26,20 +28,22 @@ public class PacketPlayInAdvancementsEvent extends PacketPlayInEvent {
 	/**
 	 * Only present if status is Opened tab.
 	 */
+	@Nullable
 	private NamespacedKey tabId;
 
 	public PacketPlayInAdvancementsEvent(Player injectedPlayer, PacketPlayInAdvancements packet) {
 		super(injectedPlayer);
-		tabId = PacketUtils.toNamespacedKey(packet.d());
+		tabId = packet.d() == null ? null : PacketUtils.toNamespacedKey(packet.d());
 		status = Status.getStatus(packet.c());
 	}
 
-	public PacketPlayInAdvancementsEvent(Player injectedPlayer, Status status, NamespacedKey tabId) {
+	public PacketPlayInAdvancementsEvent(Player injectedPlayer, Status status, @Nullable NamespacedKey tabId) {
 		super(injectedPlayer);
 		this.tabId = tabId;
 		this.status = status;
 	}
 
+	@Nullable
 	public NamespacedKey getTabId() {
 		return tabId;
 	}

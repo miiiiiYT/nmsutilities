@@ -1,16 +1,18 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
 import org.bukkit.GameMode;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.DimensionManager;
 import net.minecraft.server.v1_16_R3.EnumGamemode;
+import net.minecraft.server.v1_16_R3.IRegistry;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
 import net.minecraft.server.v1_16_R3.PacketPlayOutRespawn;
 import net.minecraft.server.v1_16_R3.ResourceKey;
-import net.minecraft.server.v1_16_R3.World;
 
 /**
  * https://wiki.vg/Protocol#Respawn
@@ -40,7 +42,7 @@ import net.minecraft.server.v1_16_R3.World;
 public class PacketPlayOutRespawnEvent extends PacketPlayOutEvent {
 
 	private DimensionManager dimension;
-	private ResourceKey<World> worldName;
+	private NamespacedKey worldName;
 
 	/**
 	 * First 8 bytes of the SHA-256 hash of the world's seed. Used client side for
@@ -70,23 +72,20 @@ public class PacketPlayOutRespawnEvent extends PacketPlayOutEvent {
 	 */
 	private boolean copyMetadata;
 
-	@SuppressWarnings({ "deprecation", "unchecked" })
 	public PacketPlayOutRespawnEvent(Player injectedPlayer, PacketPlayOutRespawn packet) {
 		super(injectedPlayer);
 
 		dimension = Field.get(packet, "a", DimensionManager.class);
-		worldName = Field.get(packet, "b", ResourceKey.class);
+		worldName = PacketUtils.toNamespacedKey(Field.get(packet, "b", ResourceKey.class));
 		hashedSeed = Field.get(packet, "c", long.class);
-		gameMode = GameMode.getByValue(Field.get(packet, "d", EnumGamemode.class).getId());
-		previousGameMode = GameMode.getByValue(Field.get(packet, "e", EnumGamemode.class).getId());
+		gameMode = PacketUtils.toGameMode(Field.get(packet, "d", EnumGamemode.class));
+		previousGameMode = PacketUtils.toGameMode(Field.get(packet, "e", EnumGamemode.class));
 		isDebug = Field.get(packet, "f", boolean.class);
 		isFlat = Field.get(packet, "g", boolean.class);
 		copyMetadata = Field.get(packet, "h", boolean.class);
 	}
 
-	
-
-	public PacketPlayOutRespawnEvent(Player injectedPlayer, DimensionManager dimension, ResourceKey<World> worldName,
+	public PacketPlayOutRespawnEvent(Player injectedPlayer, DimensionManager dimension, NamespacedKey worldName,
 			long hashedSeed, GameMode gameMode, GameMode previousGameMode, boolean isDebug, boolean isFlat,
 			boolean copyMetadata) {
 		super(injectedPlayer);
@@ -100,13 +99,11 @@ public class PacketPlayOutRespawnEvent extends PacketPlayOutEvent {
 		this.copyMetadata = copyMetadata;
 	}
 
-
-
 	public DimensionManager getDimension() {
 		return dimension;
 	}
 
-	public ResourceKey<World> getWorldName() {
+	public NamespacedKey getWorldName() {
 		return worldName;
 	}
 
@@ -134,10 +131,11 @@ public class PacketPlayOutRespawnEvent extends PacketPlayOutEvent {
 		return copyMetadata;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutRespawn(dimension, worldName, hashedSeed, EnumGamemode.getById(gameMode.getValue()), EnumGamemode.getById(previousGameMode.getValue()), isFlat, isDebug, copyMetadata);
+		return new PacketPlayOutRespawn(dimension, PacketUtils.toResourceKey(worldName, IRegistry.L), hashedSeed,
+				PacketUtils.toEnumGamemode(gameMode), PacketUtils.toEnumGamemode(previousGameMode), isFlat, isDebug,
+				copyMetadata);
 	}
 
 	@Override

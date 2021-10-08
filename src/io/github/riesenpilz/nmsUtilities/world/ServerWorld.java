@@ -5,14 +5,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.entity.Player;
@@ -28,10 +29,18 @@ import com.google.gson.stream.JsonWriter;
 import io.github.riesenpilz.nmsUtilities.Main;
 import io.github.riesenpilz.nmsUtilities.inventory.PlayerWorldInventory;
 import io.github.riesenpilz.nmsUtilities.world.chunk.Chunk;
+import io.github.riesenpilz.nmsUtilities.world.chunk.storage.IOWorker;
 import net.minecraft.server.v1_16_R3.WorldServer;
 
 @SuppressWarnings("deprecation")
 public class ServerWorld {
+	static final Map<org.bukkit.World, IOWorker> IO_WORKERS = new HashMap<>();
+	
+	public static void init() {
+		for (org.bukkit.World world : Bukkit.getWorlds())
+		IO_WORKERS.put(world, new IOWorker(world.getWorldFolder(), true, world.getName()));
+	}
+	
 	private final org.bukkit.World bukkit;
 
 	protected ServerWorld(org.bukkit.World bukkit) {
@@ -46,7 +55,7 @@ public class ServerWorld {
 	public static ServerWorld getWorldOf(WorldServer nms) {
 		return new ServerWorld(nms);
 	}
-	public static ServerWorld getWorldOf(World bukkit) {
+	public static ServerWorld getWorldOf(org.bukkit.World bukkit) {
 		return new ServerWorld(bukkit);
 	}
 	private JsonObject getWorldConfig() {
@@ -198,6 +207,14 @@ public class ServerWorld {
 
 	public org.bukkit.World getBukkit() {
 		return bukkit;
+	}
+
+	public World getWorld() {
+		return World.getWorldOf(getNMS());
+	}
+
+	public IOWorker getIOWorker() {
+		return IO_WORKERS.get(bukkit);
 	}
 
 	

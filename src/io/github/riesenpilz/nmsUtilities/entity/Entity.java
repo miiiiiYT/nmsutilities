@@ -10,20 +10,20 @@ import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
 import io.github.riesenpilz.nmsUtilities.nbt.NBTTag;
-import io.github.riesenpilz.nmsUtilities.packet.PacketEvent;
+import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
+import io.github.riesenpilz.nmsUtilities.world.ServerWorld;
 import io.github.riesenpilz.nmsUtilities.world.World;
-import net.minecraft.server.v1_16_R3.EntityTypes;
 import net.minecraft.server.v1_16_R3.NBTTagCompound;
 import net.minecraft.server.v1_16_R3.Packet;
+import net.minecraft.server.v1_16_R3.PacketPlayOutSpawnEntity;
 
 public abstract class Entity {
-
+	private List<DataWatcherItem<?>> dataWatcher;
 	private final net.minecraft.server.v1_16_R3.Entity entity;
 
-	@SuppressWarnings("deprecation")
-	public Entity(EntityType type, World world, PacketEvent packet) {
-		entity = new net.minecraft.server.v1_16_R3.Entity(EntityTypes.a(type.getName()).get(), world.getNMS()) {
+	public Entity(EntityType type, World world) {
+		entity = new net.minecraft.server.v1_16_R3.Entity(PacketUtils.toEntityTypes(type), world.getNMS()) {
 
 			@Override
 			protected void saveData(NBTTagCompound arg0) {
@@ -37,13 +37,12 @@ public abstract class Entity {
 
 			@Override
 			protected void initDatawatcher() {
-				initDatawatcher();
-
+				Entity.this.initDatawatcher();
 			}
 
 			@Override
 			public Packet<?> P() {
-				return packet.getNMS();
+				return new PacketPlayOutSpawnEntity(entity);
 			}
 		};
 	}
@@ -57,22 +56,26 @@ public abstract class Entity {
 
 			@Override
 			public NBTTag saveData() {
-				return NBTTag.getNBTTagOf(nms.save(new NBTTagCompound()));
+				final NBTTag nbtTag = NBTTag.getNBTTagOf(nms.save(new NBTTagCompound()));
+				nbtTag.setBoolean("hi", true);
+				return nbtTag;
 			}
 
 			@Override
 			public void loadData(NBTTag tag) {
+				System.out.println(tag);
 				nms.load(tag.getNMS());
-			}
-
-			@Override
-			protected void initDatawatcher() {
-				// TODO
 			}
 		};
 	}
 
-	protected abstract void initDatawatcher();
+	protected void initDatawatcher() {
+		dataWatcher = new ArrayList<>();
+	}
+
+	public List<DataWatcherItem<?>> getDataWatcher() {
+		return dataWatcher;
+	}
 
 	public abstract void loadData(NBTTag tag);
 
@@ -163,12 +166,17 @@ public abstract class Entity {
 	}
 
 	public final void setLocation(Location location) {
+		entity.world = World.getWorldOf(location.getWorld()).getNMS();
 		entity.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
 	}
 
 	public final Location getLocation() {
 		return new Location(getWorld().getBukkit(), entity.locX(), entity.locY(), entity.locZ(), entity.yaw,
 				entity.pitch);
+	}
+
+	public void spawn() {
+		entity.getWorld().addEntity(entity);
 	}
 
 	/**
@@ -204,9 +212,15 @@ public abstract class Entity {
 
 	/**
 	 * Gets a new entity id for fake entities in packets.
+	 * 
 	 * @return new entity id
 	 */
 	public static int getNewEntityId() {
-		return Field.getConstant(net.minecraft.server.v1_16_R3.Entity.class, "entityCount", AtomicInteger.class).incrementAndGet();
+		return Field.getConstant(net.minecraft.server.v1_16_R3.Entity.class, "entityCount", AtomicInteger.class)
+				.incrementAndGet();
+	}
+
+	public void teleportTo(Location location) {
+		entity.teleportTo(ServerWorld.getWorldOf(location.getWorld()).getNMS(), PacketUtils.toBlockPosition(location));
 	}
 }

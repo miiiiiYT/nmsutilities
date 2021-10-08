@@ -1,40 +1,21 @@
 package io.github.riesenpilz.nmsUtilities.entity;
 
-import org.bukkit.Chunk;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.event.entity.EntitySpawnEvent;
 
-import io.github.riesenpilz.nmsUtilities.Main;
 import io.github.riesenpilz.nmsUtilities.nbt.NBTTag;
-import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutEntityMoveEvent;
 
 public class EntityEvents implements Listener {
-	
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onEntityDie(EntityDeathEvent e) {
-		new WorldEntity(e.getEntity()).removeNBTTag();
+
+	@EventHandler
+	public void onEntityDeath(EntityDeathEvent e) {
+		WorldEntity.tags.remove(e.getEntity());
 	}
-	
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onEntityMove(PacketPlayOutEntityMoveEvent e) {
-		if (e.isCanceled())
-			return;
-		
-		final Chunk chunkTo = e.getTo().getChunk();
-		if (e.getFrom().getChunk().equals(chunkTo))
-			return;
-		NBTTag tag = e.getEntity().getNBTTag();
-		e.getEntity().removeNBTTag();
-		new BukkitRunnable() {
-			
-			@Override
-			public void run() {
-				e.getEntity().setNBTTag(tag);
-				
-			}
-		}.runTask(Main.getPlugin());
+	@EventHandler
+	public void onEntitySpawn(EntitySpawnEvent e) {
+		NBTTag nbtTag = new NBTTag();
+		WorldEntity.getWorldEntity(e.getEntity()).setNBTTag(nbtTag);
 	}
 }

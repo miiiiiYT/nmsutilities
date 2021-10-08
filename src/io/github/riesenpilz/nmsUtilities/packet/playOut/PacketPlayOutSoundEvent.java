@@ -7,8 +7,6 @@ import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
-import net.minecraft.server.v1_16_R3.IRegistry;
-import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
 import net.minecraft.server.v1_16_R3.PacketPlayOutNamedSoundEffect;
@@ -46,20 +44,13 @@ public class PacketPlayOutSoundEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutSoundEvent(Player injectedPlayer, PacketPlayOutNamedSoundEffect packet) {
 		super(injectedPlayer);
-		sound = getSound(Field.get(Field.get(packet, "a", SoundEffect.class), "b", MinecraftKey.class).getKey());
+		sound = PacketUtils.toSound(Field.get(packet, "a", SoundEffect.class));
 		category = PacketUtils
 				.toSoundCategory(Field.get(packet, "b", net.minecraft.server.v1_16_R3.SoundCategory.class));
 		location = new Location(injectedPlayer.getWorld(), Field.get(packet, "c", int.class) / 8D,
 				Field.get(packet, "d", int.class) / 8D, Field.get(packet, "e", int.class) / 8D);
 		volume = Field.get(packet, "f", float.class);
 		pitch = Field.get(packet, "g", float.class);
-	}
-
-	private Sound getSound(String key) {
-		for (Sound sound : Sound.values())
-			if (sound.getKey().getKey().equals(key))
-				return sound;
-		return null;
 	}
 
 	public PacketPlayOutSoundEvent(Player injectedPlayer, Sound sound, SoundCategory category, Location location,
@@ -94,15 +85,9 @@ public class PacketPlayOutSoundEvent extends PacketPlayOutEvent {
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutNamedSoundEffect(getEffect(), PacketUtils.toNMSSoundCategory(category), location.getX(),
-				location.getY(), location.getZ(), volume, pitch);
-	}
-
-	private SoundEffect getEffect() {
-		for (SoundEffect soundEffect : IRegistry.SOUND_EVENT)
-			if (Field.get(soundEffect, "b", MinecraftKey.class).getKey().equals(sound.getKey().getKey()))
-				return soundEffect;
-		return null;
+		return new PacketPlayOutNamedSoundEffect(PacketUtils.toSoundEffect(sound),
+				PacketUtils.toNMSSoundCategory(category), location.getX(), location.getY(), location.getZ(), volume,
+				pitch);
 	}
 
 	@Override

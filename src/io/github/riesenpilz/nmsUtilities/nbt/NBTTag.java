@@ -49,15 +49,17 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	 * 
 	 * @param nms the NBTTagCompound
 	 */
-	protected NBTTag(NBTTagCompound nms) {
+	protected NBTTag(@Nullable NBTTagCompound nms) {
 		super(NBTType.NBT_TAG);
-		Validate.notNull(nms);
 
 		contents = new HashMap<>();
+		if (nms == null)
+			return;
 		@SuppressWarnings("unchecked")
 		Map<String, net.minecraft.server.v1_16_R3.NBTBase> nmsContents = Field.get(nms, "map", Map.class);
 		for (Entry<String, net.minecraft.server.v1_16_R3.NBTBase> entry : nmsContents.entrySet())
-			contents.put(entry.getKey(), NBTBase.getNBTBaseOf(entry.getValue()));
+			if (entry.getValue() != null)
+				contents.put(entry.getKey(), NBTBase.getNBTBaseOf(entry.getValue()));
 	}
 
 	/**
@@ -66,7 +68,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	 * @param nms the NBTTagCompound to convert
 	 * @return the new NBTTag
 	 */
-	public static NBTTag getNBTTagOf(NBTTagCompound nms) {
+	public static NBTTag getNBTTagOf(@Nullable NBTTagCompound nms) {
 		return new NBTTag(nms);
 	}
 
@@ -99,7 +101,8 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	public NBTTagCompound getNMS() {
 		NBTTagCompound nms = new NBTTagCompound();
 		for (Entry<String, NBTBase> entry : this)
-			nms.set(entry.getKey(), entry.getValue().getNMS());
+			if (entry.getValue() != null)
+				nms.set(entry.getKey(), entry.getValue().getNMS());
 		return nms;
 	}
 

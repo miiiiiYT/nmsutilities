@@ -1,5 +1,7 @@
 package io.github.riesenpilz.nmsUtilities.entity;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -16,6 +18,7 @@ import net.minecraft.server.v1_16_R3.NBTTagCompound;
 import net.minecraft.server.v1_16_R3.WorldServer;
 
 public class WorldEntity {
+	public static final Map<org.bukkit.entity.Entity, NBTTag> tags = new HashMap<>();
 	private final org.bukkit.entity.Entity bukkit;
 
 	protected WorldEntity(org.bukkit.entity.Entity bukkit) {
@@ -24,7 +27,7 @@ public class WorldEntity {
 	}
 
 	protected WorldEntity(UUID uuid) {
-		this.bukkit = Bukkit.getEntity(uuid);
+		bukkit = Bukkit.getEntity(uuid);
 	}
 
 	public static WorldEntity getWorldEntity(UUID uuid) {
@@ -88,21 +91,16 @@ public class WorldEntity {
 		return bukkit.getLocation();
 	}
 
+	@Nullable
 	public NBTTag getNBTTag() {
-		final NBTTag allNBTTags = getChunk().getAllNBTTags();
-		final NBTTag blockTags = allNBTTags.getOrDefNBTTag("entity", new NBTTag());
-		return blockTags.getOrDefNBTTag(getUUIDString(), new NBTTag());
+		return tags.get(bukkit);
 	}
 
 	public void setNBTTag(@Nullable NBTTag tag) {
-		final NBTTag allNBTTags = getChunk().getAllNBTTags();
-		final NBTTag blockTags = allNBTTags.getOrDefNBTTag("entity", new NBTTag());
-		blockTags.setNBTTag(getUUIDString(), tag);
+		tags.put(bukkit, tag);
 	}
 
 	public void removeNBTTag() {
-		final NBTTag allNBTTags = getChunk().getAllNBTTags();
-		final NBTTag blockTags = allNBTTags.getOrDefNBTTag("entity", new NBTTag());
-		blockTags.remove(getUUIDString());
+		tags.remove(bukkit);
 	}
 }

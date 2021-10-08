@@ -174,16 +174,17 @@ public class PacketPlayOutAdvancementsEvent extends PacketPlayOutEvent {
 	}
 
 	public static class Advancement {
-
+		@Nullable
 		private NamespacedKey parent;
+
+		@Nullable
 		private Display display;
 		private Rewards rewards;
 		private Map<String, Criterion> criteria;
 		private String[][] requirements;
 
-		public Advancement(NamespacedKey parent, Display display, Rewards rewards, Map<String, Criterion> criteria,
-				String[][] requirements) {
-			super();
+		public Advancement(@Nullable NamespacedKey parent, @Nullable Display display, Rewards rewards,
+				Map<String, Criterion> criteria, String[][] requirements) {
 			this.parent = parent;
 			this.display = display;
 			this.rewards = rewards;
@@ -191,19 +192,21 @@ public class PacketPlayOutAdvancementsEvent extends PacketPlayOutEvent {
 			this.requirements = requirements;
 		}
 
+		@Nullable
 		public NamespacedKey getParent() {
 			return parent;
 		}
 
-		public void setParent(NamespacedKey parent) {
+		public void setParent(@Nullable NamespacedKey parent) {
 			this.parent = parent;
 		}
 
+		@Nullable
 		public Display getDisplay() {
 			return display;
 		}
 
-		public void setDisplay(Display display) {
+		public void setDisplay(@Nullable Display display) {
 			this.display = display;
 		}
 
@@ -237,8 +240,11 @@ public class PacketPlayOutAdvancementsEvent extends PacketPlayOutEvent {
 			final Map<String, Criterion> criteria = new HashMap<>();
 			for (Entry<String, net.minecraft.server.v1_16_R3.Criterion> entry : nmsCriteria.entrySet())
 				criteria.put(entry.getKey(), Criterion.getCriterionOf(entry.getValue()));
-			return new Advancement(PacketUtils.toNamespacedKey(Field.get(nms, "a", MinecraftKey.class)),
-					Display.getDisplayOf(Field.get(nms, "c", AdvancementDisplay.class)),
+
+			final AdvancementDisplay nmsDisplay = Field.get(nms, "c", AdvancementDisplay.class);
+			final MinecraftKey nmsParent = Field.get(nms, "a", MinecraftKey.class);
+			return new Advancement(nmsParent == null ? null : PacketUtils.toNamespacedKey(nmsParent),
+					nmsDisplay == null ? null : Display.getDisplayOf(nmsDisplay),
 					Rewards.getRewardsOf(Field.get(nms, "d", AdvancementRewards.class)), criteria,
 					Field.get(nms, "f", String[][].class));
 		}
@@ -248,8 +254,9 @@ public class PacketPlayOutAdvancementsEvent extends PacketPlayOutEvent {
 			for (Entry<String, Criterion> entry : criteria.entrySet())
 				nmsCriteria.put(entry.getKey(), entry.getValue().getNMS());
 			final SerializedAdvancement nms = new net.minecraft.server.v1_16_R3.Advancement(null, null,
-					display.getNMS(), rewards.getNMS(), nmsCriteria, requirements).a();
-			Field.set(nms, "a", PacketUtils.toMinecraftKey(parent));
+					display == null ? null : display.getNMS(), rewards.getNMS(), nmsCriteria, requirements).a();
+			if (parent == null)
+				Field.set(nms, "a", PacketUtils.toMinecraftKey(parent));
 			return nms;
 		}
 
@@ -259,6 +266,8 @@ public class PacketPlayOutAdvancementsEvent extends PacketPlayOutEvent {
 		private IChatBaseComponent title;
 		private IChatBaseComponent description;
 		private ItemStack icon;
+
+		@Nullable
 		private NamespacedKey background;
 		private AdvancementFrameType frame;
 		private boolean showToast;
@@ -268,9 +277,8 @@ public class PacketPlayOutAdvancementsEvent extends PacketPlayOutEvent {
 		private float y;
 
 		public Display(IChatBaseComponent title, IChatBaseComponent description, ItemStack icon,
-				NamespacedKey background, AdvancementFrameType frame, boolean showToast, boolean announceToChat,
-				boolean hidden, float x, float y) {
-			super();
+				@Nullable NamespacedKey background, AdvancementFrameType frame, boolean showToast,
+				boolean announceToChat, boolean hidden, float x, float y) {
 			this.title = title;
 			this.description = description;
 			this.icon = icon;
@@ -307,11 +315,12 @@ public class PacketPlayOutAdvancementsEvent extends PacketPlayOutEvent {
 			this.icon = icon;
 		}
 
+		@Nullable
 		public NamespacedKey getBackground() {
 			return background;
 		}
 
-		public void setBackground(NamespacedKey background) {
+		public void setBackground(@Nullable NamespacedKey background) {
 			this.background = background;
 		}
 
@@ -364,16 +373,18 @@ public class PacketPlayOutAdvancementsEvent extends PacketPlayOutEvent {
 		}
 
 		public static Display getDisplayOf(AdvancementDisplay nms) {
+			final MinecraftKey nmsBackGground = Field.get(nms, "d", MinecraftKey.class);
 			return new Display(nms.a(), nms.b(),
 					ItemStack.getItemStackOf(Field.get(nms, "c", net.minecraft.server.v1_16_R3.ItemStack.class)),
-					PacketUtils.toNamespacedKey(Field.get(nms, "d", MinecraftKey.class)),
+					nmsBackGground == null ? null : PacketUtils.toNamespacedKey(nmsBackGground),
 					AdvancementFrameType.getAdvancementFrameTypeOf(nms.e()), Field.get(nms, "f", boolean.class),
 					nms.i(), nms.j(), Field.get(nms, "i", float.class), Field.get(nms, "j", float.class));
 		}
 
 		public AdvancementDisplay getNMS() {
 			final AdvancementDisplay nms = new AdvancementDisplay(icon.getNMS(), title, description,
-					PacketUtils.toMinecraftKey(background), frame.getNMS(), showToast, announceToChat, hidden);
+					background == null ? null : PacketUtils.toMinecraftKey(background), frame.getNMS(), showToast,
+					announceToChat, hidden);
 			nms.a(x, y);
 			return nms;
 		}
