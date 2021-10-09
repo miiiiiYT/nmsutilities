@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -26,6 +27,7 @@ public class PacketPlayInDifficultyLockEvent extends PacketPlayInEvent {
 
 	public PacketPlayInDifficultyLockEvent(Player injectedPlayer, PacketPlayInDifficultyLock packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		lock = packet.b();
 	}
 

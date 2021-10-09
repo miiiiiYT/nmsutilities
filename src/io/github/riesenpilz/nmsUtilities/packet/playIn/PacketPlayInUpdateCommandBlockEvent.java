@@ -1,9 +1,10 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import io.github.riesenpilz.nmsUtilities.block.CommandBlock.CommandBlockType;
+import io.github.riesenpilz.nmsUtilities.block.CommandBlockType;
 import io.github.riesenpilz.nmsUtilities.packet.HasBlockPosition;
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -37,6 +38,7 @@ public class PacketPlayInUpdateCommandBlockEvent extends PacketPlayInEvent imple
 
 	public PacketPlayInUpdateCommandBlockEvent(Player injectedPlayer, PacketPlayInSetCommandBlock packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		blockLocation = PacketUtils.toLocation(packet.b(), injectedPlayer.getWorld());
 		command = packet.c();
 		trackOutput = packet.d();
@@ -48,6 +50,11 @@ public class PacketPlayInUpdateCommandBlockEvent extends PacketPlayInEvent imple
 	public PacketPlayInUpdateCommandBlockEvent(Player injectedPlayer, Location blockLocation, String command,
 			boolean trackOutput, boolean conditional, boolean automatic, CommandBlockType type) {
 		super(injectedPlayer);
+
+		Validate.notNull(blockLocation);
+		Validate.notNull(command);
+		Validate.notNull(type);
+		
 		this.blockLocation = blockLocation;
 		this.command = command;
 		this.trackOutput = trackOutput;

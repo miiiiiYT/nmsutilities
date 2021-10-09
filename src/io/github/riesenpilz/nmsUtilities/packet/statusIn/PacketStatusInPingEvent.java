@@ -48,7 +48,7 @@ public class PacketStatusInPingEvent extends PacketStatusInEvent {
 
 	@Override
 	public int getPacketID() {
-		return 1;
+		return 0x01;
 	}
 
 	@Override

@@ -2,16 +2,17 @@ package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import io.github.riesenpilz.nmsUtilities.entity.EntityUseAction;
 import io.github.riesenpilz.nmsUtilities.entity.player.Hand;
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInUseEntity;
-import net.minecraft.server.v1_16_R3.PacketPlayInUseEntity.EnumEntityUseAction;
 
 /**
  * https://wiki.vg/Protocol#Interact_Entity
@@ -46,6 +47,7 @@ public class PacketPlayInEntityInteractEvent extends PacketPlayInEntityEvent {
 
 	public PacketPlayInEntityInteractEvent(Player injectedPlayer, PacketPlayInUseEntity packet) {
 		super(injectedPlayer, packet);
+		Validate.notNull(packet);
 		vector = EntityUseAction.INTERACT_AT.equals(action) ? PacketUtils.toVetor(packet.d()) : new Vector();
 		hand = !EntityUseAction.ATTACK.equals(action) ? Hand.getHand(packet.c()) : null;
 		sneaking = packet.e();
@@ -54,6 +56,9 @@ public class PacketPlayInEntityInteractEvent extends PacketPlayInEntityEvent {
 	public PacketPlayInEntityInteractEvent(Player injectedPlayer, int entityId, EntityUseAction action, Vector vector,
 			Hand hand, boolean sneaking) {
 		super(injectedPlayer, entityId);
+		Validate.notNull(action);
+		Validate.notNull(vector);
+		Validate.isTrue((action != EntityUseAction.INTERACT && action != EntityUseAction.INTERACT_AT) || hand != null);
 		this.action = action;
 		this.vector = vector;
 		this.hand = hand;
@@ -97,26 +102,5 @@ public class PacketPlayInEntityInteractEvent extends PacketPlayInEntityEvent {
 		return "https://wiki.vg/Protocol#Interact_Entity";
 	}
 
-	public enum EntityUseAction {
-
-		INTERACT(EnumEntityUseAction.INTERACT), ATTACK(EnumEntityUseAction.ATTACK),
-		INTERACT_AT(EnumEntityUseAction.INTERACT_AT);
-
-		private EnumEntityUseAction nms;
-
-		EntityUseAction(EnumEntityUseAction nms) {
-			this.nms = nms;
-		}
-
-		public EnumEntityUseAction getNMS() {
-			return nms;
-		}
-
-		public static EntityUseAction getEntityUseAction(EnumEntityUseAction nms) {
-			for (EntityUseAction action : values())
-				if (action.getNMS().equals(nms))
-					return action;
-			return null;
-		}
-	}
+	
 }

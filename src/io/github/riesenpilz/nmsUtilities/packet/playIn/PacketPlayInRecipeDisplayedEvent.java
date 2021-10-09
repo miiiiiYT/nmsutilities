@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
@@ -27,15 +28,17 @@ public class PacketPlayInRecipeDisplayedEvent extends PacketPlayInEvent {
 
 	public PacketPlayInRecipeDisplayedEvent(Player injectedPlayer, PacketPlayInRecipeDisplayed packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		recipeId = PacketUtils.toNamespacedKey(packet.b());
 	}
 
-	public PacketPlayInRecipeDisplayedEvent(Player injectedPlayer, NamespacedKey recipeID) {
+	public PacketPlayInRecipeDisplayedEvent(Player injectedPlayer, NamespacedKey recipeId) {
 		super(injectedPlayer);
-		this.recipeId = recipeID;
+		Validate.notNull(recipeId);
+		this.recipeId = recipeId;
 	}
 
-	public NamespacedKey getRecipeID() {
+	public NamespacedKey getRecipeId() {
 		return recipeId;
 	}
 

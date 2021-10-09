@@ -3,6 +3,7 @@ package io.github.riesenpilz.nmsUtilities.nbt;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.ArrayUtils;
 
 public class NBTTagByteArray extends NBTBase {
@@ -13,6 +14,7 @@ public class NBTTagByteArray extends NBTBase {
 
 	public NBTTagByteArray(net.minecraft.server.v1_16_R3.NBTTagByteArray nms) {
 		super(TYPE);
+		Validate.notNull(nms);
 		data = nms.getBytes();
 	}
 
@@ -23,6 +25,7 @@ public class NBTTagByteArray extends NBTBase {
 
 	public NBTTagByteArray(byte[] data) {
 		super(TYPE);
+		Validate.notNull(data);
 		this.data = data;
 	}
 
@@ -30,7 +33,9 @@ public class NBTTagByteArray extends NBTBase {
 		this(listToArray(list));
 	}
 
-	public static byte[] listToArray(List<Byte> list) {
+	private static byte[] listToArray(List<Byte> list) {
+		Validate.notNull(list);
+		
 		byte[] byteArray = new byte[list.size()];
 
 		for (int i = 0; i < list.size(); ++i) {
@@ -54,6 +59,8 @@ public class NBTTagByteArray extends NBTBase {
 	}
 
 	public NBTTagByte set(int i, NBTTagByte nbtTagByte) {
+		Validate.notNull(nbtTagByte);
+		
 		byte oldByte = data[i];
 
 		data[i] = nbtTagByte.getData();
@@ -61,6 +68,8 @@ public class NBTTagByteArray extends NBTBase {
 	}
 
 	public void add(int i, NBTTagByte nbtTagByte) {
+		Validate.notNull(nbtTagByte);
+		
 		data = ArrayUtils.add(data, i, nbtTagByte.getData());
 	}
 
@@ -81,8 +90,12 @@ public class NBTTagByteArray extends NBTBase {
 	}
 
 	@Override
-	protected NBTTagByteArray clone() {
+	public NBTTagByteArray clone() {
 		return new NBTTagByteArray(ArrayUtils.clone(data));
 	}
 
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).append("data", data).toString();
+	}
 }

@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.entity.player.ChatVisibilitySetting;
@@ -56,20 +57,21 @@ public class PacketPlayInSettingsEvent extends PacketPlayInEvent {
 
 	public PacketPlayInSettingsEvent(Player injectedPlayer, PacketPlayInSettings packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 
 		locale = packet.locale;
 		viewDistance = packet.viewDistance;
 		chatVisibility = ChatVisibilitySetting.getChatVisibility(packet.d());
 		chatColors = packet.e();
 
-		final int i = packet.f();
-		capeEnabled = (i & 1) == 1;
-		jacketEnabled = (i & 2) == 2;
-		leftSleeveEnabled = (i & 4) == 4;
-		rightSleeveEnabled = (i & 8) == 8;
-		leftPantsLegEnabled = (i & 16) == 16;
-		rightPantsLegEnabled = (i & 32) == 32;
-		capeEnabled = (i & 64) == 64;
+		final int skinSettings = packet.f();
+		capeEnabled = (skinSettings & 1) == 1;
+		jacketEnabled = (skinSettings & 2) == 2;
+		leftSleeveEnabled = (skinSettings & 4) == 4;
+		rightSleeveEnabled = (skinSettings & 8) == 8;
+		leftPantsLegEnabled = (skinSettings & 16) == 16;
+		rightPantsLegEnabled = (skinSettings & 32) == 32;
+		capeEnabled = (skinSettings & 64) == 64;
 
 		mainHand = MainHandSetting.getMainHand(packet.getMainHand());
 	}
@@ -79,6 +81,10 @@ public class PacketPlayInSettingsEvent extends PacketPlayInEvent {
 			boolean leftSleeveEnabled, boolean rightSleeveEnabled, boolean leftPantsLegEnabled,
 			boolean rightPantsLegEnabled, boolean hatEnabled, MainHandSetting mainHand) {
 		super(injectedPlayer);
+
+		Validate.notNull(locale);
+		Validate.notNull(chatVisibility);
+		Validate.notNull(mainHand);
 
 		this.locale = locale;
 		this.viewDistance = viewDistance;
@@ -148,14 +154,14 @@ public class PacketPlayInSettingsEvent extends PacketPlayInEvent {
 		packet.locale = locale;
 		Field.set(packet, "c", chatVisibility.getNMS());
 		Field.set(packet, "d", chatColors);
-		int e = capeEnabled ? 1 : 0;
-		e += jacketEnabled ? 2 : 0;
-		e += leftSleeveEnabled ? 4 : 0;
-		e += rightSleeveEnabled ? 8 : 0;
-		e += leftPantsLegEnabled ? 16 : 0;
-		e += rightPantsLegEnabled ? 32 : 0;
-		e += hatEnabled ? 64 : 0;
-		Field.set(packet, "e", e);
+		int skinSettings = capeEnabled ? 1 : 0;
+		skinSettings += jacketEnabled ? 2 : 0;
+		skinSettings += leftSleeveEnabled ? 4 : 0;
+		skinSettings += rightSleeveEnabled ? 8 : 0;
+		skinSettings += leftPantsLegEnabled ? 16 : 0;
+		skinSettings += rightPantsLegEnabled ? 32 : 0;
+		skinSettings += hatEnabled ? 64 : 0;
+		Field.set(packet, "e", skinSettings);
 		Field.set(packet, "f", mainHand.getNMS());
 		return packet;
 	}

@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -26,16 +27,22 @@ public class PacketPlayInVehicleMoveEvent extends PacketPlayInEvent {
 	/**
 	 * Absolute {@link Location}.
 	 */
-	Location locationTo;
+	private Location locationTo;
 
 	public PacketPlayInVehicleMoveEvent(Player injectedPlayer, PacketPlayInVehicleMove packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		locationTo = new Location(injectedPlayer.getWorld(), packet.getX(), packet.getY(), packet.getZ(),
 				packet.getYaw(), packet.getPitch());
 	}
 
 	public PacketPlayInVehicleMoveEvent(Player injectedPlayer, Location locationTo) {
 		super(injectedPlayer);
+
+		Validate.notNull(locationTo);
+
 		this.locationTo = locationTo;
 	}
 

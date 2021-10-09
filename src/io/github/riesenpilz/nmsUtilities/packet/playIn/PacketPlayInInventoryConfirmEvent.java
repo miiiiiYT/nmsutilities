@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -38,6 +39,7 @@ public class PacketPlayInInventoryConfirmEvent extends PacketPlayInInventoryEven
 
 	public PacketPlayInInventoryConfirmEvent(Player injectedPlayer, PacketPlayInTransaction packet) {
 		super(injectedPlayer, packet.b());
+		Validate.notNull(packet);
 		actionNumber = packet.c();
 		accepted = Field.get(packet, "c", boolean.class);
 	}

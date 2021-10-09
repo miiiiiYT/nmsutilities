@@ -18,6 +18,10 @@ import net.minecraft.server.v1_16_R3.NBTTagCompound;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketPlayOutSpawnEntity;
 
+/**
+ * Not finished yet!
+ *
+ */
 public abstract class Entity {
 	private List<DataWatcherItem<?>> dataWatcher;
 	private final net.minecraft.server.v1_16_R3.Entity entity;
@@ -63,7 +67,6 @@ public abstract class Entity {
 
 			@Override
 			public void loadData(NBTTag tag) {
-				System.out.println(tag);
 				nms.load(tag.getNMS());
 			}
 		};

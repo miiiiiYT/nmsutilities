@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -29,6 +30,7 @@ public class PacketPlayInTradeSelectEvent extends PacketPlayInEvent {
 
 	public PacketPlayInTradeSelectEvent(Player injectedPlayer, PacketPlayInTrSel packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		slot = packet.b();
 	}
 

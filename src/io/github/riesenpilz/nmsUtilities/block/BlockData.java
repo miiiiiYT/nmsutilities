@@ -10,6 +10,14 @@ import net.minecraft.server.v1_16_R3.Block;
 import net.minecraft.server.v1_16_R3.IBlockData;
 import net.minecraft.server.v1_16_R3.Material;
 
+/**
+ * Used for packets. Represents a {@link Block}
+ * 
+ * @see PacketPlayOutBlockChangeEvent
+ * @see PacketPlayOutBlockActionEvent
+ * @see PacketPlayOutMultiBlockChangeEvent#
+ * @see PacketPlayOutPlayerDiggingEvent
+ */
 public class BlockData {
 	private final Block nms;
 
@@ -25,7 +33,7 @@ public class BlockData {
 
 	protected BlockData(org.bukkit.block.Block block) {
 		Validate.notNull(block);
-		this.nms = ((CraftBlock) block).getNMS().getBlock();
+		nms = ((CraftBlock) block).getNMS().getBlock();
 	}
 
 	public static BlockData getBlockDataOf(Block nms) {
@@ -40,7 +48,14 @@ public class BlockData {
 		return new BlockData(block);
 	}
 
+	/**
+	 * Sets the block to a specific location.
+	 * 
+	 * @param loc the location to set the block to
+	 * @return the block wrapper of the new block in the location
+	 */
 	public io.github.riesenpilz.nmsUtilities.block.Block setBlock(Location loc) {
+		Validate.notNull(loc);
 		nms.c(ServerWorld.getWorldOf(loc.getWorld()).getNMS(), PacketUtils.toBlockPosition(loc));
 		return io.github.riesenpilz.nmsUtilities.block.Block.getBlockOf(loc);
 	}

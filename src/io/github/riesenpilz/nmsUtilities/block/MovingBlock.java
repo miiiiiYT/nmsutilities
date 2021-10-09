@@ -10,6 +10,11 @@ import org.bukkit.util.Vector;
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import net.minecraft.server.v1_16_R3.MovingObjectPositionBlock;
 
+/**
+ * Represents a {@link MovingObjectPositionBlock} Only used by packets.
+ * 
+ * @see PacketPlayInUseItemEvent
+ */
 public class MovingBlock {
 	private MovingObjectPositionBlock nms;
 
@@ -22,7 +27,6 @@ public class MovingBlock {
 		Validate.notNull(velocity);
 		Validate.notNull(face);
 		Validate.notNull(location);
-		Validate.notNull(flag);
 		nms = new MovingObjectPositionBlock(PacketUtils.toVec3D(velocity), CraftBlock.blockFaceToNotch(face),
 				PacketUtils.toBlockPosition(location), flag);
 	}

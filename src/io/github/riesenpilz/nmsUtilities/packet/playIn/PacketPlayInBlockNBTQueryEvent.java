@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -36,12 +37,14 @@ public class PacketPlayInBlockNBTQueryEvent extends PacketPlayInEvent implements
 
 	public PacketPlayInBlockNBTQueryEvent(Player injectedPlayer, PacketPlayInTileNBTQuery packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		transactionId = packet.b();
 		blockLocation = PacketUtils.toLocation(packet.c(), injectedPlayer.getWorld());
 	}
 
 	public PacketPlayInBlockNBTQueryEvent(Player injectedPlayer, Location blockLocation, int transactionId) {
 		super(injectedPlayer);
+		Validate.notNull(blockLocation);
 		this.transactionId = transactionId;
 		this.blockLocation = blockLocation;
 	}

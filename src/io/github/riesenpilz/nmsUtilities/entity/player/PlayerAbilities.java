@@ -1,7 +1,16 @@
 package io.github.riesenpilz.nmsUtilities.entity.player;
 
+import org.apache.commons.lang.Validate;
+
+/**
+ * Represents {@link net.minecraft.server.v1_16_R3.PlayerAbilities}. Only used
+ * by packets.
+ * 
+ * @see PacketPlayInAbilitiesEvent
+ * @see PacketPlayOutPlayerAbilitiesEvent
+ */
 public class PlayerAbilities {
-	
+
 	private boolean isInvulnerable;
 	private boolean isFlying;
 	private boolean canFly;
@@ -9,9 +18,10 @@ public class PlayerAbilities {
 	private boolean mayBuild = true;
 
 	private float flySpeed = 0.05F;
-    private float walkSpeed = 0.1F;
-    
+	private float walkSpeed = 0.1F;
+
 	public PlayerAbilities(net.minecraft.server.v1_16_R3.PlayerAbilities playerAbilities) {
+		Validate.notNull(playerAbilities);
 		isInvulnerable = playerAbilities.isInvulnerable;
 		isFlying = playerAbilities.isFlying;
 		canFly = playerAbilities.canFly;
@@ -20,14 +30,14 @@ public class PlayerAbilities {
 		flySpeed = playerAbilities.flySpeed;
 		walkSpeed = playerAbilities.walkSpeed;
 	}
-	
+
 	public PlayerAbilities(boolean isInvulnerable, boolean isFlying, boolean canFly, boolean canInstantlyBuild) {
 		this.isInvulnerable = isInvulnerable;
 		this.isFlying = isFlying;
 		this.canFly = canFly;
 		this.canInstantlyBuild = canInstantlyBuild;
 	}
-	
+
 	public boolean isInvulnerable() {
 		return isInvulnerable;
 	}
@@ -83,7 +93,7 @@ public class PlayerAbilities {
 	public void setWalkSpeed(float walkSpeed) {
 		this.walkSpeed = walkSpeed;
 	}
-	
+
 	@Override
 	protected PlayerAbilities clone() {
 		PlayerAbilities playerAbilities = new PlayerAbilities(isInvulnerable, isFlying, canFly, canInstantlyBuild);
@@ -92,7 +102,7 @@ public class PlayerAbilities {
 		playerAbilities.setWalkSpeed(walkSpeed);
 		return playerAbilities;
 	}
-	
+
 	public net.minecraft.server.v1_16_R3.PlayerAbilities getNMS() {
 		final net.minecraft.server.v1_16_R3.PlayerAbilities playerAbilities = new net.minecraft.server.v1_16_R3.PlayerAbilities();
 		playerAbilities.isInvulnerable = isInvulnerable;

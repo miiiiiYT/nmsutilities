@@ -4,6 +4,10 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang.Validate;
 
+/**
+ * Represents a {@link java.lang.reflect.Field}
+ *
+ */
 public class Field {
 
 	private java.lang.reflect.Field field;
@@ -21,23 +25,33 @@ public class Field {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T get(Object instaceAndClass, String fieldName, Class<T> type) {
+		Validate.notNull(instaceAndClass);
+		Validate.notNull(type);
 		return (T) new Field(instaceAndClass.getClass(), fieldName).get(instaceAndClass);
 	}
+
 	@SuppressWarnings("unchecked")
-	public static <T> T getFromSuper(Object instaceAndClass, String fieldName, Class<T> type) {
-		return (T) new Field(instaceAndClass.getClass().getSuperclass(), fieldName).get(instaceAndClass);
+	public static <T> T getFromSuper(Object instaceAndChildClass, String fieldName, Class<T> type) {
+		Validate.notNull(instaceAndChildClass);
+		Validate.notNull(type);
+		return (T) new Field(instaceAndChildClass.getClass().getSuperclass(), fieldName).get(instaceAndChildClass);
 	}
+
 	@SuppressWarnings("unchecked")
 	public static <T> T getConstant(Class<?> clazz, String fieldName, Class<T> type) {
+		Validate.notNull(type);
 		return (T) new Field(clazz, fieldName).get(null);
 	}
 
 	public static void set(Object instaceAndClass, String fieldName, Object value) {
 		new Field(instaceAndClass.getClass(), fieldName).set(instaceAndClass, value);
 	}
-	public static void setInSuper(Object instaceAndClass, String fieldName, Object value) {
-		new Field(instaceAndClass.getClass().getSuperclass(), fieldName).set(instaceAndClass, value);
+
+	public static void setInSuper(Object instaceAndChildClass, String fieldName, Object value) {
+		Validate.notNull(instaceAndChildClass);
+		new Field(instaceAndChildClass.getClass().getSuperclass(), fieldName).set(instaceAndChildClass, value);
 	}
+
 	public void set(Object instance, Object value) {
 		try {
 			field.set(instance, value);

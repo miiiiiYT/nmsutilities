@@ -15,10 +15,20 @@ import io.github.riesenpilz.nmsUtilities.nbt.NBTTag;
 import io.github.riesenpilz.nmsUtilities.world.ServerWorld;
 import io.github.riesenpilz.nmsUtilities.world.chunk.Chunk;
 import net.minecraft.server.v1_16_R3.NBTTagCompound;
-import net.minecraft.server.v1_16_R3.WorldServer;
 
+/**
+ * Represents a {@link org.bukkit.entity.Entity}.
+ *
+ */
 public class WorldEntity {
-	public static final Map<org.bukkit.entity.Entity, NBTTag> tags = new HashMap<>();
+
+	/**
+	 * Stores all custom entity tags. Internal use only!
+	 * 
+	 * @see WorldEntity#getNBTTag()
+	 */
+	public static final Map<org.bukkit.entity.Entity, NBTTag> ENTITY_TAGS = new HashMap<>();
+
 	private final org.bukkit.entity.Entity bukkit;
 
 	protected WorldEntity(org.bukkit.entity.Entity bukkit) {
@@ -27,7 +37,9 @@ public class WorldEntity {
 	}
 
 	protected WorldEntity(UUID uuid) {
-		bukkit = Bukkit.getEntity(uuid);
+		final org.bukkit.entity.Entity entity = Bukkit.getEntity(uuid);
+		Validate.notNull(entity);
+		bukkit = entity;
 	}
 
 	public static WorldEntity getWorldEntity(UUID uuid) {
@@ -39,11 +51,9 @@ public class WorldEntity {
 	}
 
 	public static WorldEntity getWorldEntity(int entityId, org.bukkit.World world) {
-		Validate.notNull(world);
-		final WorldServer nmsWorld = ServerWorld.getWorldOf(world).getNMS();
-		final net.minecraft.server.v1_16_R3.Entity nmsEntity = nmsWorld.getEntity(entityId);
-		Validate.notNull(nmsEntity);
-		return new WorldEntity(Bukkit.getEntity(nmsEntity.getUniqueID()));
+		final @Nullable WorldEntity entity = ServerWorld.getWorldOf(world).getEntityById(entityId);
+		Validate.notNull(entity);
+		return entity;
 	}
 
 	public static WorldEntity getWorldEntity(net.minecraft.server.v1_16_R3.Entity nms) {
@@ -56,6 +66,7 @@ public class WorldEntity {
 	}
 
 	public void loadFromNBTTag(NBTTag nbtTag) {
+		Validate.notNull(nbtTag);
 		getNMS().load(nbtTag.getNMS());
 	}
 
@@ -84,23 +95,36 @@ public class WorldEntity {
 	}
 
 	public Chunk getChunk() {
-		return new Chunk(bukkit.getLocation().getChunk());
+		return Chunk.getChunkOf(bukkit.getLocation().getChunk());
 	}
 
 	public Location getLocation() {
 		return bukkit.getLocation();
 	}
 
+	/**
+	 * Gets the Custom tag of the entity.
+	 * 
+	 * @return the tag
+	 */
 	@Nullable
 	public NBTTag getNBTTag() {
-		return tags.get(bukkit);
+		return ENTITY_TAGS.get(bukkit);
 	}
 
+	/**
+	 * Sets the Custom tag of the entity.
+	 * 
+	 * @param tag the tag to set
+	 */
 	public void setNBTTag(@Nullable NBTTag tag) {
-		tags.put(bukkit, tag);
+		ENTITY_TAGS.put(bukkit, tag);
 	}
 
+	/**
+	 * Removes the Custom tag
+	 */
 	public void removeNBTTag() {
-		tags.remove(bukkit);
+		ENTITY_TAGS.remove(bukkit);
 	}
 }

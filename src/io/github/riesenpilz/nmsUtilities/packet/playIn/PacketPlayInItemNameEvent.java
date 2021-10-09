@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import net.minecraft.server.v1_16_R3.Packet;
@@ -31,11 +32,13 @@ public class PacketPlayInItemNameEvent extends PacketPlayInEvent {
 
 	public PacketPlayInItemNameEvent(Player injectedPlayer, PacketPlayInItemName packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		itemName = packet.b();
 	}
 
 	public PacketPlayInItemNameEvent(Player injectedPlayer, String itemName) {
 		super(injectedPlayer);
+		Validate.notNull(itemName);
 		this.itemName = itemName;
 	}
 

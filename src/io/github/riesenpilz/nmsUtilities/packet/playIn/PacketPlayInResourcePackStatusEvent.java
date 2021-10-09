@@ -1,11 +1,12 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nmsUtilities.resourcePack.ResourcePackStatus;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInResourcePackStatus;
-import net.minecraft.server.v1_16_R3.PacketPlayInResourcePackStatus.EnumResourcePackStatus;
 
 /**
  * https://wiki.vg/Protocol#Resource_Pack_Status
@@ -23,12 +24,14 @@ public class PacketPlayInResourcePackStatusEvent extends PacketPlayInEvent {
 
 	public PacketPlayInResourcePackStatusEvent(Player injectedPlayer, PacketPlayInResourcePackStatus packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		status = ResourcePackStatus.getResourcePackStatus(packet.status);
 	}
 
-	public PacketPlayInResourcePackStatusEvent(Player injectedPlayer, ResourcePackStatus resourcePackStatus) {
+	public PacketPlayInResourcePackStatusEvent(Player injectedPlayer, ResourcePackStatus satus) {
 		super(injectedPlayer);
-		this.status = resourcePackStatus;
+		Validate.notNull(satus);
+		this.status = satus;
 	}
 
 	public ResourcePackStatus getStatus() {
@@ -40,28 +43,7 @@ public class PacketPlayInResourcePackStatusEvent extends PacketPlayInEvent {
 		return new PacketPlayInResourcePackStatus(status.getNMS());
 	}
 
-	public static enum ResourcePackStatus {
-
-		SUCCESSFULLY_LOADED(EnumResourcePackStatus.SUCCESSFULLY_LOADED), DECLINED(EnumResourcePackStatus.DECLINED),
-		FAILED_DOWNLOAD(EnumResourcePackStatus.FAILED_DOWNLOAD), ACCEPTED(EnumResourcePackStatus.ACCEPTED);
-
-		private EnumResourcePackStatus nms;
-
-		private ResourcePackStatus(EnumResourcePackStatus nms) {
-			this.nms = nms;
-		}
-
-		public EnumResourcePackStatus getNMS() {
-			return nms;
-		}
-
-		public static ResourcePackStatus getResourcePackStatus(EnumResourcePackStatus nms) {
-			for (ResourcePackStatus status : values())
-				if (status.getNMS().equals(nms))
-					return status;
-			return null;
-		}
-	}
+	
 
 	@Override
 	public int getPacketID() {

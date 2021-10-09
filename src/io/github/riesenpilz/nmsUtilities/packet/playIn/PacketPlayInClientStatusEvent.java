@@ -1,11 +1,12 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nmsUtilities.entity.player.ClientStatus;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInClientCommand;
-import net.minecraft.server.v1_16_R3.PacketPlayInClientCommand.EnumClientCommand;
 
 /**
  * https://wiki.vg/Protocol#Client_Status
@@ -23,11 +24,13 @@ public class PacketPlayInClientStatusEvent extends PacketPlayInEvent {
 
 	public PacketPlayInClientStatusEvent(Player injectedPlayer, PacketPlayInClientCommand packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		status = ClientStatus.getClientCommand(packet.b());
 	}
 
 	public PacketPlayInClientStatusEvent(Player injectedPlayer, ClientStatus status) {
 		super(injectedPlayer);
+		Validate.notNull(status);
 		this.status = status;
 	}
 
@@ -50,32 +53,5 @@ public class PacketPlayInClientStatusEvent extends PacketPlayInEvent {
 		return "https://wiki.vg/Protocol#Client_Status";
 	}
 
-	public static enum ClientStatus {
-		/**
-		 * Sent when the client is ready to complete login and when the client is ready
-		 * to respawn after death.
-		 */
-		PERFORM_RESPAWN(EnumClientCommand.PERFORM_RESPAWN),
-		/**
-		 * Sent when the client opens the Statistics menu.
-		 */
-		REQUEST_STATS(EnumClientCommand.REQUEST_STATS);
-
-		private final EnumClientCommand command;
-
-		private ClientStatus(EnumClientCommand command) {
-			this.command = command;
-		}
-
-		public EnumClientCommand getNMS() {
-			return command;
-		}
-
-		public static ClientStatus getClientCommand(EnumClientCommand command) {
-			for (ClientStatus command2 : ClientStatus.values())
-				if (command2.getNMS().equals(command))
-					return command2;
-			return null;
-		}
-	}
+	
 }

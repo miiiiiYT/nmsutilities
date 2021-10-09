@@ -11,7 +11,7 @@ public class EntityEvents implements Listener {
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent e) {
-		WorldEntity.tags.remove(e.getEntity());
+		WorldEntity.ENTITY_TAGS.remove(e.getEntity());
 	}
 	@EventHandler
 	public void onEntitySpawn(EntitySpawnEvent e) {

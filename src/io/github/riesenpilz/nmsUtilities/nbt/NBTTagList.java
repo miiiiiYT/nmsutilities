@@ -5,28 +5,35 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang.Validate;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 public class NBTTagList extends NBTBase implements Iterable<NBTBase> {
 
 	public static final NBTType TYPE = NBTType.NBT_TAG_LIST;
-	
+
 	/**
 	 * Can only contain one type of NBTBase!
 	 */
 	private final List<NBTBase> data;
 
-	public NBTTagList(net.minecraft.server.v1_16_R3.NBTTagList nms) {
+	protected NBTTagList(@Nullable net.minecraft.server.v1_16_R3.NBTTagList nms) {
 		super(TYPE);
 		data = new ArrayList<>();
-		for (net.minecraft.server.v1_16_R3.NBTBase base : nms)
-			data.add(NBTBase.getNBTBaseOf(base));
+		if (nms != null)
+			for (net.minecraft.server.v1_16_R3.NBTBase base : nms)
+				data.add(NBTBase.getNBTBaseOf(base));
 	}
 
-	public static NBTTagList getNBTTagListOf(net.minecraft.server.v1_16_R3.NBTTagList nms) {
+	public static NBTTagList getNBTTagListOf(@Nullable net.minecraft.server.v1_16_R3.NBTTagList nms) {
 		return new NBTTagList(nms);
 	}
 
 	public NBTTagList(List<NBTBase> list) {
 		super(TYPE);
+		Validate.notNull(list);
 		data = list;
 	}
 
@@ -85,15 +92,14 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase> {
 	}
 
 	@Override
-	public String toString() {
-		return getNMS().toString();
-	}
-
-	@Override
-	protected NBTTagList clone() {
+	public NBTTagList clone() {
 		List<NBTBase> newData = new ArrayList<>();
 		Collections.copy(data, newData);
 		return new NBTTagList(newData);
 	}
 
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).append("data", data).toString();
+	}
 }

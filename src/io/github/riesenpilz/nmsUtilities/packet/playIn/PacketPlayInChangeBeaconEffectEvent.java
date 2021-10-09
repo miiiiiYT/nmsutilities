@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -25,18 +26,21 @@ public class PacketPlayInChangeBeaconEffectEvent extends PacketPlayInEvent {
 	private PotionEffectType primaryEffect;
 	private PotionEffectType secondaryEffect;
 
-	public PacketPlayInChangeBeaconEffectEvent(Player injectedPlayer, PotionEffectType primaryEffect,
-			PotionEffectType secondaryEffect) {
-		super(injectedPlayer);
-		this.primaryEffect = primaryEffect;
-		this.secondaryEffect = secondaryEffect;
-	}
-
 	@SuppressWarnings("deprecation")
 	public PacketPlayInChangeBeaconEffectEvent(Player injectedPlayer, PacketPlayInBeacon packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		primaryEffect = PotionEffectType.getById(packet.b());
 		secondaryEffect = PotionEffectType.getById(packet.c());
+	}
+
+	public PacketPlayInChangeBeaconEffectEvent(Player injectedPlayer, PotionEffectType primaryEffect,
+			PotionEffectType secondaryEffect) {
+		super(injectedPlayer);
+		Validate.notNull(primaryEffect);
+		Validate.notNull(secondaryEffect);
+		this.primaryEffect = primaryEffect;
+		this.secondaryEffect = secondaryEffect;
 	}
 
 	public PotionEffectType getPrimaryEffect() {

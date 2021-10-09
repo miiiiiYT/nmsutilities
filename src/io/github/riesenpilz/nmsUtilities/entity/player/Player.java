@@ -2,7 +2,7 @@ package io.github.riesenpilz.nmsUtilities.entity.player;
 
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 
-import io.github.riesenpilz.nmsUtilities.entity.livingEntity.LivingEntity;
+import io.github.riesenpilz.nmsUtilities.entity.LivingEntity;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
 import net.minecraft.server.v1_16_R3.PlayerConnection;

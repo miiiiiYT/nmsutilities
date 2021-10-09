@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.inventory.RecipeBookType;
@@ -22,25 +23,27 @@ import net.minecraft.server.v1_16_R3.PacketPlayInRecipeSettings;
  */
 public class PacketPlayInRecipeSettingsEvent extends PacketPlayInEvent {
 
-	private RecipeBookType recipeBookType;
+	private RecipeBookType type;
 	private boolean bookOpen;
 	private boolean filterActive;
 
 	public PacketPlayInRecipeSettingsEvent(Player injectedPlayer, PacketPlayInRecipeSettings packet) {
 		super(injectedPlayer);
-		recipeBookType = RecipeBookType.getRecipeBookType(packet.b());
+		Validate.notNull(packet);
+		type = RecipeBookType.getRecipeBookType(packet.b());
 	}
 
-	public PacketPlayInRecipeSettingsEvent(Player injectedPlayer, RecipeBookType recipeBookType, boolean bookOpen,
+	public PacketPlayInRecipeSettingsEvent(Player injectedPlayer, RecipeBookType type, boolean bookOpen,
 			boolean filterActive) {
 		super(injectedPlayer);
-		this.recipeBookType = recipeBookType;
+		Validate.notNull(type);
+		this.type = type;
 		this.bookOpen = bookOpen;
 		this.filterActive = filterActive;
 	}
 
-	public RecipeBookType getRecipeBookType() {
-		return recipeBookType;
+	public RecipeBookType getType() {
+		return type;
 	}
 
 	public boolean isBookOpen() {
@@ -54,7 +57,7 @@ public class PacketPlayInRecipeSettingsEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInRecipeSettings packet = new PacketPlayInRecipeSettings();
-		Field.set(packet, "a", recipeBookType.getNMS());
+		Field.set(packet, "a", type.getNMS());
 		Field.set(packet, "b", bookOpen);
 		Field.set(packet, "c", filterActive);
 		return packet;

@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Difficulty;
 import org.bukkit.entity.Player;
 
@@ -27,11 +28,13 @@ public class PacketPlayInDifficultyChangeEvent extends PacketPlayInEvent {
 
 	public PacketPlayInDifficultyChangeEvent(Player injectedPlayer, PacketPlayInDifficultyChange packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		difficulty = PacketUtils.toDifficulty(packet.b());
 	}
 
 	public PacketPlayInDifficultyChangeEvent(Player injectedPlayer, Difficulty difficulty) {
 		super(injectedPlayer);
+		Validate.notNull(difficulty);
 		this.difficulty = difficulty;
 	}
 

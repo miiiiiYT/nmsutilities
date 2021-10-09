@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -44,6 +45,7 @@ public class PacketPlayInPickItemEvent extends PacketPlayInEvent {
 
 	public PacketPlayInPickItemEvent(Player injectedPlayer, PacketPlayInPickItem packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		slot = packet.b();
 	}
 
@@ -59,7 +61,7 @@ public class PacketPlayInPickItemEvent extends PacketPlayInEvent {
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInPickItem packet = new PacketPlayInPickItem();
-		new Field(PacketPlayInPickItem.class, "a").set(packet, slot);
+		Field.set(packet, "a", slot);
 		return packet;
 	}
 

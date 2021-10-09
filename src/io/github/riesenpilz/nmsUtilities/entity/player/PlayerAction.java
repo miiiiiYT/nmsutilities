@@ -1,7 +1,14 @@
 package io.github.riesenpilz.nmsUtilities.entity.player;
 
+import org.apache.commons.lang.Validate;
+
 import net.minecraft.server.v1_16_R3.PacketPlayInEntityAction.EnumPlayerAction;
 
+/**
+ * Represents {@link EnumPlayerAction}. Only used by packets.
+ * 
+ * @see PacketPlayInActionEvent
+ */
 public enum PlayerAction {
 
 	START_SNEAKING(EnumPlayerAction.PRESS_SHIFT_KEY), STOP_SNEAKING(EnumPlayerAction.RELEASE_SHIFT_KEY),
@@ -30,9 +37,10 @@ public enum PlayerAction {
 	}
 
 	public static PlayerAction getPlayerAction(EnumPlayerAction nms) {
+		Validate.notNull(nms);
 		for (PlayerAction action : values())
 			if (action.getNMS().equals(nms))
 				return action;
-		return null;
+		throw new IllegalArgumentException();
 	}
 }

@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -39,14 +40,15 @@ public class PacketPlayInMovementEvent extends PacketPlayInEvent {
 	 */
 	protected boolean onGround;
 
+	public PacketPlayInMovementEvent(Player injectedPlayer, PacketPlayInFlying packet) {
+		super(injectedPlayer);
+		Validate.notNull(packet);
+		this.onGround = packet.b();
+	}
+
 	public PacketPlayInMovementEvent(Player injectedPlayer, boolean onGround) {
 		super(injectedPlayer);
 		this.onGround = onGround;
-	}
-
-	public PacketPlayInMovementEvent(Player injectedPlayer, PacketPlayInFlying packet) {
-		super(injectedPlayer);
-		this.onGround = packet.b();
 	}
 
 	public boolean isOnGround() {

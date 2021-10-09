@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -37,12 +38,19 @@ public class PacketPlayInUpdateSignEvent extends PacketPlayInEvent implements Ha
 
 	public PacketPlayInUpdateSignEvent(Player injectedPlayer, PacketPlayInUpdateSign packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		blockLocation = PacketUtils.toLocation(packet.b(), injectedPlayer.getWorld());
 		text = packet.c();
 	}
 
 	public PacketPlayInUpdateSignEvent(Player injectedPlayer, Location blockLocation, String[] text) {
 		super(injectedPlayer);
+
+		Validate.notNull(blockLocation);
+		Validate.notNull(text);
+
 		this.blockLocation = blockLocation;
 		this.text = text;
 	}

@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -37,12 +38,14 @@ public class PacketPlayInTabCompleteEvent extends PacketPlayInEvent {
 
 	public PacketPlayInTabCompleteEvent(Player injectedPlayer, PacketPlayInTabComplete packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		transactionId = packet.b();
 		toComplete = packet.c();
 	}
 
 	public PacketPlayInTabCompleteEvent(Player injectedPlayer, int transactionId, String toComplete) {
 		super(injectedPlayer);
+		Validate.notNull(toComplete);
 		this.transactionId = transactionId;
 		this.toComplete = toComplete;
 	}

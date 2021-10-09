@@ -1,9 +1,14 @@
 package io.github.riesenpilz.nmsUtilities.nbt;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang.Validate;
 
 import net.minecraft.server.v1_16_R3.NBTTagCompound;
 
+/**
+ * Represents a {@link net.minecraft.server.v1_16_R3.NBTBase}.
+ */
 public abstract class NBTBase implements Cloneable {
 
 	/**
@@ -17,6 +22,7 @@ public abstract class NBTBase implements Cloneable {
 	 * @param type the type of the stored data
 	 */
 	public NBTBase(NBTType type) {
+		Validate.notNull(type);
 		this.type = type;
 	}
 
@@ -28,12 +34,11 @@ public abstract class NBTBase implements Cloneable {
 	public NBTType getType() {
 		return type;
 	}
-	
-	public boolean is(NBTType type) {
+
+	public boolean is(@Nullable NBTType type) {
 		return this.type == type;
 	}
-	
-	
+
 	/**
 	 * Gets the stored data. Should be a instance of {@code getType().getClazz()}.
 	 * 
@@ -89,5 +94,9 @@ public abstract class NBTBase implements Cloneable {
 	}
 
 	@Override
-	abstract protected NBTBase clone();
+	public abstract NBTBase clone();
+	
+	@Override
+	public abstract String toString();
+	
 }

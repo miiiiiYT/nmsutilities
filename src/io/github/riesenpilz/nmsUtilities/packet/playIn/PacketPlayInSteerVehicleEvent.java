@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -35,6 +36,7 @@ public class PacketPlayInSteerVehicleEvent extends PacketPlayInEvent {
 
 	public PacketPlayInSteerVehicleEvent(Player injectedPlayer, PacketPlayInSteerVehicle packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		sideways = packet.b();
 		forward = packet.c();
 		jump = packet.d();

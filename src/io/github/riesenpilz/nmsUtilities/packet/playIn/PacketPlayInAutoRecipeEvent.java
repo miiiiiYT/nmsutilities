@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
@@ -33,12 +34,14 @@ public class PacketPlayInAutoRecipeEvent extends PacketPlayInInventoryEvent {
 
 	public PacketPlayInAutoRecipeEvent(Player injectedPlayer, PacketPlayInAutoRecipe packet) {
 		super(injectedPlayer, packet.b());
+		Validate.notNull(packet);
 		recipeId = PacketUtils.toNamespacedKey(packet.c());
 		makeAll = packet.d();
 	}
 
 	public PacketPlayInAutoRecipeEvent(Player injectedPlayer, int windowID, NamespacedKey recipeId, boolean makeAll) {
 		super(injectedPlayer, windowID);
+		Validate.notNull(recipeId);
 		this.recipeId = recipeId;
 		this.makeAll = makeAll;
 	}

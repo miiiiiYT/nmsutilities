@@ -1,10 +1,13 @@
-package io.github.riesenpilz.nmsUtilities.entity.livingEntity;
+package io.github.riesenpilz.nmsUtilities.entity;
 
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftLivingEntity;
 
-import io.github.riesenpilz.nmsUtilities.entity.WorldEntity;
 import net.minecraft.server.v1_16_R3.EntityLiving;
 
+/**
+ * Represents a {@link org.bukkit.entity.LivingEntity bukkit}
+ *
+ */
 public class LivingEntity extends WorldEntity {
 
     protected LivingEntity(org.bukkit.entity.LivingEntity bukkit) {

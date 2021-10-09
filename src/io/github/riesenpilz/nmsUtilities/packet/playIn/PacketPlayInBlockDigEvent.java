@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
@@ -38,19 +39,23 @@ public class PacketPlayInBlockDigEvent extends PacketPlayInEvent implements HasB
 
 	private DigType digType;
 
-	public PacketPlayInBlockDigEvent(Player injectedPlayer, Location blockLocation, BlockFace blockFace,
-			DigType digType) {
-		super(injectedPlayer);
-		this.blockLocation = blockLocation;
-		this.blockFace = blockFace;
-		this.digType = digType;
-	}
-
 	public PacketPlayInBlockDigEvent(Player injectedPlayer, PacketPlayInBlockDig packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		blockLocation = PacketUtils.toLocation(packet.b(), injectedPlayer.getWorld());
 		blockFace = CraftBlock.notchToBlockFace(packet.c());
 		digType = DigType.getPlayerDigType(packet.d());
+	}
+
+	public PacketPlayInBlockDigEvent(Player injectedPlayer, Location blockLocation, BlockFace blockFace,
+			DigType digType) {
+		super(injectedPlayer);
+		Validate.notNull(blockLocation);
+		Validate.notNull(blockFace);
+		Validate.notNull(digType);
+		this.blockLocation = blockLocation;
+		this.blockFace = blockFace;
+		this.digType = digType;
 	}
 
 	public BlockFace getBlockFace() {

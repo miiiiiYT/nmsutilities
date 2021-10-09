@@ -18,7 +18,7 @@ public class Chunk {
 	public static final HashMap<org.bukkit.Chunk, NBTTag> nbtTags = new HashMap<>();
 	private final org.bukkit.Chunk bukkitChunk;
 
-	public Chunk(org.bukkit.Chunk bukkitChunk) {
+	protected Chunk(org.bukkit.Chunk bukkitChunk) {
 		Validate.notNull(bukkitChunk);
 		this.bukkitChunk = bukkitChunk;
 	}

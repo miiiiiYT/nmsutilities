@@ -1,5 +1,7 @@
 package io.github.riesenpilz.nmsUtilities.nbt;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 public class NBTTagEnd extends NBTBase {
 	
 	public NBTTagEnd() {
@@ -17,7 +19,11 @@ public class NBTTagEnd extends NBTBase {
 	}
 
 	@Override
-	protected NBTTagEnd clone() {
+	public NBTTagEnd clone() {
 		return new NBTTagEnd();
+	}
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).toString();
 	}
 }

@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -29,6 +30,7 @@ public class PacketPlayInUpdateCommandMinecartEvent extends PacketPlayInEntityEv
 
 	public PacketPlayInUpdateCommandMinecartEvent(Player injectedPlayer, PacketPlayInSetCommandMinecart packet) {
 		super(injectedPlayer, packet);
+		Validate.notNull(packet);
 		command = packet.b();
 		trackOutput = packet.c();
 	}
@@ -36,6 +38,9 @@ public class PacketPlayInUpdateCommandMinecartEvent extends PacketPlayInEntityEv
 	public PacketPlayInUpdateCommandMinecartEvent(Player injectedPlayer, int entityId, String command,
 			boolean trackOutput) {
 		super(injectedPlayer, entityId);
+
+		Validate.notNull(command);
+
 		this.command = command;
 		this.trackOutput = trackOutput;
 	}

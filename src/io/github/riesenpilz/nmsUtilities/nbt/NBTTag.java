@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang.Validate;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.google.common.collect.Maps;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -20,7 +21,7 @@ import net.minecraft.server.v1_16_R3.MojangsonParser;
 import net.minecraft.server.v1_16_R3.NBTCompressedStreamTools;
 import net.minecraft.server.v1_16_R3.NBTTagCompound;
 
-public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>, Cloneable {
+public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>> {
 	private final HashMap<String, NBTBase> contents;
 
 	/**
@@ -337,11 +338,6 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 		return new NBTTag(newContents);
 	}
 
-	@Override
-	public String toString() {
-		return getNMS().toString();
-	}
-
 	public boolean isEmpty() {
 		return contents.isEmpty();
 	}
@@ -373,5 +369,10 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>>,
 	@Override
 	public HashMap<String, NBTBase> getData() {
 		return contents;
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).append("data", contents).toString();
 	}
 }

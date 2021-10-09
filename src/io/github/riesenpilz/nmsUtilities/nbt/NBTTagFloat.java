@@ -1,5 +1,8 @@
 package io.github.riesenpilz.nmsUtilities.nbt;
 
+import org.apache.commons.lang.Validate;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 public class NBTTagFloat extends NBTBase {
 
 	public static final NBTType TYPE = NBTType.FLOAT;
@@ -8,6 +11,7 @@ public class NBTTagFloat extends NBTBase {
 
 	public NBTTagFloat(net.minecraft.server.v1_16_R3.NBTTagFloat nms) {
 		super(TYPE);
+		Validate.notNull(nms);
 		data = nms.asFloat();
 	}
 
@@ -31,8 +35,12 @@ public class NBTTagFloat extends NBTBase {
 	}
 
 	@Override
-	protected NBTTagFloat clone() {
+	public NBTTagFloat clone() {
 		return new NBTTagFloat(data);
 	}
 
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).append("data", data).toString();
+	}
 }

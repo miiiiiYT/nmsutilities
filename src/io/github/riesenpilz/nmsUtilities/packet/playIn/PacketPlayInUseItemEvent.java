@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.block.MovingBlock;
@@ -33,8 +34,21 @@ public class PacketPlayInUseItemEvent extends PacketPlayInEvent {
 
 	public PacketPlayInUseItemEvent(Player injectedPlayer, PacketPlayInUseItem packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		block = MovingBlock.getMovingBlockOf(packet.c());
 		hand = Hand.getHand(packet.b());
+	}
+
+	public PacketPlayInUseItemEvent(Player injectedPlayer, MovingBlock block, Hand hand) {
+		super(injectedPlayer);
+
+		Validate.notNull(block);
+		Validate.notNull(hand);
+
+		this.block = block;
+		this.hand = hand;
 	}
 
 	@Override

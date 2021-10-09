@@ -1,14 +1,16 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
+import org.bukkit.Rotation;
+import org.bukkit.block.structure.Mirror;
+import org.bukkit.block.structure.UsageMode;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nmsUtilities.block.StructureUpdateType;
 import io.github.riesenpilz.nmsUtilities.packet.HasBlockPosition;
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
-import net.minecraft.server.v1_16_R3.BlockPropertyStructureMode;
-import net.minecraft.server.v1_16_R3.EnumBlockMirror;
-import net.minecraft.server.v1_16_R3.EnumBlockRotation;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInStruct;
@@ -28,8 +30,8 @@ import net.minecraft.server.v1_16_R3.PacketPlayInStruct;
 public class PacketPlayInUpdateStructureBlockEvent extends PacketPlayInEvent implements HasBlockPosition {
 
 	private Location blockLocation;
-	private UpdateType updateType;
-	private Mode mode;
+	private StructureUpdateType updateType;
+	private UsageMode mode;
 	private String name;
 
 	/**
@@ -58,14 +60,17 @@ public class PacketPlayInUpdateStructureBlockEvent extends PacketPlayInEvent imp
 
 	public PacketPlayInUpdateStructureBlockEvent(Player injectedPlayer, PacketPlayInStruct packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		blockLocation = PacketUtils.toLocation(packet.b(), injectedPlayer.getWorld());
-		updateType = UpdateType.getUpdateType(packet.c());
-		mode = Mode.getMode(packet.d());
+		updateType = StructureUpdateType.getUpdateType(packet.c());
+		mode = PacketUtils.toUsageMode(packet.d());
 		name = packet.e();
 		offset = PacketUtils.toLocation(packet.f(), injectedPlayer.getWorld());
 		size = PacketUtils.toLocation(packet.g(), injectedPlayer.getWorld());
-		mirror = Mirror.getMirror(packet.h());
-		rotation = Rotation.getRotation(packet.i());
+		mirror = PacketUtils.toMirror(packet.h());
+		rotation = PacketUtils.toRotation(packet.i());
 		metadata = packet.j();
 		ignoreEntities = packet.k();
 		showAir = packet.l();
@@ -74,10 +79,21 @@ public class PacketPlayInUpdateStructureBlockEvent extends PacketPlayInEvent imp
 		seed = packet.o();
 	}
 
-	public PacketPlayInUpdateStructureBlockEvent(Player injectedPlayer, Location blockLocation, UpdateType updateType,
-			Mode mode, String name, Location offset, Location size, Mirror mirror, Rotation rotation, String metadata,
+	public PacketPlayInUpdateStructureBlockEvent(Player injectedPlayer, Location blockLocation, StructureUpdateType updateType,
+			UsageMode mode, String name, Location offset, Location size, Mirror mirror, Rotation rotation, String metadata,
 			boolean ignoreEntities, boolean showAir, boolean showBoundingBox, float integrity, long seed) {
 		super(injectedPlayer);
+
+		Validate.notNull(blockLocation);
+		Validate.notNull(updateType);
+		Validate.notNull(mode);
+		Validate.notNull(name);
+		Validate.notNull(offset);
+		Validate.notNull(size);
+		Validate.notNull(mirror);
+		Validate.notNull(rotation);
+		Validate.notNull(metadata);
+
 		this.blockLocation = blockLocation;
 		this.updateType = updateType;
 		this.mode = mode;
@@ -99,11 +115,11 @@ public class PacketPlayInUpdateStructureBlockEvent extends PacketPlayInEvent imp
 		return blockLocation;
 	}
 
-	public UpdateType getUpdateType() {
+	public StructureUpdateType getUpdateType() {
 		return updateType;
 	}
 
-	public Mode getMode() {
+	public UsageMode getMode() {
 		return mode;
 	}
 
@@ -156,12 +172,12 @@ public class PacketPlayInUpdateStructureBlockEvent extends PacketPlayInEvent imp
 		final PacketPlayInStruct packet = new PacketPlayInStruct();
 		Field.set(packet, "a", PacketUtils.toBlockPosition(blockLocation));
 		Field.set(packet, "b", updateType.getNMS());
-		Field.set(packet, "c", mode.getNMS());
+		Field.set(packet, "c", PacketUtils.toBlockPropertyStructureMode(mode));
 		Field.set(packet, "d", name);
 		Field.set(packet, "e", PacketUtils.toBlockPosition(offset));
 		Field.set(packet, "f", PacketUtils.toBlockPosition(size));
-		Field.set(packet, "g", mirror.getNMS());
-		Field.set(packet, "h", rotation.getNMS());
+		Field.set(packet, "g", PacketUtils.toEnumBlockMirror(mirror));
+		Field.set(packet, "h", PacketUtils.toEnumBlockRotation(rotation));
 		Field.set(packet, "i", metadata);
 		Field.set(packet, "j", ignoreEntities);
 		Field.set(packet, "k", showAir);
@@ -179,96 +195,6 @@ public class PacketPlayInUpdateStructureBlockEvent extends PacketPlayInEvent imp
 	@Override
 	public String getProtocolURLString() {
 		return "https://wiki.vg/Protocol#Update_Structure_Block";
-	}
-
-	public enum UpdateType {
-
-		UPDATE_DATA(net.minecraft.server.v1_16_R3.TileEntityStructure.UpdateType.UPDATE_DATA),
-		SAVE_AREA(net.minecraft.server.v1_16_R3.TileEntityStructure.UpdateType.SAVE_AREA),
-		LOAD_AREA(net.minecraft.server.v1_16_R3.TileEntityStructure.UpdateType.LOAD_AREA),
-		SCAN_AREA(net.minecraft.server.v1_16_R3.TileEntityStructure.UpdateType.SCAN_AREA);
-
-		private net.minecraft.server.v1_16_R3.TileEntityStructure.UpdateType nms;
-
-		UpdateType(net.minecraft.server.v1_16_R3.TileEntityStructure.UpdateType nms) {
-			this.nms = nms;
-		}
-
-		public net.minecraft.server.v1_16_R3.TileEntityStructure.UpdateType getNMS() {
-			return nms;
-		}
-
-		public static UpdateType getUpdateType(net.minecraft.server.v1_16_R3.TileEntityStructure.UpdateType nms) {
-			for (UpdateType type : values())
-				if (type.getNMS().equals(nms))
-					return type;
-			return null;
-		}
-	}
-
-	public enum Mode {
-		SAVE(BlockPropertyStructureMode.SAVE), LOAD(BlockPropertyStructureMode.LOAD),
-		CORNER(BlockPropertyStructureMode.CORNER), DATA(BlockPropertyStructureMode.DATA);
-
-		private BlockPropertyStructureMode nms;
-
-		Mode(BlockPropertyStructureMode nms) {
-			this.nms = nms;
-		}
-
-		public BlockPropertyStructureMode getNMS() {
-			return nms;
-		}
-
-		public static Mode getMode(BlockPropertyStructureMode nms) {
-			for (Mode mode : values())
-				if (mode.getNMS().equals(nms))
-					return mode;
-			return null;
-		}
-	}
-
-	public enum Mirror {
-		NONE(EnumBlockMirror.NONE), LEFT_RIGHT(EnumBlockMirror.LEFT_RIGHT), FRONT_BACK(EnumBlockMirror.FRONT_BACK);
-
-		private EnumBlockMirror nms;
-
-		Mirror(EnumBlockMirror nms) {
-			this.nms = nms;
-		}
-
-		public EnumBlockMirror getNMS() {
-			return nms;
-		}
-
-		public static Mirror getMirror(EnumBlockMirror nms) {
-			for (Mirror mirror : values())
-				if (mirror.getNMS().equals(nms))
-					return mirror;
-			return null;
-		}
-	}
-
-	public enum Rotation {
-		NONE(EnumBlockRotation.NONE), CLOCKWISE_90(EnumBlockRotation.CLOCKWISE_90),
-		CLOCKWISE_180(EnumBlockRotation.CLOCKWISE_180), COUNTERCLOCKWISE_90(EnumBlockRotation.COUNTERCLOCKWISE_90);
-
-		private EnumBlockRotation nms;
-
-		Rotation(EnumBlockRotation nms) {
-			this.nms = nms;
-		}
-
-		public EnumBlockRotation getNMS() {
-			return nms;
-		}
-
-		public static Rotation getRotation(EnumBlockRotation nms) {
-			for (Rotation rotation : values())
-				if (rotation.getNMS().equals(nms))
-					return rotation;
-			return null;
-		}
 	}
 
 }

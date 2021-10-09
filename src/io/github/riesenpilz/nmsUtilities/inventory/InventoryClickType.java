@@ -1,5 +1,13 @@
 package io.github.riesenpilz.nmsUtilities.inventory;
 
+import org.apache.commons.lang.Validate;
+
+/**
+ * Represents {@link net.minecraft.server.v1_16_R3.InventoryClickType}.
+ * Only used by packets.
+ *
+ *@see PacketPlayInInventoryClickEvent
+ */
 public enum InventoryClickType {
 
 	PICKUP(net.minecraft.server.v1_16_R3.InventoryClickType.PICKUP),
@@ -10,7 +18,7 @@ public enum InventoryClickType {
 	QUICK_CRAFT(net.minecraft.server.v1_16_R3.InventoryClickType.QUICK_CRAFT),
 	PICKUP_ALL(net.minecraft.server.v1_16_R3.InventoryClickType.PICKUP_ALL);
 
-	private net.minecraft.server.v1_16_R3.InventoryClickType nms;
+	private final net.minecraft.server.v1_16_R3.InventoryClickType nms;
 
 	private InventoryClickType(net.minecraft.server.v1_16_R3.InventoryClickType nms) {
 		this.nms = nms;
@@ -21,9 +29,10 @@ public enum InventoryClickType {
 	}
 
 	public static InventoryClickType getInventoryClickType(net.minecraft.server.v1_16_R3.InventoryClickType nms) {
+		Validate.notNull(nms);
 		for (InventoryClickType type : values())
 			if (type.getNMS().equals(nms))
 				return type;
-		return null;
+		throw new IllegalArgumentException();
 	}
 }

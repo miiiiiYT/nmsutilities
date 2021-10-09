@@ -162,7 +162,7 @@ public class Block {
 	 * @return the chunk wrapper
 	 */
 	public Chunk getChunk() {
-		return new Chunk(block.getChunk());
+		return Chunk.getChunkOf(block.getChunk());
 	}
 
 	/**
@@ -236,9 +236,10 @@ public class Block {
 					drops.add(ItemStack.getItemStack((NBTTag) nbtItemStack));
 		return drops;
 	}
-	
+
 	/**
 	 * Tests if this block has custom drops.
+	 * 
 	 * @return true if this block has custom drops
 	 */
 	public boolean hasDrops() {
@@ -253,16 +254,25 @@ public class Block {
 	public Location getLocation() {
 		return block.getLocation();
 	}
-	
+
 	/**
 	 * Gets the Bukkit block
+	 * 
 	 * @return the Bukkit block
 	 */
 	public org.bukkit.block.Block getBukkit() {
 		return block;
 	}
-	
+
+	/**
+	 * Sets the material to {@code AIR} and drops {@code getDrops()} or the normal
+	 * block drops if it has no custom drops.
+	 * 
+	 * @param player the player who broke the block
+	 * @return true if the event is cancelled and the block isn't broken
+	 */
 	public boolean breakBlock(Player player) {
+		Validate.notNull(player);
 		BlockBreakEvent e = new BlockBreakEvent(block, player.getBukkit());
 		if (!e.isCancelled())
 			setMaterial(Material.AIR);

@@ -23,15 +23,19 @@ import io.github.riesenpilz.nmsUtilities.nbt.NBTTagList;
 import io.github.riesenpilz.nmsUtilities.nbt.NBTType;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 
+/**
+ * Represents a {@link net.minecraft.server.v1_16_R3.ItemStack}
+ *
+ */
 public class ItemStack {
 	private net.minecraft.server.v1_16_R3.ItemStack nms;
 
 	protected ItemStack(@Nullable org.bukkit.inventory.ItemStack bukkit) {
-		nms = nms == null ? net.minecraft.server.v1_16_R3.ItemStack.b : CraftItemStack.asNMSCopy(bukkit);
+		this(bukkit == null ? null : CraftItemStack.asNMSCopy(bukkit));
 	}
 
 	public ItemStack(@Nullable Material material) {
-		nms = CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(material == null ? Material.AIR : material));
+		this(new org.bukkit.inventory.ItemStack(material == null ? Material.AIR : material));
 	}
 
 	protected ItemStack(@Nullable net.minecraft.server.v1_16_R3.ItemStack nms) {
@@ -50,26 +54,52 @@ public class ItemStack {
 		return nms;
 	}
 
+	/**
+	 * Gets the nbtTag of the itemStack where all the data is stored.<br>
+	 * <i>does not contain the count and the material. If you want them too, use
+	 * {@link ItemStack#toNBTTag()} </i>
+	 * 
+	 * @return a nbtTag with all the data of the itemStack.
+	 */
 	public NBTTag getTag() {
 		return NBTTag.getNBTTagOf(getNMS().getOrCreateTag());
 	}
 
-	public void setTag(NBTTag nbtTag) {
-		Validate.notNull(nbtTag);
-		getNMS().setTag(nbtTag.getNMS());
+	/**
+	 * Sets the nbtTag of the itemStack where all the data is stored.<br>
+	 * <i>If you want to change the count and the material too, use
+	 * {@link ItemStack#getItemStack(NBTTag)}</i>
+	 * 
+	 * @param nbtTag the tag to set.
+	 */
+	public void setTag(@Nullable NBTTag nbtTag) {
+		nms.setTag(nbtTag == null ? null : nbtTag.getNMS());
 	}
 
 	public boolean isEnchanted() {
-		return getNMS().hasEnchantments();
+		return nms.hasEnchantments();
 	}
 
+	/**
+	 * Sets or removes the glow effect from the itemStack. This doesn't add any
+	 * enchantments!<br>
+	 * <i>If glow is set to false, all enchantments will be removed.</i>
+	 * 
+	 * @param glow
+	 */
 	public void setEnchanted(boolean glow) {
-		if (glow && !getNMS().hasEnchantments())
+		if (glow && !nms.hasEnchantments())
 			getTag().setNBTTagList("ench", new NBTTagList());
 		else if (!glow && getNMS().hasEnchantments())
 			getNMS().removeTag("ench");
 	}
 
+	/**
+	 * Saves the itemStack to an NBTTag. You can load it again with
+	 * {@link ItemStack#getItemStack(NBTTag)}
+	 * 
+	 * @return an NBTTag with the tags, material and count of the itemStack
+	 */
 	public NBTTag toNBTTag() {
 		NBTTag tag = new NBTTag();
 		tag.setNBTTag("tag", getTag());
@@ -133,9 +163,11 @@ public class ItemStack {
 
 	public void setSkullTexture(String url) {
 		Validate.isTrue(getMaterial().equals(Material.PLAYER_HEAD));
+		
 		GameProfile profile = new GameProfile(UUID.randomUUID(), null);
 		byte[] encodedData = base64.encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
 		profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
+		
 		SkullMeta headMeta = (SkullMeta) getItemMeta();
 		Field.set(headMeta, "profile", profile);
 		setItemMeta(headMeta);
@@ -147,13 +179,14 @@ public class ItemStack {
 		GameProfile profile = Field.get((SkullMeta) getItemMeta(), "profile", GameProfile.class);
 		Collection<Property> properties = profile.getProperties().get("textures");
 		Property property = Iterables.getFirst(properties, null);
-		Validate.notNull(property, "Skull doesnt has a texture");
+		
+		Validate.notNull(property, "Skull doesn't has a texture");
 		byte[] decodedData = base64.decode(property.getValue().getBytes());
 		return new String(decodedData).substring("{textures:{SKIN:{url:\"".length() - 1, "\"}}}".length() - 1);
 	}
 
 	public static boolean isItemStackNBT(NBTBase nbtItemStack) {
-		if (!nbtItemStack.getType().equals(NBTType.NBT_TAG))
+		if (!nbtItemStack.is(NBTType.NBT_TAG))
 			return false;
 		NBTTag nbtTagItemStack = (NBTTag) nbtItemStack;
 		return nbtTagItemStack.hasKeyWithValueType("id", NBTType.INT)

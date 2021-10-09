@@ -1,7 +1,8 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
-import org.bukkit.entity.Player;
+import org.apache.commons.lang.Validate;
 
+import io.github.riesenpilz.nmsUtilities.entity.player.Player;
 import io.github.riesenpilz.nmsUtilities.entity.player.PlayerAction;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -24,7 +25,6 @@ import net.minecraft.server.v1_16_R3.PacketPlayInEntityAction;
  */
 public class PacketPlayInActionEvent extends PacketPlayInEntityEvent {
 
-
 	private PlayerAction action;
 
 	/**
@@ -34,17 +34,25 @@ public class PacketPlayInActionEvent extends PacketPlayInEntityEvent {
 	 */
 	private int jumpBoost;
 
-	public PacketPlayInActionEvent(Player injectedPlayer, PacketPlayInEntityAction packet) {
+	public PacketPlayInActionEvent(org.bukkit.entity.Player injectedPlayer, PacketPlayInEntityAction packet) {
 		super(injectedPlayer, packet);
+		Validate.notNull(packet);
 		action = PlayerAction.getPlayerAction(packet.c());
 		jumpBoost = packet.d();
 
 	}
 
-	public PacketPlayInActionEvent(Player injectedPlayer, int playerId, PlayerAction action, int jumpBoost) {
+	public PacketPlayInActionEvent(org.bukkit.entity.Player injectedPlayer, int playerId, PlayerAction action,
+			int jumpBoost) {
 		super(injectedPlayer, playerId);
+		Validate.notNull(action);
 		this.action = action;
 		this.jumpBoost = jumpBoost;
+	}
+
+	@Override
+	public Player getEntity() {
+		return (Player) super.getEntity();
 	}
 
 	public PlayerAction getAction() {

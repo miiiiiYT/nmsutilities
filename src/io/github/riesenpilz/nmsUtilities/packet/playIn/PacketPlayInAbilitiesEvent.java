@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.entity.player.PlayerAbilities;
@@ -26,11 +27,13 @@ public class PacketPlayInAbilitiesEvent extends PacketPlayInEvent {
 
 	public PacketPlayInAbilitiesEvent(Player injectedPlayer, PacketPlayInAbilities packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		isFlying = packet.isFlying();
 	}
 
 	public PacketPlayInAbilitiesEvent(Player injectedPlayer, PlayerAbilities playerAbilities) {
 		super(injectedPlayer);
+		Validate.notNull(playerAbilities);
 		isFlying = playerAbilities.isFlying();
 	}
 

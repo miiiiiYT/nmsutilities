@@ -2,9 +2,11 @@ package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nmsUtilities.advancemts.AdvancementStatus;
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -23,7 +25,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayInAdvancements;
  */
 public class PacketPlayInAdvancementsEvent extends PacketPlayInEvent {
 
-	private Status status;
+	private AdvancementStatus status;
 
 	/**
 	 * Only present if status is Opened tab.
@@ -33,12 +35,15 @@ public class PacketPlayInAdvancementsEvent extends PacketPlayInEvent {
 
 	public PacketPlayInAdvancementsEvent(Player injectedPlayer, PacketPlayInAdvancements packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		tabId = packet.d() == null ? null : PacketUtils.toNamespacedKey(packet.d());
-		status = Status.getStatus(packet.c());
+		status = AdvancementStatus.getAdvancementStatus(packet.c());
 	}
 
-	public PacketPlayInAdvancementsEvent(Player injectedPlayer, Status status, @Nullable NamespacedKey tabId) {
+	public PacketPlayInAdvancementsEvent(Player injectedPlayer, AdvancementStatus status,
+			@Nullable NamespacedKey tabId) {
 		super(injectedPlayer);
+		Validate.notNull(status);
 		this.tabId = tabId;
 		this.status = status;
 	}
@@ -48,7 +53,7 @@ public class PacketPlayInAdvancementsEvent extends PacketPlayInEvent {
 		return tabId;
 	}
 
-	public Status getStatus() {
+	public AdvancementStatus getStatus() {
 		return status;
 	}
 
@@ -56,7 +61,7 @@ public class PacketPlayInAdvancementsEvent extends PacketPlayInEvent {
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInAdvancements packet = new PacketPlayInAdvancements();
 		Field.set(packet, "a", status.getNMS());
-		Field.set(packet, "b", PacketUtils.toMinecraftKey(tabId));
+		Field.set(packet, "b", tabId == null ? null : PacketUtils.toMinecraftKey(tabId));
 		return packet;
 	}
 
@@ -70,26 +75,4 @@ public class PacketPlayInAdvancementsEvent extends PacketPlayInEvent {
 		return "https://wiki.vg/Protocol#Advancement_Tab";
 	}
 
-	public enum Status {
-		OPENED_TAB(PacketPlayInAdvancements.Status.OPENED_TAB),
-		CLOSED_SCREEN(PacketPlayInAdvancements.Status.CLOSED_SCREEN);
-
-		private PacketPlayInAdvancements.Status nms;
-
-		Status(PacketPlayInAdvancements.Status nms) {
-			this.nms = nms;
-		}
-
-		public PacketPlayInAdvancements.Status getNMS() {
-			return nms;
-		}
-
-		static Status getStatus(PacketPlayInAdvancements.Status nms) {
-			for (Status status : values())
-				if (status.getNMS().equals(nms))
-					return status;
-			return null;
-		}
-
-	}
 }

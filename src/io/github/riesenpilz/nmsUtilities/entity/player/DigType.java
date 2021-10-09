@@ -1,9 +1,16 @@
 package io.github.riesenpilz.nmsUtilities.entity.player;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.block.BlockFace;
 
 import net.minecraft.server.v1_16_R3.PacketPlayInBlockDig.EnumPlayerDigType;
 
+/**
+ * Represents {@link EnumPlayerDigType}. Only used by packets. 
+ * @see PacketPlayInBlockDigEvent
+ * @see PacketPlayOutPlayerDiggingEvent
+ *
+ */
 public enum DigType {
 
 	START_DESTROY_BLOCK(EnumPlayerDigType.START_DESTROY_BLOCK),
@@ -39,7 +46,7 @@ public enum DigType {
 	 */
 	SWAP_ITEM_WITH_OFFHAND(EnumPlayerDigType.SWAP_ITEM_WITH_OFFHAND);
 
-	private EnumPlayerDigType nms;
+	private final EnumPlayerDigType nms;
 
 	private DigType(EnumPlayerDigType nms) {
 		this.nms = nms;
@@ -50,9 +57,10 @@ public enum DigType {
 	}
 
 	public static DigType getPlayerDigType(EnumPlayerDigType nms) {
+		Validate.notNull(nms);
 		for (DigType clickType : values())
 			if (clickType.getNMS().equals(nms))
 				return clickType;
-		return null;
+		throw new IllegalArgumentException();
 	}
 }

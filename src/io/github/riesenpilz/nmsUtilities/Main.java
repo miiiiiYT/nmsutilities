@@ -31,7 +31,7 @@ public class Main extends JavaPlugin {
 	public void onDisable() {
 		for (org.bukkit.Chunk chunk : Chunk.nbtTags.keySet())
 			Chunk.getChunkOf(chunk).save();
-		for (Entity entity : WorldEntity.tags.keySet())
+		for (Entity entity : WorldEntity.ENTITY_TAGS.keySet())
 			WorldEntity.getWorldEntity(entity).getChunk().save();
 	}
 

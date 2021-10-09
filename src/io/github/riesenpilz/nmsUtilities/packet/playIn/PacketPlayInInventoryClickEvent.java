@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.inventory.InventoryClickType;
@@ -48,6 +49,7 @@ public class PacketPlayInInventoryClickEvent extends PacketPlayInInventoryEvent 
 
 	public PacketPlayInInventoryClickEvent(Player injectedPlayer, PacketPlayInWindowClick packet) {
 		super(injectedPlayer, packet.b());
+		Validate.notNull(packet);
 		clickType = InventoryClickType.getInventoryClickType(packet.g());
 		itemStack = ItemStack.getItemStackOf(packet.f());
 		action = packet.e();
@@ -58,6 +60,8 @@ public class PacketPlayInInventoryClickEvent extends PacketPlayInInventoryEvent 
 	public PacketPlayInInventoryClickEvent(Player injectedPlayer, InventoryClickType clickType, ItemStack itemStack,
 			short action, int inventoryId, int slot, int button) {
 		super(injectedPlayer, inventoryId);
+		Validate.notNull(clickType);
+		Validate.notNull(itemStack);
 		this.clickType = clickType;
 		this.itemStack = itemStack;
 		this.action = action;

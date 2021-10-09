@@ -2,6 +2,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
 import java.util.UUID;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -38,11 +39,13 @@ public class PacketPlayInSpectateEvent extends PacketPlayInEvent {
 
 	public PacketPlayInSpectateEvent(Player injectedPlayer, PacketPlayInSpectate packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		targetUUID = Field.get(packet, "a", UUID.class);
 	}
 
 	public PacketPlayInSpectateEvent(Player injectedPlayer, UUID targetUUID) {
 		super(injectedPlayer);
+		Validate.notNull(targetUUID);
 		this.targetUUID = targetUUID;
 	}
 

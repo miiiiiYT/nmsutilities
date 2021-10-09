@@ -60,7 +60,7 @@ public abstract class PacketEvent extends Event {
 	public PacketType getPacketType() {
 		return packetType;
 	}
-	
+
 	public URL getProtocolURL() {
 		try {
 			return new URL(getProtocolURLString());
@@ -82,28 +82,6 @@ public abstract class PacketEvent extends Event {
 
 	public void setCanceled(boolean canceled) {
 		this.canceled = canceled;
-	}
-
-	public enum PacketType {
-		HANDSHAKING_IN("handshaking", "server"), LOGIN_IN("login", "server"), LOGIN_OUT("login", "client"),
-		PLAY_IN("play", "server"), PLAY_OUT("play", "client"), STATUS_IN("status", "server"),
-		STATUS_OUT("status", "client");
-
-		private final String boundTo;
-		private final String state;
-
-		PacketType(String state, String boundTo) {
-			this.state = state;
-			this.boundTo = boundTo;
-		}
-
-		public String getBoundTo() {
-			return boundTo;
-		}
-
-		public String getState() {
-			return state;
-		}
 	}
 
 }

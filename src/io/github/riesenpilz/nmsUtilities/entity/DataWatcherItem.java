@@ -23,6 +23,12 @@ import net.minecraft.server.v1_16_R3.ParticleParam;
 import net.minecraft.server.v1_16_R3.Vector3f;
 import net.minecraft.server.v1_16_R3.VillagerData;
 
+/**
+ * Represents a {@link DataWatcher.Item}. Only used by packets.
+ * 
+ * @see PacketPlayOutEntityMetadataEvent
+ * @param <T> the type of the value
+ */
 public class DataWatcherItem<T> {
 
 	private int index;
@@ -30,10 +36,12 @@ public class DataWatcherItem<T> {
 
 	public DataWatcherItem(int index, T value) {
 		this.index = index;
+		Validate.notNull(value);
 		this.value = value;
 	}
 
 	protected DataWatcherItem(DataWatcher.Item<T> nms) {
+		Validate.notNull(nms);
 		index = nms.a().a();
 		value = nms.b();
 	}
@@ -55,6 +63,7 @@ public class DataWatcherItem<T> {
 	}
 
 	public void setValue(T value) {
+		Validate.notNull(value);
 		this.value = value;
 	}
 

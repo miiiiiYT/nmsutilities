@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -28,6 +29,7 @@ public class PacketPlayInEntityNBTQueryEvent extends PacketPlayInEntityEvent {
 
 	public PacketPlayInEntityNBTQueryEvent(Player injectedPlayer, PacketPlayInEntityNBTQuery packet) {
 		super(injectedPlayer, packet.c());
+		Validate.notNull(packet);
 		transactionID = packet.b();
 	}
 

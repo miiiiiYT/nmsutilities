@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
@@ -71,12 +72,15 @@ public class PacketPlayInCustomPayloadEvent extends PacketPlayInEvent {
 
 	public PacketPlayInCustomPayloadEvent(Player injectedPlayer, PacketPlayInCustomPayload packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		channel = PacketUtils.toNamespacedKey(packet.tag);
 		data = new PacketDataSerializer(packet.data);
 	}
 
 	public PacketPlayInCustomPayloadEvent(Player injectedPlayer, NamespacedKey channel, PacketDataSerializer data) {
 		super(injectedPlayer);
+		Validate.notNull(channel);
+		Validate.notNull(data);
 		this.channel = channel;
 		this.data = data;
 	}

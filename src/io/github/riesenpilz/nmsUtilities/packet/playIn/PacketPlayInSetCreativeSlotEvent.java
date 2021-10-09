@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.inventory.ItemStack;
@@ -50,12 +51,14 @@ public class PacketPlayInSetCreativeSlotEvent extends PacketPlayInEvent {
 
 	public PacketPlayInSetCreativeSlotEvent(Player injectedPlayer, PacketPlayInSetCreativeSlot packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		slot = packet.b();
 		itemStack = ItemStack.getItemStackOf(packet.getItemStack());
 	}
 
 	public PacketPlayInSetCreativeSlotEvent(Player injectedPlayer, int slot, org.bukkit.inventory.ItemStack itemStack) {
 		super(injectedPlayer);
+		Validate.notNull(itemStack);
 		this.slot = slot;
 		this.itemStack = ItemStack.getItemStackOf(itemStack);
 	}

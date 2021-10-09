@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playIn;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -34,6 +35,7 @@ public class PacketPlayInGenerateStructureEvent extends PacketPlayInEvent implem
 
 	public PacketPlayInGenerateStructureEvent(Player injectedPlayer, PacketPlayInJigsawGenerate packet) {
 		super(injectedPlayer);
+		Validate.notNull(packet);
 		blockLocation = PacketUtils.toLocation(packet.b(), injectedPlayer.getWorld());
 		levels = packet.c();
 		keepJigsaws = packet.d();
@@ -42,6 +44,7 @@ public class PacketPlayInGenerateStructureEvent extends PacketPlayInEvent implem
 	public PacketPlayInGenerateStructureEvent(Player injectedPlayer, Location blockLocation, int levels,
 			boolean keepJigsaws) {
 		super(injectedPlayer);
+		Validate.notNull(blockLocation);
 		this.blockLocation = blockLocation;
 		this.levels = levels;
 		this.keepJigsaws = keepJigsaws;

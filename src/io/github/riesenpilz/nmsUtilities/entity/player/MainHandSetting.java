@@ -1,11 +1,18 @@
 package io.github.riesenpilz.nmsUtilities.entity.player;
 
+import org.apache.commons.lang.Validate;
+
 import net.minecraft.server.v1_16_R3.EnumMainHand;
 
+/**
+ * Represents {@link MainHandSetting}. Only used by packets.
+ * 
+ * @see PacketPlayInSettingsEvent
+ */
 public enum MainHandSetting {
 	LEFT(EnumMainHand.LEFT), RIGHT(EnumMainHand.RIGHT);
 
-	private EnumMainHand nms;
+	private final EnumMainHand nms;
 
 	private MainHandSetting(EnumMainHand nms) {
 		this.nms = nms;
@@ -16,9 +23,10 @@ public enum MainHandSetting {
 	}
 
 	public static MainHandSetting getMainHand(EnumMainHand nms) {
+		Validate.notNull(nms);
 		for (MainHandSetting mainHand : MainHandSetting.values())
 			if (mainHand.getNMS().equals(nms))
 				return mainHand;
-		return null;
+		throw new IllegalArgumentException();
 	}
 }
