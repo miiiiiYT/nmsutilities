@@ -3,6 +3,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.map.MapIcon;
@@ -72,6 +73,9 @@ public class PacketPlayOutMapDataEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutMapDataEvent(Player injectedPlayer, PacketPlayOutMap packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		mapID = Field.get(packet, "a", int.class);
 		scale = Field.get(packet, "b", byte.class);
 		locked = Field.get(packet, "c", boolean.class);
@@ -91,6 +95,10 @@ public class PacketPlayOutMapDataEvent extends PacketPlayOutEvent {
 	public PacketPlayOutMapDataEvent(Player injectedPlayer, int mapID, byte scale, boolean locked,
 			boolean trackingPosition, MapIcon[] icons, int columns, int rows, int x, int z, byte[] data) {
 		super(injectedPlayer);
+
+		Validate.notNull(icons);
+		Validate.notNull(data);
+
 		this.mapID = mapID;
 		this.scale = scale;
 		this.locked = locked;

@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.packet.HasText;
@@ -31,11 +32,17 @@ public class PacketPlayOutDisconnectEvent extends PacketPlayOutEvent implements 
 
 	public PacketPlayOutDisconnectEvent(Player injectedPlayer, PacketPlayOutKickDisconnect packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		reason = Field.get(packet, "a", IChatBaseComponent.class);
 	}
 
 	public PacketPlayOutDisconnectEvent(Player injectedPlayer, IChatBaseComponent reason) {
 		super(injectedPlayer);
+
+		Validate.notNull(reason);
+
 		this.reason = reason;
 	}
 

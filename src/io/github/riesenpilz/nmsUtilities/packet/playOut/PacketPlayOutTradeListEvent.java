@@ -2,6 +2,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -19,9 +20,6 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutOpenWindowMerchant;
  * Packet ID: 0x28<br>
  * State: Play<br>
  * Bound To: Client
- * 
- * @author Martin
- *
  */
 public class PacketPlayOutTradeListEvent extends PacketPlayOutInventoryEvent {
 
@@ -65,6 +63,9 @@ public class PacketPlayOutTradeListEvent extends PacketPlayOutInventoryEvent {
 	public PacketPlayOutTradeListEvent(Player injectedPlayer, int inventoryId, MerchantRecipeList tardeList,
 			int villagerLevel, int xp, boolean regularVillager, boolean restock) {
 		super(injectedPlayer, inventoryId);
+
+		Validate.notNull(tardeList);
+
 		this.tardeList = tardeList;
 		this.villagerLevel = villagerLevel;
 		this.xp = xp;
@@ -75,9 +76,11 @@ public class PacketPlayOutTradeListEvent extends PacketPlayOutInventoryEvent {
 	public MerchantRecipeList getTardeList() {
 		return tardeList;
 	}
+
 	public ArrayList<MerchantRecipe> getTardeArray() {
 		return tardeList;
 	}
+
 	public int getVillagerLevel() {
 		return villagerLevel;
 	}

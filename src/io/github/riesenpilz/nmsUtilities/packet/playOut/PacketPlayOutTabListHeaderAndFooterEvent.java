@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -24,11 +25,13 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutPlayerListHeaderFooter;
 public class PacketPlayOutTabListHeaderAndFooterEvent extends PacketPlayOutEvent {
 
 	public IChatBaseComponent header;
-    public IChatBaseComponent footer;
-	
+	public IChatBaseComponent footer;
+
 	public PacketPlayOutTabListHeaderAndFooterEvent(Player injectedPlayer, PacketPlayOutPlayerListHeaderFooter packet) {
 		super(injectedPlayer);
-		
+
+		Validate.notNull(packet);
+
 		header = Field.get(packet, "a", IChatBaseComponent.class);
 		footer = Field.get(packet, "b", IChatBaseComponent.class);
 	}
@@ -36,6 +39,10 @@ public class PacketPlayOutTabListHeaderAndFooterEvent extends PacketPlayOutEvent
 	public PacketPlayOutTabListHeaderAndFooterEvent(Player injectedPlayer, IChatBaseComponent header,
 			IChatBaseComponent footer) {
 		super(injectedPlayer);
+
+		Validate.notNull(header);
+		Validate.notNull(footer);
+
 		this.header = header;
 		this.footer = footer;
 	}

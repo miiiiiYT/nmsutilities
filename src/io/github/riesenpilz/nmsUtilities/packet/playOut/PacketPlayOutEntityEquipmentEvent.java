@@ -3,6 +3,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import com.mojang.datafixers.util.Pair;
@@ -31,8 +32,9 @@ public class PacketPlayOutEntityEquipmentEvent extends PacketPlayOutEntityEvent 
 	@SuppressWarnings("unchecked")
 	public PacketPlayOutEntityEquipmentEvent(Player injectedPlayer, PacketPlayOutEntityEquipment packet) {
 		super(injectedPlayer, packet);
-		
-		final List<Pair<EnumItemSlot, net.minecraft.server.v1_16_R3.ItemStack>> nms = Field.get(packet, "b", List.class);
+
+		final List<Pair<EnumItemSlot, net.minecraft.server.v1_16_R3.ItemStack>> nms = Field.get(packet, "b",
+				List.class);
 		equimpent = new ArrayList<>();
 		for (Pair<EnumItemSlot, net.minecraft.server.v1_16_R3.ItemStack> nmsEquipment : nms)
 			equimpent.add(new Equipment(nmsEquipment));
@@ -40,6 +42,9 @@ public class PacketPlayOutEntityEquipmentEvent extends PacketPlayOutEntityEvent 
 
 	public PacketPlayOutEntityEquipmentEvent(Player injectedPlayer, int entityId, List<Equipment> equimpent) {
 		super(injectedPlayer, entityId);
+
+		Validate.notNull(equimpent);
+
 		this.equimpent = equimpent;
 	}
 

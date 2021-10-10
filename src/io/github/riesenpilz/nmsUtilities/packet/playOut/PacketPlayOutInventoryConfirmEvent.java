@@ -29,6 +29,7 @@ public class PacketPlayOutInventoryConfirmEvent extends PacketPlayOutInventoryEv
 
 	public PacketPlayOutInventoryConfirmEvent(Player injectedPlayer, PacketPlayOutTransaction packet) {
 		super(injectedPlayer, packet);
+
 		actionNumber = Field.get(packet, "b", short.class);
 		accept = Field.get(packet, "c", boolean.class);
 	}
@@ -36,6 +37,7 @@ public class PacketPlayOutInventoryConfirmEvent extends PacketPlayOutInventoryEv
 	public PacketPlayOutInventoryConfirmEvent(Player injectedPlayer, int inventoryId, short actionNumber,
 			boolean accept) {
 		super(injectedPlayer, inventoryId);
+
 		this.actionNumber = actionNumber;
 		this.accept = accept;
 	}

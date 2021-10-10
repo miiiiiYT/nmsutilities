@@ -2,6 +2,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -24,18 +25,21 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutLightUpdate;
 public class PacketPlayOutUpdateLightEvent extends PacketPlayOutEvent {
 
 	private int chunkX;
-    private int chunkY;
-    private int c;
-    private int d;
-    private int e;
-    private int f;
-    private List<byte[]> skyLight;
-    private List<byte[]> blockLight;
-    private boolean trustEdges;
-	
+	private int chunkY;
+	private int c;
+	private int d;
+	private int e;
+	private int f;
+	private List<byte[]> skyLight;
+	private List<byte[]> blockLight;
+	private boolean trustEdges;
+
 	@SuppressWarnings("unchecked")
 	public PacketPlayOutUpdateLightEvent(Player injectedPlayer, PacketPlayOutLightUpdate packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		chunkX = Field.get(packet, "a", int.class);
 		chunkY = Field.get(packet, "b", int.class);
 		c = Field.get(packet, "c", int.class);
@@ -50,6 +54,10 @@ public class PacketPlayOutUpdateLightEvent extends PacketPlayOutEvent {
 	public PacketPlayOutUpdateLightEvent(Player injectedPlayer, int chunkX, int chunkY, int c, int d, int e, int f,
 			List<byte[]> skyLight, List<byte[]> blockLight, boolean trustEdges) {
 		super(injectedPlayer);
+
+		Validate.notNull(skyLight);
+		Validate.notNull(blockLight);
+
 		this.chunkX = chunkX;
 		this.chunkY = chunkY;
 		this.c = c;

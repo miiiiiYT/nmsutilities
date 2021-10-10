@@ -1,8 +1,10 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
+import io.github.riesenpilz.nmsUtilities.scoreboard.UpdateScoreMode;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
 import net.minecraft.server.v1_16_R3.PacketPlayOutScoreboardScore;
@@ -37,19 +39,27 @@ public class PacketPlayOutScoreboardUpdateScoreEvent extends PacketPlayOutEvent 
 	 * The score to be displayed next to the entry.
 	 */
 	private int value;
-	private Mode mode;
+	private UpdateScoreMode mode;
 
 	public PacketPlayOutScoreboardUpdateScoreEvent(Player injectedPlayer, PacketPlayOutScoreboardScore packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		entityName = Field.get(packet, "a", String.class);
 		entityName = Field.get(packet, "b", String.class);
 		value = Field.get(packet, "c", int.class);
-		mode = Mode.getMode(Field.get(packet, "d", Action.class));
+		mode = UpdateScoreMode.getMode(Field.get(packet, "d", Action.class));
 	}
 
 	public PacketPlayOutScoreboardUpdateScoreEvent(Player injectedPlayer, String entityName, String objectiveName,
-			int value, Mode mode) {
+			int value, UpdateScoreMode mode) {
 		super(injectedPlayer);
+
+		Validate.notNull(entityName);
+		Validate.notNull(objectiveName);
+		Validate.notNull(mode);
+
 		this.entityName = entityName;
 		this.objectiveName = objectiveName;
 		this.value = value;
@@ -68,7 +78,7 @@ public class PacketPlayOutScoreboardUpdateScoreEvent extends PacketPlayOutEvent 
 		return value;
 	}
 
-	public Mode getMode() {
+	public UpdateScoreMode getMode() {
 		return mode;
 	}
 
@@ -87,24 +97,4 @@ public class PacketPlayOutScoreboardUpdateScoreEvent extends PacketPlayOutEvent 
 		return "https://wiki.vg/Protocol#Update_Score";
 	}
 
-	public enum Mode {
-		CREATE_OR_UPDATE(Action.CHANGE), REMOVE(Action.REMOVE);
-
-		private Action nms;
-
-		private Mode(Action nms) {
-			this.nms = nms;
-		}
-
-		public Action getNMS() {
-			return nms;
-		}
-
-		public static Mode getMode(Action nms) {
-			for (Mode mode : values())
-				if (mode.getNMS().equals(nms))
-					return mode;
-			return null;
-		}
-	}
 }

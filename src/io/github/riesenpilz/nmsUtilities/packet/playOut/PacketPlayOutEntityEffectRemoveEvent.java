@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.EntityEffect;
 import org.bukkit.entity.Player;
 
@@ -26,12 +27,16 @@ public class PacketPlayOutEntityEffectRemoveEvent extends PacketPlayOutEntityEve
 
 	public PacketPlayOutEntityEffectRemoveEvent(Player injectedPlayer, PacketPlayOutRemoveEntityEffect packet) {
 		super(injectedPlayer, packet);
+
 		effect = PacketUtils.toEntityEffect(Field.get(packet, "b", MobEffectList.class));
 
 	}
 
 	public PacketPlayOutEntityEffectRemoveEvent(Player injectedPlayer, int entityId, EntityEffect effect) {
 		super(injectedPlayer, entityId);
+
+		Validate.notNull(effect);
+
 		this.effect = effect;
 	}
 

@@ -3,10 +3,12 @@ package io.github.riesenpilz.nmsUtilities.packet;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang.Validate;
+import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
 import org.bukkit.EntityEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Rotation;
 import org.bukkit.Sound;
@@ -24,10 +26,12 @@ import net.minecraft.server.v1_16_R3.BlockPropertyStructureMode;
 import net.minecraft.server.v1_16_R3.EntityTypes;
 import net.minecraft.server.v1_16_R3.EnumBlockMirror;
 import net.minecraft.server.v1_16_R3.EnumBlockRotation;
+import net.minecraft.server.v1_16_R3.EnumChatFormat;
 import net.minecraft.server.v1_16_R3.EnumDifficulty;
 import net.minecraft.server.v1_16_R3.EnumDirection;
 import net.minecraft.server.v1_16_R3.EnumGamemode;
 import net.minecraft.server.v1_16_R3.IRegistry;
+import net.minecraft.server.v1_16_R3.Item;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.MobEffectList;
 import net.minecraft.server.v1_16_R3.ResourceKey;
@@ -233,5 +237,25 @@ public class PacketUtils {
 			if (enumBlockRotation.name().equals(rotation.name()))
 				return enumBlockRotation;
 		throw new IllegalArgumentException();
+	}
+
+	public static ChatColor toColor(EnumChatFormat enumChatFormat) {
+		Validate.notNull(enumChatFormat);
+		return ChatColor.getByChar(Field.get(enumChatFormat, "character", char.class));
+	}
+
+	public static EnumChatFormat toEnumChatFormat(ChatColor chatColor) {
+		Validate.notNull(chatColor);
+		return EnumChatFormat.a(Field.get(chatColor, "intCode", int.class));
+	}
+
+	public static Material toMaterial(Item item) {
+		Validate.notNull(item);
+		return Field.getConstant(Material.class, "byId", Material[].class)[Item.getId(item)];
+	}
+	@SuppressWarnings("deprecation")
+	public static Item toItem(Material material) {
+		Validate.notNull(material);
+		return Item.getById(material.getId());
 	}
 }

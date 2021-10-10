@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.Object2IntMap;
 import org.bukkit.entity.Player;
 
@@ -29,7 +30,22 @@ public class PacketPlayOutStatisticsEvent extends PacketPlayOutEvent {
 	@SuppressWarnings("unchecked")
 	public PacketPlayOutStatisticsEvent(Player injectedPlayer, PacketPlayOutStatistic packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		statistics = (Object2IntMap<Statistic<?>>) new Field(packet.getClass(), "a").get(packet);
+	}
+
+	public PacketPlayOutStatisticsEvent(Player injectedPlayer, Object2IntMap<Statistic<?>> statistics) {
+		super(injectedPlayer);
+
+		Validate.notNull(statistics);
+
+		this.statistics = statistics;
+	}
+
+	public Object2IntMap<Statistic<?>> getStatistics() {
+		return statistics;
 	}
 
 	@Override
@@ -47,7 +63,4 @@ public class PacketPlayOutStatisticsEvent extends PacketPlayOutEvent {
 		return "https://wiki.vg/Protocol#Statistics";
 	}
 
-	public Object2IntMap<Statistic<?>> getStatistics() {
-		return statistics;
-	}
 }

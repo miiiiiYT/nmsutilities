@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
@@ -36,6 +37,8 @@ public class PacketPlayOutStopSoundEvent extends PacketPlayOutEvent {
 	public PacketPlayOutStopSoundEvent(Player injectedPlayer, PacketPlayOutStopSound packet) {
 		super(injectedPlayer);
 
+		Validate.notNull(packet);
+
 		sound = PacketUtils.toSound(Field.get(packet, "a", MinecraftKey.class));
 		category = PacketUtils
 				.toSoundCategory(Field.get(packet, "b", net.minecraft.server.v1_16_R3.SoundCategory.class));
@@ -43,6 +46,10 @@ public class PacketPlayOutStopSoundEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutStopSoundEvent(Player injectedPlayer, Sound sound, SoundCategory category) {
 		super(injectedPlayer);
+
+		Validate.notNull(sound);
+		Validate.notNull(category);
+
 		this.sound = sound;
 		this.category = category;
 	}

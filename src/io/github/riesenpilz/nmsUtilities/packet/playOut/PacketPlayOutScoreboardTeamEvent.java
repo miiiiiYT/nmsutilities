@@ -5,11 +5,17 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.packet.HasText;
+import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
+import io.github.riesenpilz.nmsUtilities.scoreboard.CollisionRule;
+import io.github.riesenpilz.nmsUtilities.scoreboard.FriendlyTag;
+import io.github.riesenpilz.nmsUtilities.scoreboard.ScoreboardTeamMode;
+import io.github.riesenpilz.nmsUtilities.scoreboard.NameTagVisibility;
 import net.minecraft.server.v1_16_R3.EnumChatFormat;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -24,9 +30,6 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutScoreboardTeam;
  * Packet ID: 0x55<br>
  * State: Play<br>
  * Bound To: Client
- * 
- * @author Martin
- *
  */
 public class PacketPlayOutScoreboardTeamEvent extends PacketPlayOutEvent implements HasText {
 
@@ -49,17 +52,20 @@ public class PacketPlayOutScoreboardTeamEvent extends PacketPlayOutEvent impleme
 	private CollisionRule rule;
 	private ChatColor teamColor;
 	private Collection<String> entities;
-	private Mode mode;
+	private ScoreboardTeamMode mode;
 	private Set<FriendlyTag> tags;
 
 	@SuppressWarnings("unchecked")
 	public PacketPlayOutScoreboardTeamEvent(Player injectedPlayer, PacketPlayOutScoreboardTeam packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		name = Field.get(packet, "a", String.class);
-		mode = Mode.getById(Field.get(packet, "b", int.class));
+		mode = ScoreboardTeamMode.getById(Field.get(packet, "b", int.class));
 		tags = new HashSet<>();
 		entities = new ArrayList<>();
-		if (mode.equals(Mode.CREATE) || mode.equals(Mode.UPDATE_INFO)) {
+		if (mode.equals(ScoreboardTeamMode.CREATE) || mode.equals(ScoreboardTeamMode.UPDATE_INFO)) {
 			displayName = Field.get(packet, "b", IChatBaseComponent.class);
 
 			int nmsTags = Field.get(packet, "j", int.class);
@@ -70,13 +76,12 @@ public class PacketPlayOutScoreboardTeamEvent extends PacketPlayOutEvent impleme
 			visibility = NameTagVisibility.getByName(Field.get(packet, "e", String.class));
 			rule = CollisionRule.getByName(Field.get(packet, "f", String.class));
 
-			teamColor = ChatColor
-					.getByChar(Field.get(Field.get(packet, "g", EnumChatFormat.class), "character", char.class));
+			teamColor = PacketUtils.toColor(Field.get(packet, "g", EnumChatFormat.class));
 			prefix = Field.get(packet, "b", IChatBaseComponent.class);
 			suffix = Field.get(packet, "b", IChatBaseComponent.class);
 		}
 
-		if (mode.equals(Mode.CREATE) || mode.equals(Mode.ADD_ENTITIES) || mode.equals(Mode.REMOVE_ENTITIES)) {
+		if (mode.equals(ScoreboardTeamMode.CREATE) || mode.equals(ScoreboardTeamMode.ADD_ENTITIES) || mode.equals(ScoreboardTeamMode.REMOVE_ENTITIES)) {
 			entities = Field.get(packet, "h", Collection.class);
 		}
 
@@ -84,8 +89,20 @@ public class PacketPlayOutScoreboardTeamEvent extends PacketPlayOutEvent impleme
 
 	public PacketPlayOutScoreboardTeamEvent(Player injectedPlayer, String name, IChatBaseComponent displayName,
 			IChatBaseComponent prefix, IChatBaseComponent suffix, NameTagVisibility visibility, CollisionRule rule,
-			ChatColor teamColor, Collection<String> entities, Mode mode, Set<FriendlyTag> tags) {
+			ChatColor teamColor, Collection<String> entities, ScoreboardTeamMode mode, Set<FriendlyTag> tags) {
 		super(injectedPlayer);
+
+		Validate.notNull(name);
+		Validate.notNull(displayName);
+		Validate.notNull(prefix);
+		Validate.notNull(suffix);
+		Validate.notNull(visibility);
+		Validate.notNull(rule);
+		Validate.notNull(teamColor);
+		Validate.notNull(entities);
+		Validate.notNull(mode);
+		Validate.notNull(tags);
+
 		this.name = name;
 		this.displayName = displayName;
 		this.prefix = prefix;
@@ -133,7 +150,7 @@ public class PacketPlayOutScoreboardTeamEvent extends PacketPlayOutEvent impleme
 		return entities;
 	}
 
-	public Mode getMode() {
+	public ScoreboardTeamMode getMode() {
 		return mode;
 	}
 
@@ -150,7 +167,7 @@ public class PacketPlayOutScoreboardTeamEvent extends PacketPlayOutEvent impleme
 		Field.set(packet, "d", suffix);
 		Field.set(packet, "e", visibility.getName());
 		Field.set(packet, "f", rule.getName());
-		Field.set(packet, "g", EnumChatFormat.a(Field.get(teamColor, "intCode", int.class)));
+		Field.set(packet, "g", PacketUtils.toEnumChatFormat(teamColor));
 		Field.set(packet, "h", entities);
 		Field.set(packet, "i", (int) mode.getId());
 		int nmsTags = 0;
@@ -170,89 +187,4 @@ public class PacketPlayOutScoreboardTeamEvent extends PacketPlayOutEvent impleme
 		return "https://wiki.vg/Protocol#Teams";
 	}
 
-	public enum Mode {
-		CREATE((byte) 0), REMOVE((byte) 1), UPDATE_INFO((byte) 2), ADD_ENTITIES((byte) 3), REMOVE_ENTITIES((byte) 4);
-
-		private byte id;
-
-		private Mode(byte id) {
-			this.id = id;
-		}
-
-		public byte getId() {
-			return id;
-		}
-
-		public static Mode getById(int id) {
-			for (Mode mode : values())
-				if (mode.getId() == id)
-					return mode;
-			return null;
-		}
-	}
-
-	public enum FriendlyTag {
-		FRIENDLY_FIRE(0x01), SEE_INVISIBLE_PLAYERS(0x02);
-
-		private int bit;
-
-		private FriendlyTag(int bit) {
-			this.bit = bit;
-		}
-
-		public int getBit() {
-			return bit;
-		}
-
-		public static FriendlyTag getByBitposition(int position) {
-			final double pow = Math.pow(2, position);
-			for (FriendlyTag tag : values())
-				if (tag.getBit() == pow)
-					return tag;
-			return null;
-		}
-	}
-
-	public enum NameTagVisibility {
-		ALWAYS("always"), HIDE_FOR_OTHER_TEAMS("hideForOtherTeams"), HIDE_FOR_OWN_TEAMS("hideForOwnTeam"),
-		NEVER("never");
-
-		private String name;
-
-		private NameTagVisibility(String name) {
-			this.name = name;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public static NameTagVisibility getByName(String name) {
-			for (NameTagVisibility rule : values())
-				if (rule.getName().equals(name))
-					return rule;
-			return null;
-		}
-	}
-
-	public enum CollisionRule {
-		ALWAYS("always"), PUSH_OTHER_TEAMS("pushOtherTeams"), PUSH_OWN_TEAMS("pushOwnTeam"), NEVER("never");
-
-		private String name;
-
-		private CollisionRule(String name) {
-			this.name = name;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public static CollisionRule getByName(String name) {
-			for (CollisionRule rule : values())
-				if (rule.getName().equals(name))
-					return rule;
-			return null;
-		}
-	}
 }

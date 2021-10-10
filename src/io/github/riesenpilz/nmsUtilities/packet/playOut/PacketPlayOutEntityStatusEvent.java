@@ -25,17 +25,19 @@ public class PacketPlayOutEntityStatusEvent extends PacketPlayOutEntityEvent {
 
 	/**
 	 * See Entity statuses for a list of which statuses are valid for each type of
-	 * entity.
+	 * entity. (https://wiki.vg/Entity_statuses )
 	 */
 	private byte entityStatus;
 
 	public PacketPlayOutEntityStatusEvent(Player injectedPlayer, PacketPlayOutEntityStatus packet) {
 		super(injectedPlayer, packet);
+
 		entityStatus = Field.get(packet, "b", byte.class);
 	}
 
 	public PacketPlayOutEntityStatusEvent(Player injectedPlayer, int entityId, byte entityStatus) {
 		super(injectedPlayer, entityId);
+
 		this.entityStatus = entityStatus;
 	}
 

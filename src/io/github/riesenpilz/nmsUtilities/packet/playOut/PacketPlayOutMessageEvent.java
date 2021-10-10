@@ -2,6 +2,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
 import java.util.UUID;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.packet.HasText;
@@ -39,6 +40,9 @@ public class PacketPlayOutMessageEvent extends PacketPlayOutEvent implements Has
 
 	public PacketPlayOutMessageEvent(Player injectedPlayer, PacketPlayOutChat packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		message = Field.get(packet, "a", IChatBaseComponent.class);
 		switch (Field.get(packet, "b", net.minecraft.server.v1_16_R3.ChatMessageType.class)) {
 		case CHAT:
@@ -52,6 +56,19 @@ public class PacketPlayOutMessageEvent extends PacketPlayOutEvent implements Has
 			break;
 		}
 		sender = Field.get(packet, "c", UUID.class);
+	}
+
+	public PacketPlayOutMessageEvent(Player injectedPlayer, IChatBaseComponent message, ChatMessageType type,
+			UUID sender) {
+		super(injectedPlayer);
+
+		Validate.notNull(message);
+		Validate.notNull(type);
+		Validate.notNull(sender);
+
+		this.message = message;
+		this.type = type;
+		this.sender = sender;
 	}
 
 	@Override

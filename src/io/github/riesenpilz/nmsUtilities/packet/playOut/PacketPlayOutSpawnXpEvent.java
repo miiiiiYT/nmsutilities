@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -29,17 +30,21 @@ public class PacketPlayOutSpawnXpEvent extends PacketPlayOutEntityEvent {
 	 */
 	private int count;
 
-	public PacketPlayOutSpawnXpEvent(Player injectedPlayer, int entityId, Location location, int count) {
-		super(injectedPlayer, entityId);
-		this.location = location;
-		this.count = count;
-	}
-
 	public PacketPlayOutSpawnXpEvent(Player injectedPlayer, PacketPlayOutSpawnEntityExperienceOrb packet) {
 		super(injectedPlayer, packet);
+
 		location = new Location(injectedPlayer.getWorld(), Field.get(packet, "b", double.class),
 				Field.get(packet, "c", double.class), Field.get(packet, "d", double.class));
 		count = Field.get(packet, "e", int.class);
+	}
+
+	public PacketPlayOutSpawnXpEvent(Player injectedPlayer, int entityId, Location location, int count) {
+		super(injectedPlayer, entityId);
+
+		Validate.notNull(location);
+
+		this.location = location;
+		this.count = count;
 	}
 
 	public Location getLocation() {

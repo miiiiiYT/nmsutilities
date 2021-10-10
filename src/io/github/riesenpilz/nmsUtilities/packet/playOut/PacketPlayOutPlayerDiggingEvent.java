@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -37,12 +38,27 @@ public class PacketPlayOutPlayerDiggingEvent extends PacketPlayOutEvent implemen
 	 */
 	private DigType status;
 
-
 	public PacketPlayOutPlayerDiggingEvent(Player injectedPlayer, PacketPlayOutBlockBreak packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		status = DigType.getPlayerDigType(Field.get(packet, "a", EnumPlayerDigType.class));
 		blockLocation = PacketUtils.toLocation(Field.get(packet, "c", BlockPosition.class), injectedPlayer.getWorld());
 		blockData = BlockData.getBlockDataOf(Field.get(packet, "d", IBlockData.class));
+	}
+
+	public PacketPlayOutPlayerDiggingEvent(Player injectedPlayer, Location blockLocation, BlockData blockData,
+			DigType status) {
+		super(injectedPlayer);
+
+		Validate.notNull(blockLocation);
+		Validate.notNull(blockData);
+		Validate.notNull(status);
+
+		this.blockLocation = blockLocation;
+		this.blockData = blockData;
+		this.status = status;
 	}
 
 	public Location getBlockLocation() {
@@ -56,7 +72,6 @@ public class PacketPlayOutPlayerDiggingEvent extends PacketPlayOutEvent implemen
 	public DigType getStatus() {
 		return status;
 	}
-
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {

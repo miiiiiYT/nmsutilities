@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -25,11 +26,16 @@ public class PacketPlayOutTagsEvent extends PacketPlayOutEvent {
 	public PacketPlayOutTagsEvent(Player injectedPlayer, PacketPlayOutTags packet) {
 		super(injectedPlayer);
 
+		Validate.notNull(packet);
+
 		tags = Field.get(packet, "a", ITagRegistry.class);
 	}
 
 	public PacketPlayOutTagsEvent(Player injectedPlayer, ITagRegistry tags) {
 		super(injectedPlayer);
+
+		Validate.notNull(tags);
+
 		this.tags = tags;
 	}
 

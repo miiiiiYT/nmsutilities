@@ -33,6 +33,7 @@ public class PacketPlayOutInventoryOpenEvent extends PacketPlayOutInventoryEvent
 
 	public PacketPlayOutInventoryOpenEvent(Player injectedPlayer, PacketPlayOutOpenWindow packet) {
 		super(injectedPlayer, packet);
+
 		windowType = Field.get(packet, "b", int.class);
 		title = Field.get(packet, "c", IChatBaseComponent.class);
 	}
@@ -40,6 +41,7 @@ public class PacketPlayOutInventoryOpenEvent extends PacketPlayOutInventoryEvent
 	public PacketPlayOutInventoryOpenEvent(Player injectedPlayer, int inventoryId, int windowType,
 			IChatBaseComponent title) {
 		super(injectedPlayer, inventoryId);
+
 		this.windowType = windowType;
 		this.title = title;
 	}

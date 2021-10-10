@@ -1,7 +1,9 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nmsUtilities.entity.player.PlayerAnimation;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
@@ -16,24 +18,24 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutAnimation;
  * State: Play<br>
  * Bound To: Client
  *
- * @author Martin
- *
  */
 public class PacketPlayOutAnimationEvent extends PacketPlayOutEntityEvent {
 
-	private Animation animation;
+	private PlayerAnimation animation;
 
 	public PacketPlayOutAnimationEvent(Player injectedPlayer, PacketPlayOutAnimation packet) {
 		super(injectedPlayer, packet);
-		animation = Animation.getByID(Field.get(packet, "b", int.class));
+		Validate.notNull(packet);
+		animation = PlayerAnimation.getByID(Field.get(packet, "b", int.class));
 	}
 
-	public PacketPlayOutAnimationEvent(Player injectedPlayer, Animation animation, int entityId) {
+	public PacketPlayOutAnimationEvent(Player injectedPlayer, PlayerAnimation animation, int entityId) {
 		super(injectedPlayer, entityId);
+		Validate.notNull(animation);
 		this.animation = animation;
 	}
 
-	public Animation getAnimation() {
+	public PlayerAnimation getAnimation() {
 		return animation;
 	}
 
@@ -55,25 +57,4 @@ public class PacketPlayOutAnimationEvent extends PacketPlayOutEntityEvent {
 		return "https://wiki.vg/Protocol#Entity_Animation_.28clientbound.29";
 	}
 
-	public enum Animation {
-		CRITICAL_EFFECT(4), LEAVE_BED(2), MAGIC_CRITICAL_EFFECT(5), SWING_MAIN_ARM(0), SWING_OFFHAND(3), TAKE_DAMAGE(1);
-
-		private int id;
-
-		Animation(int id) {
-			this.id = id;
-		}
-
-		public int getId() {
-			return id;
-		}
-
-		public static Animation getByID(int id) {
-			for (Animation animation : values())
-				if (animation.getId() == id)
-					return animation;
-			return null;
-		}
-
-	}
 }

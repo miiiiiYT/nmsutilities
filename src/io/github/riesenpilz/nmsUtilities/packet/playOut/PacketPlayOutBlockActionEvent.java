@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -39,6 +40,9 @@ public class PacketPlayOutBlockActionEvent extends PacketPlayOutEvent implements
 
 	public PacketPlayOutBlockActionEvent(Player injectedPlayer, PacketPlayOutBlockAction packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		blockLocation = PacketUtils.toLocation(Field.get(packet, "a", BlockPosition.class), injectedPlayer.getWorld());
 		actionId = Field.get(packet, "b", int.class);
 		actionParam = Field.get(packet, "c", int.class);
@@ -48,6 +52,10 @@ public class PacketPlayOutBlockActionEvent extends PacketPlayOutEvent implements
 	public PacketPlayOutBlockActionEvent(Player injectedPlayer, Location blockLocation, int actionId, int actionParam,
 			BlockData blockData) {
 		super(injectedPlayer);
+
+		Validate.notNull(blockLocation);
+		Validate.notNull(blockData);
+
 		this.blockLocation = blockLocation;
 		this.actionId = actionId;
 		this.actionParam = actionParam;
@@ -73,7 +81,8 @@ public class PacketPlayOutBlockActionEvent extends PacketPlayOutEvent implements
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutBlockAction(PacketUtils.toBlockPosition(blockLocation), blockData.getNMS(), actionParam, actionId);
+		return new PacketPlayOutBlockAction(PacketUtils.toBlockPosition(blockLocation), blockData.getNMS(), actionParam,
+				actionId);
 	}
 
 	@Override

@@ -29,6 +29,7 @@ public class PacketPlayOutEntityVelocityEvent extends PacketPlayOutEntityEvent {
 
 	public PacketPlayOutEntityVelocityEvent(Player injectedPlayer, PacketPlayOutEntityVelocity packet) {
 		super(injectedPlayer, packet);
+
 		velocityX = Field.get(packet, "b", int.class);
 		velocityY = Field.get(packet, "c", int.class);
 		velocityZ = Field.get(packet, "d", int.class);
@@ -37,6 +38,7 @@ public class PacketPlayOutEntityVelocityEvent extends PacketPlayOutEntityEvent {
 	public PacketPlayOutEntityVelocityEvent(Player injectedPlayer, int entityId, short velocityX, short velocityY,
 			short velocityZ) {
 		super(injectedPlayer, entityId);
+
 		this.velocityX = velocityX;
 		this.velocityY = velocityY;
 		this.velocityZ = velocityZ;

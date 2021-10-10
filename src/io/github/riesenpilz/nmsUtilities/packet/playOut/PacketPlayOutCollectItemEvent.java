@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -38,6 +39,8 @@ public class PacketPlayOutCollectItemEvent extends PacketPlayOutEntityEvent {
 	public PacketPlayOutCollectItemEvent(Player injectedPlayer, PacketPlayOutCollect packet) {
 		super(injectedPlayer, packet, "b");
 
+		Validate.notNull(packet);
+
 		collectedEntityId = Field.get(packet, "a", int.class);
 		count = Field.get(packet, "c", int.class);
 	}
@@ -45,6 +48,7 @@ public class PacketPlayOutCollectItemEvent extends PacketPlayOutEntityEvent {
 	public PacketPlayOutCollectItemEvent(Player injectedPlayer, int collectedEntityId, int collectorEntityId,
 			int count) {
 		super(injectedPlayer, collectorEntityId);
+
 		this.collectedEntityId = collectedEntityId;
 		this.count = count;
 	}
@@ -52,6 +56,7 @@ public class PacketPlayOutCollectItemEvent extends PacketPlayOutEntityEvent {
 	public int getCollectedEntityId() {
 		return collectedEntityId;
 	}
+
 	/**
 	 * collecotor entity ID
 	 */

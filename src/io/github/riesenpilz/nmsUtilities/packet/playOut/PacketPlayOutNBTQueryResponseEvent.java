@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.nbt.NBTTag;
@@ -39,13 +40,18 @@ public class PacketPlayOutNBTQueryResponseEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutNBTQueryResponseEvent(Player injectedPlayer, PacketPlayOutNBTQuery packet) {
 		super(injectedPlayer);
-		
+
+		Validate.notNull(packet);
+
 		transactionId = Field.get(packet, "a", int.class);
 		tag = NBTTag.getNBTTagOf(Field.get(packet, "b", NBTTagCompound.class));
 	}
 
 	public PacketPlayOutNBTQueryResponseEvent(Player injectedPlayer, int transactionId, NBTTag tag) {
 		super(injectedPlayer);
+
+		Validate.notNull(tag);
+
 		this.transactionId = transactionId;
 		this.tag = tag;
 	}

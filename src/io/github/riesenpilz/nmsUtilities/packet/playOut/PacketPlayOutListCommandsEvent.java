@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import com.mojang.brigadier.tree.RootCommandNode;
@@ -34,11 +35,17 @@ public class PacketPlayOutListCommandsEvent extends PacketPlayOutEvent {
 	@SuppressWarnings("unchecked")
 	public PacketPlayOutListCommandsEvent(Player injectedPlayer, PacketPlayOutCommands packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		commands = Field.get(packet, "a", RootCommandNode.class);
 	}
 
 	public PacketPlayOutListCommandsEvent(Player injectedPlayer, RootCommandNode<ICompletionProvider> commands) {
 		super(injectedPlayer);
+
+		Validate.notNull(commands);
+
 		this.commands = commands;
 	}
 
@@ -50,7 +57,6 @@ public class PacketPlayOutListCommandsEvent extends PacketPlayOutEvent {
 	public Packet<PacketListenerPlayOut> getNMS() {
 		return new PacketPlayOutCommands(commands);
 	}
-
 
 	@Override
 	public int getPacketID() {

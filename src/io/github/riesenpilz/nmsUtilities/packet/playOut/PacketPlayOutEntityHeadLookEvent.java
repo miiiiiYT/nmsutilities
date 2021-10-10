@@ -38,6 +38,7 @@ public class PacketPlayOutEntityHeadLookEvent extends PacketPlayOutEntityEvent {
 
 	public PacketPlayOutEntityHeadLookEvent(Player injectedPlayer, int entityId, byte angle) {
 		super(injectedPlayer, entityId);
+
 		this.angle = angle;
 	}
 

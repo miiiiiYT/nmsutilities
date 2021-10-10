@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -39,12 +40,16 @@ public class PacketPlayOutUpdateViewPositionEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutUpdateViewPositionEvent(Player injectedPlayer, PacketPlayOutViewCentre packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		chunkX = Field.get(packet, "a", int.class);
 		chunkZ = Field.get(packet, "b", int.class);
 	}
 
 	public PacketPlayOutUpdateViewPositionEvent(Player injectedPlayer, int chunkX, int chunkZ) {
 		super(injectedPlayer);
+
 		this.chunkX = chunkX;
 		this.chunkZ = chunkZ;
 	}

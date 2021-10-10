@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -35,6 +36,9 @@ public class PacketPlayOutSetXpEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutSetXpEvent(Player injectedPlayer, PacketPlayOutExperience packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		experienceBar = Field.get(packet, "a", float.class);
 		level = Field.get(packet, "b", int.class);
 		totalExperience = Field.get(packet, "c", int.class);

@@ -3,14 +3,12 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.GameMode;
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
-import com.mojang.authlib.GameProfile;
-
+import io.github.riesenpilz.nmsUtilities.entity.player.PlayerInfoAction;
+import io.github.riesenpilz.nmsUtilities.entity.player.PlayerInfoData;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
-import net.minecraft.server.v1_16_R3.EnumGamemode;
-import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
 import net.minecraft.server.v1_16_R3.PacketPlayOutPlayerInfo;
@@ -48,25 +46,33 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutPlayerInfo;
  */
 public class PacketPlayOutPlayerInfoEvent extends PacketPlayOutEvent {
 
-	private Action action;
+	private PlayerInfoAction action;
 	private List<PlayerInfoData> playerInfoDatas = new ArrayList<>();
 
 	@SuppressWarnings("unchecked")
 	public PacketPlayOutPlayerInfoEvent(Player injectedPlayer, PacketPlayOutPlayerInfo packet) {
 		super(injectedPlayer);
-		action = Action.getAction(Field.get(packet, "a", PacketPlayOutPlayerInfo.EnumPlayerInfoAction.class));
+
+		Validate.notNull(packet);
+
+		action = PlayerInfoAction.getAction(Field.get(packet, "a", PacketPlayOutPlayerInfo.EnumPlayerInfoAction.class));
 		final List<PacketPlayOutPlayerInfo.PlayerInfoData> nms = Field.get(packet, "b", List.class);
 		for (PacketPlayOutPlayerInfo.PlayerInfoData playerInfoData : nms)
-			playerInfoDatas.add(new PlayerInfoData(playerInfoData));
+			playerInfoDatas.add(PlayerInfoData.getPlayerInfoData(playerInfoData));
 	}
 
-	public PacketPlayOutPlayerInfoEvent(Player injectedPlayer, Action action, List<PlayerInfoData> playerInfoDatas) {
+	public PacketPlayOutPlayerInfoEvent(Player injectedPlayer, PlayerInfoAction action,
+			List<PlayerInfoData> playerInfoDatas) {
 		super(injectedPlayer);
+
+		Validate.notNull(action);
+		Validate.notNull(playerInfoDatas);
+
 		this.action = action;
 		this.playerInfoDatas = playerInfoDatas;
 	}
 
-	public Action getAction() {
+	public PlayerInfoAction getAction() {
 		return action;
 	}
 
@@ -95,89 +101,4 @@ public class PacketPlayOutPlayerInfoEvent extends PacketPlayOutEvent {
 		return "https://wiki.vg/Protocol#Player_Info";
 	}
 
-	public static class PlayerInfoData {
-
-		private int ping;
-		private GameMode gameMode;
-		private GameProfile profile;
-		private IChatBaseComponent displayName;
-
-		public PlayerInfoData(GameProfile profile, int ping, GameMode gameMode, IChatBaseComponent displayName) {
-			this.profile = profile;
-			this.ping = ping;
-			this.gameMode = gameMode;
-			this.displayName = displayName;
-		}
-
-		@SuppressWarnings("deprecation")
-		public PlayerInfoData(PacketPlayOutPlayerInfo.PlayerInfoData nms) {
-			ping = nms.b();
-			gameMode = GameMode.getByValue(nms.c().getId());
-			profile = nms.a();
-			displayName = nms.d();
-		}
-
-		public int getPing() {
-			return ping;
-		}
-
-		public void setPing(int ping) {
-			this.ping = ping;
-		}
-
-		public GameMode getGameMode() {
-			return gameMode;
-		}
-
-		public void setGameMode(GameMode gameMode) {
-			this.gameMode = gameMode;
-		}
-
-		public GameProfile getProfile() {
-			return profile;
-		}
-
-		public void setProfile(GameProfile profile) {
-			this.profile = profile;
-		}
-
-		public IChatBaseComponent getDisplayName() {
-			return displayName;
-		}
-
-		public void setDisplayName(IChatBaseComponent displayName) {
-			this.displayName = displayName;
-		}
-
-		@SuppressWarnings("deprecation")
-		public PacketPlayOutPlayerInfo.PlayerInfoData getNMS(PacketPlayOutPlayerInfo packet) {
-			return packet.new PlayerInfoData(profile, ping, EnumGamemode.getById(gameMode.getValue()), displayName);
-		}
-
-	}
-
-	public enum Action {
-		ADD_PLAYER(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER),
-		UPDATE_GAME_MODE(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_GAME_MODE),
-		UPDATE_LATENCY(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_LATENCY),
-		UPDATE_DISPLAY_NAME(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME),
-		REMOVE_PLAYER(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER);
-
-		private PacketPlayOutPlayerInfo.EnumPlayerInfoAction nms;
-
-		private Action(PacketPlayOutPlayerInfo.EnumPlayerInfoAction nms) {
-			this.nms = nms;
-		}
-
-		public PacketPlayOutPlayerInfo.EnumPlayerInfoAction getNMS() {
-			return nms;
-		}
-
-		public static Action getAction(PacketPlayOutPlayerInfo.EnumPlayerInfoAction nms) {
-			for (Action action : values())
-				if (action.getNMS().equals(nms))
-					return action;
-			return null;
-		}
-	}
 }

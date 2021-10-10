@@ -27,12 +27,14 @@ public class PacketPlayOutInventoryPropertyEvent extends PacketPlayOutInventoryE
 
 	public PacketPlayOutInventoryPropertyEvent(Player injectedPlayer, PacketPlayOutWindowData packet) {
 		super(injectedPlayer, packet);
+
 		property = Field.get(packet, "b", int.class);
 		value = Field.get(packet, "c", int.class);
 	}
 
 	public PacketPlayOutInventoryPropertyEvent(Player injectedPlayer, int inventoryId, int property, int value) {
 		super(injectedPlayer, inventoryId);
+
 		this.property = property;
 		this.value = value;
 	}

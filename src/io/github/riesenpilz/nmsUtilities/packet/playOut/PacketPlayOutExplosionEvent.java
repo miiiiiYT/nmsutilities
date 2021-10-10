@@ -3,6 +3,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -43,6 +44,9 @@ public class PacketPlayOutExplosionEvent extends PacketPlayOutEvent {
 	@SuppressWarnings("unchecked")
 	public PacketPlayOutExplosionEvent(Player injectedPlayer, PacketPlayOutExplosion packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		explosionLocation = new Location(injectedPlayer.getWorld(), Field.get(packet, "a", double.class),
 				Field.get(packet, "b", double.class), Field.get(packet, "c", double.class));
 		strength = Field.get(packet, "d", float.class);
@@ -56,6 +60,11 @@ public class PacketPlayOutExplosionEvent extends PacketPlayOutEvent {
 	public PacketPlayOutExplosionEvent(Player injectedPlayer, Location explosionLocation, float strength,
 			List<Location> records, Vector velocity) {
 		super(injectedPlayer);
+
+		Validate.notNull(explosionLocation);
+		Validate.notNull(records);
+		Validate.notNull(velocity);
+
 		this.explosionLocation = explosionLocation;
 		this.strength = strength;
 		this.records = records;

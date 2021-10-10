@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.entity.player.Hand;
@@ -28,11 +29,17 @@ public class PacketPlayOutOpenBookEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutOpenBookEvent(Player injectedPlayer, PacketPlayOutOpenBook packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		hand = Hand.getHand(Field.get(packet, "a", EnumHand.class));
 	}
 
 	public PacketPlayOutOpenBookEvent(Player injectedPlayer, Hand hand) {
 		super(injectedPlayer);
+
+		Validate.notNull(hand);
+
 		this.hand = hand;
 	}
 

@@ -3,6 +3,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -122,6 +123,14 @@ public class PacketPlayOutJoinGameEvent extends PacketPlayOutEntityEvent {
 			DimensionManager dimension, NamespacedKey worldName, int maxPlayers, int viewDistance,
 			boolean reducedDebugInfo, boolean enableRespawnScreen, boolean debug, boolean flat) {
 		super(injectedPlayer, playerId);
+		
+		Validate.notNull(gamemode);
+		Validate.notNull(previousGamemode);
+		Validate.notNull(worldNames);
+		Validate.notNull(dimensionCodec);
+		Validate.notNull(dimension);
+		Validate.notNull(worldName);
+		
 		this.hashedSeed = hashedSeed;
 		this.hardcore = hardcore;
 		this.gamemode = gamemode;

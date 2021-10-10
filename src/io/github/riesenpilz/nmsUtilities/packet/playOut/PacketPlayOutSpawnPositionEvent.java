@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -36,6 +37,8 @@ public class PacketPlayOutSpawnPositionEvent extends PacketPlayOutEvent {
 	public PacketPlayOutSpawnPositionEvent(Player injectedPlayer, PacketPlayOutSpawnPosition packet) {
 		super(injectedPlayer);
 
+		Validate.notNull(packet);
+
 		spawnLocation = PacketUtils.toLocation(Field.get(packet, "position", BlockPosition.class),
 				injectedPlayer.getWorld());
 		angle = Field.get(packet, "b", float.class);
@@ -43,6 +46,9 @@ public class PacketPlayOutSpawnPositionEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutSpawnPositionEvent(Player injectedPlayer, Location spawnLocation, float angle) {
 		super(injectedPlayer);
+
+		Validate.notNull(spawnLocation);
+
 		this.spawnLocation = spawnLocation;
 		this.angle = angle;
 	}

@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -27,6 +28,9 @@ public class PacketPlayOutVehicleMoveEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutVehicleMoveEvent(Player injectedPlayer, PacketPlayOutVehicleMove packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		newLocation = new Location(injectedPlayer.getWorld(), Field.get(packet, "a", double.class),
 				Field.get(packet, "b", double.class), Field.get(packet, "c", double.class),
 				Field.get(packet, "d", float.class), Field.get(packet, "e", float.class));
@@ -34,6 +38,9 @@ public class PacketPlayOutVehicleMoveEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutVehicleMoveEvent(Player injectedPlayer, Location newLocation) {
 		super(injectedPlayer);
+
+		Validate.notNull(newLocation);
+
 		this.newLocation = newLocation;
 	}
 

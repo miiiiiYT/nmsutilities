@@ -45,6 +45,7 @@ public class PacketPlayOutEntityMoveEvent extends PacketPlayOutEntityEvent {
 
 	public PacketPlayOutEntityMoveEvent(Player injectedPlayer, PacketPlayOutRelEntityMove packet) {
 		super(injectedPlayer, Field.getFromSuper(packet, "a", int.class));
+
 		deltaX = Field.getFromSuper(packet, "b", short.class);
 		deltaY = Field.getFromSuper(packet, "c", short.class);
 		deltaZ = Field.getFromSuper(packet, "d", short.class);
@@ -54,6 +55,7 @@ public class PacketPlayOutEntityMoveEvent extends PacketPlayOutEntityEvent {
 	public PacketPlayOutEntityMoveEvent(Player injectedPlayer, int entityId, short deltaX, short deltaY, short deltaZ,
 			boolean onGround) {
 		super(injectedPlayer, entityId);
+
 		this.deltaX = deltaX;
 		this.deltaY = deltaY;
 		this.deltaZ = deltaZ;
@@ -65,7 +67,7 @@ public class PacketPlayOutEntityMoveEvent extends PacketPlayOutEntityEvent {
 	}
 
 	public Location getTo() {
-		return getFrom().clone().add(((double) deltaX) / 128 / 32, ((double) deltaY) / 128 / 32,
+		return getFrom().add(((double) deltaX) / 128 / 32, ((double) deltaY) / 128 / 32,
 				((double) deltaZ) / 128 / 32);
 	}
 

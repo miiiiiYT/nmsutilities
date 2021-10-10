@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -40,13 +41,16 @@ public class PacketPlayOutTimeUpdateEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutTimeUpdateEvent(Player injectedPlayer, PacketPlayOutUpdateTime packet) {
 		super(injectedPlayer);
-		
+
+		Validate.notNull(packet);
+
 		worldAge = Field.get(packet, "a", long.class);
 		time = Field.get(packet, "b", long.class);
 	}
 
 	public PacketPlayOutTimeUpdateEvent(Player injectedPlayer, long worldAge, long time) {
 		super(injectedPlayer);
+
 		this.worldAge = worldAge;
 		this.time = time;
 	}

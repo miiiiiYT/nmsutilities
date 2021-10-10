@@ -2,8 +2,10 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nmsUtilities.advancemts.AdvancementTab;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -35,14 +37,19 @@ public class PacketPlayOutSelectAdvancementTabEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutSelectAdvancementTabEvent(Player injectedPlayer, PacketPlayOutSelectAdvancementTab packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		tab = AdvancementTab.getAdvancementTab(Field.get(packet, "a", MinecraftKey.class).getKey());
 	}
 
-	public PacketPlayOutSelectAdvancementTabEvent(Player injectedPlayer, AdvancementTab tab) {
+	public PacketPlayOutSelectAdvancementTabEvent(Player injectedPlayer, @Nullable AdvancementTab tab) {
 		super(injectedPlayer);
+
 		this.tab = tab;
 	}
 
+	@Nullable
 	public AdvancementTab getTab() {
 		return tab;
 	}
@@ -62,25 +69,5 @@ public class PacketPlayOutSelectAdvancementTabEvent extends PacketPlayOutEvent {
 		return "https://wiki.vg/Protocol#Select_Advancement_Tab";
 	}
 
-	public enum AdvancementTab {
-		STORY("story/root"), NETHER("nether/root"), END("end/root"), ADVENTURE("adventure/root"),
-		HUSBANDRY("husbandry/root");
-
-		private String identifier;
-
-		private AdvancementTab(String identifier) {
-			this.identifier = identifier;
-		}
-
-		public String getIdentifier() {
-			return identifier;
-		}
-
-		public static AdvancementTab getAdvancementTab(String identifier) {
-			for (AdvancementTab tab : AdvancementTab.values())
-				if (tab.getIdentifier().equals(identifier))
-					return tab;
-			return null;
-		}
-	}
+	
 }

@@ -2,10 +2,14 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang.Validate;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nmsUtilities.boss.BossBarAction;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.BossBattle;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent;
@@ -36,6 +40,7 @@ public class PacketPlayOutBossBarEvent extends PacketPlayOutEvent {
 	 * Only used if {@link #action} is {@link BossBarAction#ADD} or
 	 * {@link BossBarAction#UPDATE_TITLE}
 	 */
+	@Nullable
 	private IChatBaseComponent title;
 
 	/**
@@ -51,12 +56,14 @@ public class PacketPlayOutBossBarEvent extends PacketPlayOutEvent {
 	 * Only used if {@link #action} is {@link BossBarAction#ADD} or
 	 * {@link BossBarAction#UPDATE_STYLE}
 	 */
+	@Nullable
 	private BarColor color;
 
 	/**
 	 * Only used if {@link #action} is {@link BossBarAction#ADD} or
 	 * {@link BossBarAction#UPDATE_STYLE}
 	 */
+	@Nullable
 	private BarStyle style;
 
 	/**
@@ -85,6 +92,9 @@ public class PacketPlayOutBossBarEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutBossBarEvent(Player injectedPlayer, PacketPlayOutBoss packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		uuid = Field.get(packet, "a", UUID.class);
 		action = BossBarAction.getBossBarAction(Field.get(packet, "b", Action.class));
 		switch (action) {
@@ -117,6 +127,42 @@ public class PacketPlayOutBossBarEvent extends PacketPlayOutEvent {
 
 	}
 
+	public PacketPlayOutBossBarEvent(Player injectedPlayer, UUID uuid, BossBarAction action, IChatBaseComponent title,
+			float health, BarColor color, BarStyle style, boolean darkenSky, boolean playBossMusic, boolean createFog) {
+		super(injectedPlayer);
+
+		Validate.notNull(uuid);
+		Validate.notNull(action);
+
+		this.uuid = uuid;
+		this.action = action;
+
+		switch (action) {
+		case ADD:
+			Validate.notNull(title);
+			Validate.notNull(color);
+			Validate.notNull(style);
+			break;
+		case UPDATE_TITLE:
+			Validate.notNull(title);
+			break;
+		case UPDATE_STYLE:
+			Validate.notNull(color);
+			Validate.notNull(style);
+			break;
+		default:
+			break;
+		}
+
+		this.title = title;
+		this.health = health;
+		this.color = color;
+		this.style = style;
+		this.darkenSky = darkenSky;
+		this.playBossMusic = playBossMusic;
+		this.createFog = createFog;
+	}
+
 	public UUID getUuid() {
 		return uuid;
 	}
@@ -125,6 +171,7 @@ public class PacketPlayOutBossBarEvent extends PacketPlayOutEvent {
 		return action;
 	}
 
+	@Nullable
 	public IChatBaseComponent getTitle() {
 		return title;
 	}
@@ -133,10 +180,12 @@ public class PacketPlayOutBossBarEvent extends PacketPlayOutEvent {
 		return health;
 	}
 
+	@Nullable
 	public BarColor getColor() {
 		return color;
 	}
 
+	@Nullable
 	public BarStyle getStyle() {
 		return style;
 	}
@@ -202,25 +251,4 @@ public class PacketPlayOutBossBarEvent extends PacketPlayOutEvent {
 		return "https://wiki.vg/Protocol#Boss_Bar";
 	}
 
-	public enum BossBarAction {
-		ADD(Action.ADD), REMOVE(Action.REMOVE), UPDATE_HEALTH(Action.UPDATE_PCT), UPDATE_TITLE(Action.UPDATE_NAME),
-		UPDATE_STYLE(Action.UPDATE_STYLE), UPDATE_PROPERTIES(Action.UPDATE_PROPERTIES);
-
-		private Action nms;
-
-		BossBarAction(Action action) {
-			nms = action;
-		}
-
-		public Action getNMS() {
-			return nms;
-		}
-
-		public static BossBarAction getBossBarAction(Action nms) {
-			for (BossBarAction action : values())
-				if (action.getNMS().equals(nms))
-					return action;
-			return null;
-		}
-	}
 }

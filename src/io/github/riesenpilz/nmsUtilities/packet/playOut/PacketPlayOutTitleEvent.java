@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.packet.HasText;
@@ -22,7 +23,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutTitle.EnumTitleAction;
  */
 public class PacketPlayOutTitleEvent extends PacketPlayOutEvent implements HasText {
 
-	private Mode mode;
+	private TitleMode mode;
 	private IChatBaseComponent text;
 	private int fadeIn;
 	private int stay;
@@ -31,16 +32,22 @@ public class PacketPlayOutTitleEvent extends PacketPlayOutEvent implements HasTe
 	public PacketPlayOutTitleEvent(Player injectedPlayer, PacketPlayOutTitle packet) {
 		super(injectedPlayer);
 
-		mode = Mode.getMode(Field.get(packet, "a", EnumTitleAction.class));
+		Validate.notNull(packet);
+
+		mode = TitleMode.getMode(Field.get(packet, "a", EnumTitleAction.class));
 		text = Field.get(packet, "b", IChatBaseComponent.class);
 		fadeIn = Field.get(packet, "c", int.class);
 		stay = Field.get(packet, "d", int.class);
 		fadeOut = Field.get(packet, "e", int.class);
 	}
 
-	public PacketPlayOutTitleEvent(Player injectedPlayer, Mode mode, IChatBaseComponent text, int fadeIn, int stay,
+	public PacketPlayOutTitleEvent(Player injectedPlayer, TitleMode mode, IChatBaseComponent text, int fadeIn, int stay,
 			int fadeOut) {
 		super(injectedPlayer);
+
+		Validate.notNull(mode);
+		Validate.notNull(text);
+
 		this.mode = mode;
 		this.text = text;
 		this.fadeIn = fadeIn;
@@ -48,7 +55,7 @@ public class PacketPlayOutTitleEvent extends PacketPlayOutEvent implements HasTe
 		this.fadeOut = fadeOut;
 	}
 
-	public Mode getMode() {
+	public TitleMode getMode() {
 		return mode;
 	}
 
@@ -84,13 +91,13 @@ public class PacketPlayOutTitleEvent extends PacketPlayOutEvent implements HasTe
 		return "https://wiki.vg/Protocol#Set_Title_SubTitle";
 	}
 
-	public enum Mode {
+	public enum TitleMode {
 		TITLE(EnumTitleAction.TITLE), SUBTITLE(EnumTitleAction.SUBTITLE), ACTIONBAR(EnumTitleAction.ACTIONBAR),
 		TIMES(EnumTitleAction.TIMES), CLEAR(EnumTitleAction.CLEAR), RESET(EnumTitleAction.TIMES);
 
-		private EnumTitleAction nms;
+		private final EnumTitleAction nms;
 
-		private Mode(EnumTitleAction nms) {
+		private TitleMode(EnumTitleAction nms) {
 			this.nms = nms;
 		}
 
@@ -98,11 +105,12 @@ public class PacketPlayOutTitleEvent extends PacketPlayOutEvent implements HasTe
 			return nms;
 		}
 
-		public static Mode getMode(EnumTitleAction nms) {
-			for (Mode mode : values())
+		public static TitleMode getMode(EnumTitleAction nms) {
+			Validate.notNull(nms);
+			for (TitleMode mode : values())
 				if (mode.getNms() == nms)
 					return mode;
-			return null;
+			throw new IllegalArgumentException();
 		}
 	}
 }

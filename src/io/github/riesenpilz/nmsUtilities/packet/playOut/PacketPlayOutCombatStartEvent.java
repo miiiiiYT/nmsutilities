@@ -1,5 +1,7 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import javax.annotation.Nullable;
+
 import org.bukkit.entity.Player;
 
 import net.minecraft.server.v1_16_R3.Packet;
@@ -21,8 +23,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutCombatEvent;
  */
 public class PacketPlayOutCombatStartEvent extends PacketPlayOutEvent {
 
-	public PacketPlayOutCombatStartEvent(Player injectedPlayer,
-			PacketPlayOutCombatEvent packet) {
+	public PacketPlayOutCombatStartEvent(Player injectedPlayer, @Nullable PacketPlayOutCombatEvent packet) {
 		super(injectedPlayer);
 	}
 

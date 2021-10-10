@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -54,6 +55,9 @@ public class PacketPlayOutWorldBorderInitializeEvent extends PacketPlayOutEvent 
 
 	public PacketPlayOutWorldBorderInitializeEvent(Player injectedPlayer, PacketPlayOutWorldBorder packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		portalTeleportBoundary = Field.get(packet, "b", int.class);
 		centerX = Field.get(packet, "c", double.class);
 		centerZ = Field.get(packet, "d", double.class);
@@ -67,6 +71,7 @@ public class PacketPlayOutWorldBorderInitializeEvent extends PacketPlayOutEvent 
 	public PacketPlayOutWorldBorderInitializeEvent(Player injectedPlayer, int portalTeleportBoundary, double centerX,
 			double centerZ, double oldDiameter, double newDiameter, long speed, int warningBlocks, int warningTime) {
 		super(injectedPlayer);
+
 		this.portalTeleportBoundary = portalTeleportBoundary;
 		this.centerX = centerX;
 		this.centerZ = centerZ;
@@ -120,7 +125,7 @@ public class PacketPlayOutWorldBorderInitializeEvent extends PacketPlayOutEvent 
 		Field.set(packet, "f", newDiameter);
 		Field.set(packet, "g", speed);
 		Field.set(packet, "h", warningBlocks);
-		Field.set(packet, "i", warningTime);	
+		Field.set(packet, "i", warningTime);
 		return packet;
 	}
 

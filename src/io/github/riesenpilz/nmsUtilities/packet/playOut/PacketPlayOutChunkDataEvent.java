@@ -3,6 +3,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.nbt.NBTTag;
@@ -71,6 +72,8 @@ public class PacketPlayOutChunkDataEvent extends PacketPlayOutEvent {
 	public PacketPlayOutChunkDataEvent(Player injectedPlayer, PacketPlayOutMapChunk packet) {
 		super(injectedPlayer);
 
+		Validate.notNull(packet);
+
 		chunkX = Field.get(packet, "a", int.class);
 		chunkZ = Field.get(packet, "b", int.class);
 		c = Field.get(packet, "c", int.class);
@@ -88,6 +91,12 @@ public class PacketPlayOutChunkDataEvent extends PacketPlayOutEvent {
 	public PacketPlayOutChunkDataEvent(Player injectedPlayer, int chunkX, int chunkZ, int c, NBTTag heightmaps,
 			int[] biomes, byte[] data, List<NBTTag> blockEntities, boolean h) {
 		super(injectedPlayer);
+
+		Validate.notNull(heightmaps);
+		Validate.notNull(biomes);
+		Validate.notNull(data);
+		Validate.notNull(blockEntities);
+
 		this.chunkX = chunkX;
 		this.chunkZ = chunkZ;
 		this.c = c;

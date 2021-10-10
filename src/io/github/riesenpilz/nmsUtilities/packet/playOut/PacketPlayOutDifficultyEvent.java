@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Difficulty;
 import org.bukkit.entity.Player;
 
@@ -29,8 +30,20 @@ public class PacketPlayOutDifficultyEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutDifficultyEvent(Player injectedPlayer, PacketPlayOutServerDifficulty packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		difficulty = PacketUtils.toDifficulty(Field.get(packet, "a", EnumDifficulty.class));
 		looked = Field.get(packet, "b", boolean.class);
+	}
+
+	public PacketPlayOutDifficultyEvent(Player injectedPlayer, Difficulty difficulty, boolean looked) {
+		super(injectedPlayer);
+
+		Validate.notNull(difficulty);
+
+		this.difficulty = difficulty;
+		this.looked = looked;
 	}
 
 	public Difficulty getDifficulty() {

@@ -3,6 +3,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -36,6 +37,7 @@ public class PacketPlayOutInventoryItemsEvent extends PacketPlayOutInventoryEven
 
 	public PacketPlayOutInventoryItemsEvent(Player injectedPlayer, PacketPlayOutWindowItems packet) {
 		super(injectedPlayer, packet);
+
 		itemStacks = new ArrayList<>();
 		@SuppressWarnings("unchecked")
 		List<net.minecraft.server.v1_16_R3.ItemStack> nmsItemStacks = Field.get(packet, "b", List.class);
@@ -45,6 +47,9 @@ public class PacketPlayOutInventoryItemsEvent extends PacketPlayOutInventoryEven
 
 	public PacketPlayOutInventoryItemsEvent(Player injectedPlayer, int inventoryId, List<ItemStack> itemStacks) {
 		super(injectedPlayer, inventoryId);
+
+		Validate.notNull(itemStacks);
+
 		this.itemStacks = itemStacks;
 	}
 

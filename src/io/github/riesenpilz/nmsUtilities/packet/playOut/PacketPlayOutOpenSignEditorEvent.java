@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -33,14 +34,20 @@ public class PacketPlayOutOpenSignEditorEvent extends PacketPlayOutEvent impleme
 
 	public PacketPlayOutOpenSignEditorEvent(Player injectedPlayer, PacketPlayOutOpenSignEditor packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		PacketUtils.toLocation(Field.get(packet, "a", BlockPosition.class), injectedPlayer.getWorld());
 	}
 
 	public PacketPlayOutOpenSignEditorEvent(Player injectedPlayer, Location blockPosition) {
 		super(injectedPlayer);
+
+		Validate.notNull(blockPosition);
+
 		this.blockPosition = blockPosition;
 	}
-	
+
 	@Override
 	public Location getBlockLocation() {
 		return blockPosition;
@@ -61,5 +68,4 @@ public class PacketPlayOutOpenSignEditorEvent extends PacketPlayOutEvent impleme
 		return "https://wiki.vg/Protocol#Open_Sign_Editor";
 	}
 
-	
 }

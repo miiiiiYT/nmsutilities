@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -39,12 +40,19 @@ public class PacketPlayOutBlockChangeEvent extends PacketPlayOutEvent implements
 
 	public PacketPlayOutBlockChangeEvent(Player injectedPlayer, PacketPlayOutBlockChange packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		blockLocation = PacketUtils.toLocation(Field.get(packet, "a", BlockPosition.class), injectedPlayer.getWorld());
 		blockData = BlockData.getBlockDataOf(Field.get(packet, "block", IBlockData.class));
 	}
 
 	public PacketPlayOutBlockChangeEvent(Player injectedPlayer, Location blockLocation, BlockData blockData) {
 		super(injectedPlayer);
+
+		Validate.notNull(blockLocation);
+		Validate.notNull(blockData);
+
 		this.blockLocation = blockLocation;
 		this.blockData = blockData;
 	}

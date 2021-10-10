@@ -1,7 +1,10 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.Item;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -28,7 +31,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutSetCooldown;
  */
 public class PacketPlayOutSetCooldownEvent extends PacketPlayOutEvent {
 
-	private Item item;
+	private Material material;
 
 	/**
 	 * Number of ticks to apply a cooldown for, or 0 to clear the cooldown.
@@ -37,18 +40,24 @@ public class PacketPlayOutSetCooldownEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutSetCooldownEvent(Player injectedPlayer, PacketPlayOutSetCooldown packet) {
 		super(injectedPlayer);
-		item = Field.get(packet, "a", Item.class);
+
+		Validate.notNull(packet);
+
+		material = PacketUtils.toMaterial(Field.get(packet, "a", Item.class));
 		cooldown = Field.get(packet, "b", int.class);
 	}
 
-	public PacketPlayOutSetCooldownEvent(Player injectedPlayer, Item item, int cooldown) {
+	public PacketPlayOutSetCooldownEvent(Player injectedPlayer, Material material, int cooldown) {
 		super(injectedPlayer);
-		this.item = item;
+
+		Validate.notNull(material);
+
+		this.material = material;
 		this.cooldown = cooldown;
 	}
 
-	public Item getItem() {
-		return item;
+	public Material getMaterial() {
+		return material;
 	}
 
 	public int getCooldown() {
@@ -57,7 +66,7 @@ public class PacketPlayOutSetCooldownEvent extends PacketPlayOutEvent {
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutSetCooldown(item, cooldown);
+		return new PacketPlayOutSetCooldown(PacketUtils.toItem(material), cooldown);
 	}
 
 	@Override

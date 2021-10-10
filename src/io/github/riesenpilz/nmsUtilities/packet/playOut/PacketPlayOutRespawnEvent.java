@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -75,6 +76,8 @@ public class PacketPlayOutRespawnEvent extends PacketPlayOutEvent {
 	public PacketPlayOutRespawnEvent(Player injectedPlayer, PacketPlayOutRespawn packet) {
 		super(injectedPlayer);
 
+		Validate.notNull(packet);
+
 		dimension = Field.get(packet, "a", DimensionManager.class);
 		worldName = PacketUtils.toNamespacedKey(Field.get(packet, "b", ResourceKey.class));
 		hashedSeed = Field.get(packet, "c", long.class);
@@ -89,6 +92,12 @@ public class PacketPlayOutRespawnEvent extends PacketPlayOutEvent {
 			long hashedSeed, GameMode gameMode, GameMode previousGameMode, boolean isDebug, boolean isFlat,
 			boolean copyMetadata) {
 		super(injectedPlayer);
+
+		Validate.notNull(dimension);
+		Validate.notNull(worldName);
+		Validate.notNull(gameMode);
+		Validate.notNull(previousGameMode);
+
 		this.dimension = dimension;
 		this.worldName = worldName;
 		this.hashedSeed = hashedSeed;

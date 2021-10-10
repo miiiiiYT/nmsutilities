@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.entity.Player;
 
@@ -35,6 +36,7 @@ public class PacketPlayOutEntityAttributesEvent extends PacketPlayOutEntityEvent
 	@SuppressWarnings("unchecked")
 	public PacketPlayOutEntityAttributesEvent(Player injectedPlayer, PacketPlayOutUpdateAttributes packet) {
 		super(injectedPlayer, packet);
+
 		List<AttributeSnapshot> nms = Field.get(packet, "b", List.class);
 		attributes = new ArrayList<>();
 		for (AttributeSnapshot snapshot : nms)
@@ -43,6 +45,9 @@ public class PacketPlayOutEntityAttributesEvent extends PacketPlayOutEntityEvent
 
 	public PacketPlayOutEntityAttributesEvent(Player injectedPlayer, int entityId, List<Attribute> attributes) {
 		super(injectedPlayer, entityId);
+
+		Validate.notNull(attributes);
+
 		this.attributes = attributes;
 	}
 

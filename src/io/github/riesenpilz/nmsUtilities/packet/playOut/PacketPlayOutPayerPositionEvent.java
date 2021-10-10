@@ -3,9 +3,11 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import io.github.riesenpilz.nmsUtilities.entity.player.TeleportFlags;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
@@ -45,31 +47,37 @@ public class PacketPlayOutPayerPositionEvent extends PacketPlayOutEvent {
 
 	/**
 	 * the target location. The different values can be relative or absolute
-	 * depending on
-	 * {@link PacketPlayOutPayerPositionEvent#absoluteOrRelativeFlags}. E.g
-	 * if X is set, the x value is relative and not absolute.
+	 * depending on {@link PacketPlayOutPayerPositionEvent#absoluteOrRelativeFlags}.
+	 * E.g if X is set, the x value is relative and not absolute.
 	 */
 	private Location location;
 
-	private Set<PlayerTeleportFlags> absoluteOrRelativeFlags;
+	private Set<TeleportFlags> absoluteOrRelativeFlags;
 	private int teleportId;
 
 	public PacketPlayOutPayerPositionEvent(Player injectedPlayer, PacketPlayOutPosition packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		location = new Location(injectedPlayer.getWorld(), Field.get(packet, "a", double.class),
 				Field.get(packet, "b", double.class), Field.get(packet, "c", double.class),
 				Field.get(packet, "d", float.class), Field.get(packet, "e", float.class));
 		@SuppressWarnings("unchecked")
 		Set<EnumPlayerTeleportFlags> nmsAbsoluteOrRelativeFlags = Field.get(packet, "f", Set.class);
 		for (EnumPlayerTeleportFlags nmsAbsoluteOrRelativeFlag : nmsAbsoluteOrRelativeFlags)
-			absoluteOrRelativeFlags.add(PlayerTeleportFlags.getPlayerTeleportFlags(nmsAbsoluteOrRelativeFlag));
+			absoluteOrRelativeFlags.add(TeleportFlags.getPlayerTeleportFlags(nmsAbsoluteOrRelativeFlag));
 
 		teleportId = Field.get(packet, "g", int.class);
 	}
 
 	public PacketPlayOutPayerPositionEvent(Player injectedPlayer, Location location,
-			Set<PlayerTeleportFlags> absoluteOrRelativeFlags, int teleportId) {
+			Set<TeleportFlags> absoluteOrRelativeFlags, int teleportId) {
 		super(injectedPlayer);
+
+		Validate.notNull(location);
+		Validate.notNull(absoluteOrRelativeFlags);
+
 		this.location = location;
 		this.absoluteOrRelativeFlags = absoluteOrRelativeFlags;
 		this.teleportId = teleportId;
@@ -79,7 +87,7 @@ public class PacketPlayOutPayerPositionEvent extends PacketPlayOutEvent {
 		return location;
 	}
 
-	public Set<PlayerTeleportFlags> getAbsoluteOrRelativeFlags() {
+	public Set<TeleportFlags> getAbsoluteOrRelativeFlags() {
 		return absoluteOrRelativeFlags;
 	}
 
@@ -90,7 +98,7 @@ public class PacketPlayOutPayerPositionEvent extends PacketPlayOutEvent {
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		Set<EnumPlayerTeleportFlags> nmsAbsoluteOrRelativeFlags = new HashSet<>();
-		for (PlayerTeleportFlags absoluteOrRelativeFlag : absoluteOrRelativeFlags)
+		for (TeleportFlags absoluteOrRelativeFlag : absoluteOrRelativeFlags)
 			nmsAbsoluteOrRelativeFlags.add(absoluteOrRelativeFlag.getNMS());
 		return new PacketPlayOutPosition(location.getX(), location.getY(), location.getZ(), location.getYaw(),
 				location.getPitch(), null, teleportId);
@@ -106,26 +114,4 @@ public class PacketPlayOutPayerPositionEvent extends PacketPlayOutEvent {
 		return "https://wiki.vg/Protocol#Player_Position_And_Look_.28clientbound.29";
 	}
 
-	public static enum PlayerTeleportFlags {
-
-		X(EnumPlayerTeleportFlags.X), Y(EnumPlayerTeleportFlags.Y), Z(EnumPlayerTeleportFlags.Z),
-		Y_ROT(EnumPlayerTeleportFlags.Y_ROT), X_ROT(EnumPlayerTeleportFlags.X_ROT);
-
-		private EnumPlayerTeleportFlags nms;
-
-		private PlayerTeleportFlags(EnumPlayerTeleportFlags nms) {
-			this.nms = nms;
-		}
-
-		public EnumPlayerTeleportFlags getNMS() {
-			return nms;
-		}
-
-		public static PlayerTeleportFlags getPlayerTeleportFlags(EnumPlayerTeleportFlags nms) {
-			for (PlayerTeleportFlags flag : values())
-				if (flag.getNMS().equals(nms))
-					return flag;
-			return null;
-		}
-	}
 }

@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.entity.WorldEntity;
@@ -28,12 +29,16 @@ public class PacketPlayOutOpenHorseWindowEvent extends PacketPlayOutInventoryEve
 
 	public PacketPlayOutOpenHorseWindowEvent(Player injectedPlayer, PacketPlayOutOpenWindowHorse packet) {
 		super(injectedPlayer, packet);
+
+		Validate.notNull(packet);
+
 		slots = Field.get(packet, "b", int.class);
 		entityId = Field.get(packet, "c", int.class);
 	}
 
 	public PacketPlayOutOpenHorseWindowEvent(Player injectedPlayer, int inventoryId, int slots, int entityId) {
 		super(injectedPlayer, inventoryId);
+
 		this.slots = slots;
 		this.entityId = entityId;
 	}
@@ -45,9 +50,11 @@ public class PacketPlayOutOpenHorseWindowEvent extends PacketPlayOutInventoryEve
 	public int getEntityId() {
 		return entityId;
 	}
+
 	public WorldEntity getEntity() {
 		return WorldEntity.getWorldEntity(entityId, getBukkit().getWorld());
 	}
+
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		return new PacketPlayOutOpenWindowHorse(getInventoryId(), slots, entityId);

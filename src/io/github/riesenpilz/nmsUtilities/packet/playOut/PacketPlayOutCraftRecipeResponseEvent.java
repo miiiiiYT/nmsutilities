@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
@@ -29,11 +30,17 @@ public class PacketPlayOutCraftRecipeResponseEvent extends PacketPlayOutInventor
 
 	public PacketPlayOutCraftRecipeResponseEvent(Player injectedPlayer, PacketPlayOutAutoRecipe packet) {
 		super(injectedPlayer, packet);
+
+		Validate.notNull(packet);
+
 		recipeId = PacketUtils.toNamespacedKey(Field.get(packet, "b", MinecraftKey.class));
 	}
 
 	public PacketPlayOutCraftRecipeResponseEvent(Player injectedPlayer, int inventoryId, NamespacedKey recipeId) {
 		super(injectedPlayer, inventoryId);
+
+		Validate.notNull(recipeId);
+
 		this.recipeId = recipeId;
 	}
 

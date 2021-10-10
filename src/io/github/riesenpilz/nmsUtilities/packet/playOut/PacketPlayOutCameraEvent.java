@@ -44,7 +44,6 @@ public class PacketPlayOutCameraEvent extends PacketPlayOutEntityEvent {
 
 	public PacketPlayOutCameraEvent(Player injectedPlayer, PacketPlayOutCamera packet) {
 		super(injectedPlayer, packet);
-		
 	}
 
 	public PacketPlayOutCameraEvent(Player injectedPlayer, int targetEntityId) {

@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
@@ -33,7 +34,7 @@ public class PacketPlayOutCostumPayloadEvent extends PacketPlayOutEvent {
 	/**
 	 * Name of the plugin channel used to send the data.
 	 */
-	private NamespacedKey key;
+	private NamespacedKey channel;
 
 	/**
 	 * Any data, depending on the channel. minecraft: channels are documented here.
@@ -42,11 +43,24 @@ public class PacketPlayOutCostumPayloadEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutCostumPayloadEvent(Player injectedPlayer, PacketPlayOutCustomPayload packet) {
 		super(injectedPlayer);
-		key = PacketUtils.toNamespacedKey(Field.get(packet, "r", MinecraftKey.class));
+
+		Validate.notNull(packet);
+
+		channel = PacketUtils.toNamespacedKey(Field.get(packet, "r", MinecraftKey.class));
 	}
 
-	public NamespacedKey getKey() {
-		return key;
+	public PacketPlayOutCostumPayloadEvent(Player injectedPlayer, NamespacedKey channel, PacketDataSerializer data) {
+		super(injectedPlayer);
+
+		Validate.notNull(channel);
+		Validate.notNull(data);
+
+		this.channel = channel;
+		this.data = data;
+	}
+
+	public NamespacedKey getChannel() {
+		return channel;
 	}
 
 	public PacketDataSerializer getData() {
@@ -55,7 +69,7 @@ public class PacketPlayOutCostumPayloadEvent extends PacketPlayOutEvent {
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutCustomPayload(PacketUtils.toMinecraftKey(key), data);
+		return new PacketPlayOutCustomPayload(PacketUtils.toMinecraftKey(channel), data);
 	}
 
 	@Override

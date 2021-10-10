@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -61,6 +62,9 @@ public class PacketPlayOutParticleEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutParticleEvent(Player injectedPlayer, PacketPlayOutWorldParticles packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		particleLocation = new Location(injectedPlayer.getWorld(), Field.get(packet, "a", double.class),
 				Field.get(packet, "b", double.class), Field.get(packet, "c", double.class));
 		offsetX = Field.get(packet, "d", float.class);
@@ -75,6 +79,10 @@ public class PacketPlayOutParticleEvent extends PacketPlayOutEvent {
 	public PacketPlayOutParticleEvent(Player injectedPlayer, Location particleLocation, float offsetX, float offsetY,
 			float offsetZ, float data, int count, boolean longDistance, ParticleParam particleParam) {
 		super(injectedPlayer);
+
+		Validate.notNull(particleLocation);
+		Validate.notNull(particleParam);
+
 		this.particleLocation = particleLocation;
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;

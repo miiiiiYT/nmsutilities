@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -23,21 +24,26 @@ public class PacketPlayOutSetPassengersEvent extends PacketPlayOutEvent {
 	 * Vehicle's EID.
 	 */
 	private int vehicleId;
-	
+
 	/**
 	 * EIDs of entity's passengers.
 	 */
-    private int[] passengers;
-	
+	private int[] passengers;
+
 	public PacketPlayOutSetPassengersEvent(Player injectedPlayer, PacketPlayOutMount packet) {
 		super(injectedPlayer);
-		
+
+		Validate.notNull(packet);
+
 		vehicleId = Field.get(packet, "a", int.class);
 		passengers = Field.get(packet, "b", int[].class);
 	}
 
 	public PacketPlayOutSetPassengersEvent(Player injectedPlayer, int vehicleId, int[] passengers) {
 		super(injectedPlayer);
+
+		Validate.notNull(passengers);
+
 		this.vehicleId = vehicleId;
 		this.passengers = passengers;
 	}

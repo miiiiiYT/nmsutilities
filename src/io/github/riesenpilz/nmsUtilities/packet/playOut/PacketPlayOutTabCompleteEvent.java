@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import com.mojang.brigadier.suggestion.Suggestions;
@@ -31,12 +32,18 @@ public class PacketPlayOutTabCompleteEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutTabCompleteEvent(Player injectedPlayer, PacketPlayOutTabComplete packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		transactionID = Field.get(packet, "a", int.class);
 		suggestions = Field.get(packet, "b", Suggestions.class);
 	}
 
 	public PacketPlayOutTabCompleteEvent(Player injectedPlayer, int transactionID, Suggestions suggestions) {
 		super(injectedPlayer);
+
+		Validate.notNull(suggestions);
+
 		this.transactionID = transactionID;
 		this.suggestions = suggestions;
 	}

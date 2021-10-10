@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -28,11 +29,17 @@ public class PacketPlayOutEntityDestroyEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutEntityDestroyEvent(Player injectedPlayer, PacketPlayOutEntityDestroy packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
+
 		entityIds = Field.get(packet, "a", int[].class);
 	}
 
 	public PacketPlayOutEntityDestroyEvent(Player injectedPlayer, int[] entityIds) {
 		super(injectedPlayer);
+
+		Validate.notNull(entityIds);
+
 		this.entityIds = entityIds;
 	}
 

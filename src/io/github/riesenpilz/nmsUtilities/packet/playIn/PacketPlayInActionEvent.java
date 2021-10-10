@@ -19,9 +19,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayInEntityAction;
  * Packet ID: 0x1C<br>
  * State: Play<br>
  * Bound To: Server
- *
- * @author Martin
- *
+ * 
  */
 public class PacketPlayInActionEvent extends PacketPlayInEntityEvent {
 

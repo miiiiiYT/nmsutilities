@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -42,6 +43,9 @@ public class PacketPlayOutEntityEffectEvent extends PacketPlayOutEntityEvent {
 
 	public PacketPlayOutEntityEffectEvent(Player injectedPlayer, PacketPlayOutEntityEffect packet) {
 		super(injectedPlayer, packet);
+
+		Validate.notNull(packet);
+
 		effectId = Field.get(packet, "b", byte.class);
 		amplifier = Field.get(packet, "c", byte.class);
 		duartion = Field.get(packet, "d", int.class);
@@ -51,6 +55,7 @@ public class PacketPlayOutEntityEffectEvent extends PacketPlayOutEntityEvent {
 	public PacketPlayOutEntityEffectEvent(Player injectedPlayer, int entityId, byte effectId, byte amplifier,
 			int duartion, byte bitMask) {
 		super(injectedPlayer, entityId);
+
 		this.effectId = effectId;
 		this.amplifier = amplifier;
 		this.duartion = duartion;

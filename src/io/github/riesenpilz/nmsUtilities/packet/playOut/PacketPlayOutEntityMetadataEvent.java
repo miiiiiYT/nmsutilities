@@ -3,6 +3,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.entity.DataWatcherItem;
@@ -42,6 +43,9 @@ public class PacketPlayOutEntityMetadataEvent extends PacketPlayOutEntityEvent {
 
 	public PacketPlayOutEntityMetadataEvent(Player injectedPlayer, int entityId, List<DataWatcherItem<?>> metadata) {
 		super(injectedPlayer, entityId);
+
+		Validate.notNull(metadata);
+
 		this.metadata = metadata;
 	}
 

@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.inventory.ItemStack;
@@ -35,12 +36,16 @@ public class PacketPlayOutSetSlotEvent extends PacketPlayOutInventoryEvent {
 
 	public PacketPlayOutSetSlotEvent(Player injectedPlayer, PacketPlayOutSetSlot packet) {
 		super(injectedPlayer, packet);
+
 		slot = Field.get(packet, "b", int.class);
 		itemStack = ItemStack.getItemStackOf(Field.get(packet, "c", net.minecraft.server.v1_16_R3.ItemStack.class));
 	}
 
 	public PacketPlayOutSetSlotEvent(Player injectedPlayer, int inventoryId, int slot, ItemStack itemStack) {
 		super(injectedPlayer, inventoryId);
+
+		Validate.notNull(itemStack);
+
 		this.slot = slot;
 		this.itemStack = itemStack;
 	}

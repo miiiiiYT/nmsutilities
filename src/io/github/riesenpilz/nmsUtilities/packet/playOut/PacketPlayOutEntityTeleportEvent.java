@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -48,6 +49,9 @@ public class PacketPlayOutEntityTeleportEvent extends PacketPlayOutEntityEvent {
 	public PacketPlayOutEntityTeleportEvent(Player injectedPlayer, int entityId, Location location, byte yaw,
 			byte pitch, boolean onGround) {
 		super(injectedPlayer, entityId);
+
+		Validate.notNull(location);
+
 		this.location = location;
 		this.yaw = yaw;
 		this.pitch = pitch;

@@ -2,6 +2,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
 import java.util.UUID;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -47,6 +48,7 @@ public class PacketPlayOutSpawnEntityEvent extends PacketPlayOutEntityEvent {
 
 	public PacketPlayOutSpawnEntityEvent(Player injectedPlayer, PacketPlayOutSpawnEntity packet) {
 		super(injectedPlayer, packet);
+
 		uuid = Field.get(packet, "b", UUID.class);
 		location = new Location(injectedPlayer.getWorld(), Field.get(packet, "c", double.class),
 				Field.get(packet, "d", double.class), Field.get(packet, "e", double.class),
@@ -62,6 +64,12 @@ public class PacketPlayOutSpawnEntityEvent extends PacketPlayOutEntityEvent {
 	public PacketPlayOutSpawnEntityEvent(Player injectedPlayer, int entityId, UUID uuid, Location location,
 			EntityType type, Vector velocity, int data) {
 		super(injectedPlayer, entityId);
+
+		Validate.notNull(uuid);
+		Validate.notNull(location);
+		Validate.notNull(type);
+		Validate.notNull(velocity);
+
 		this.uuid = uuid;
 		this.location = location;
 		this.type = type;

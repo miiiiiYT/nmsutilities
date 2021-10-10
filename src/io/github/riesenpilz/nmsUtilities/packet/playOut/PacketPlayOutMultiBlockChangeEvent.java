@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -43,8 +44,10 @@ public class PacketPlayOutMultiBlockChangeEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutMultiBlockChangeEvent(Player injectedPlayer, PacketPlayOutMultiBlockChange packet) {
 		super(injectedPlayer);
-		
-		position = PacketUtils.toLocation(Field.get(packet, "a", SectionPosition.class), injectedPlayer.getWorld()) ;
+
+		Validate.notNull(packet);
+
+		position = PacketUtils.toLocation(Field.get(packet, "a", SectionPosition.class), injectedPlayer.getWorld());
 		relativePositions = Field.get(packet, "b", short[].class);
 		IBlockData[] iBlockDatas = Field.get(packet, "c", IBlockData[].class);
 		blockDatas = new BlockData[iBlockDatas.length];
@@ -53,16 +56,46 @@ public class PacketPlayOutMultiBlockChangeEvent extends PacketPlayOutEvent {
 		updateLight = Field.get(packet, "d", boolean.class);
 	}
 
+	public PacketPlayOutMultiBlockChangeEvent(Player injectedPlayer, Location position, short[] relativePositions,
+			BlockData[] blockDatas, boolean updateLight) {
+		super(injectedPlayer);
+
+		Validate.notNull(position);
+		Validate.notNull(relativePositions);
+		Validate.notNull(blockDatas);
+
+		this.position = position;
+		this.relativePositions = relativePositions;
+		this.blockDatas = blockDatas;
+		this.updateLight = updateLight;
+	}
+
+	public Location getPosition() {
+		return position;
+	}
+
+	public short[] getRelativePositions() {
+		return relativePositions;
+	}
+
+	public BlockData[] getBlockDatas() {
+		return blockDatas;
+	}
+
+	public boolean isUpdateLight() {
+		return updateLight;
+	}
+
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
 		final PacketPlayOutMultiBlockChange packet = new PacketPlayOutMultiBlockChange();
 		Field.set(packet, "a", PacketUtils.toSectionPosition(position));
 		Field.set(packet, "b", relativePositions);
-		
+
 		IBlockData[] iBlockDatas = new IBlockData[blockDatas.length];
 		for (int i = 0; i < blockDatas.length; i++)
 			iBlockDatas[i] = blockDatas[i].getNMS().getBlockData();
-		
+
 		Field.set(packet, "c", iBlockDatas);
 		Field.set(packet, "d", updateLight);
 		return packet;

@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -47,6 +48,9 @@ public class PacketPlayOutBlockBreakAnimationEvent extends PacketPlayOutEvent im
 
 	public PacketPlayOutBlockBreakAnimationEvent(Player injectedPlayer, PacketPlayOutBlockBreakAnimation packet) {
 		super(injectedPlayer);
+		
+		Validate.notNull(packet);
+		
 		entityId = Field.get(packet, "a", int.class);
 		blockLocation = PacketUtils.toLocation(Field.get(packet, "b", BlockPosition.class), injectedPlayer.getWorld());
 		destroyStage = Field.get(packet, "c", int.class);
@@ -56,6 +60,9 @@ public class PacketPlayOutBlockBreakAnimationEvent extends PacketPlayOutEvent im
 	public PacketPlayOutBlockBreakAnimationEvent(Player injectedPlayer, int entityId, Location blockLocation,
 			int destroyStage) {
 		super(injectedPlayer);
+		
+		Validate.notNull(blockLocation);
+		
 		this.entityId = entityId;
 		this.blockLocation = blockLocation;
 		this.destroyStage = destroyStage;

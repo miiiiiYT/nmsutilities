@@ -2,6 +2,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
 import java.util.UUID;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Art;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
@@ -46,6 +47,7 @@ public class PacketPlayOutSpawnPaintingEvent extends PacketPlayOutEntityEvent {
 	@SuppressWarnings("deprecation")
 	public PacketPlayOutSpawnPaintingEvent(Player injectedPlayer, PacketPlayOutSpawnEntityPainting packet) {
 		super(injectedPlayer, packet);
+
 		uuid = Field.get(packet, "b", UUID.class);
 		location = PacketUtils.toLocation(Field.get(packet, "c", BlockPosition.class), injectedPlayer.getWorld());
 		facing = PacketUtils.toBlockFace(Field.get(packet, "d", EnumDirection.class));
@@ -55,6 +57,12 @@ public class PacketPlayOutSpawnPaintingEvent extends PacketPlayOutEntityEvent {
 	public PacketPlayOutSpawnPaintingEvent(Player injectedPlayer, int entityId, UUID uuid, Location location,
 			BlockFace facing, Art art) {
 		super(injectedPlayer, entityId);
+
+		Validate.notNull(uuid);
+		Validate.notNull(location);
+		Validate.notNull(facing);
+		Validate.notNull(art);
+
 		this.uuid = uuid;
 		this.location = location;
 		this.facing = facing;

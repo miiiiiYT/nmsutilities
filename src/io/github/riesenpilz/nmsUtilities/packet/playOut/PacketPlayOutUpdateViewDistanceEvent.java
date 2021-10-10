@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -17,9 +18,6 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutViewDistance;
  * Packet ID: 0x4A<br>
  * State: Play<br>
  * Bound To: Client
- * 
- * @author Martin
- *
  */
 public class PacketPlayOutUpdateViewDistanceEvent extends PacketPlayOutEvent {
 
@@ -30,6 +28,8 @@ public class PacketPlayOutUpdateViewDistanceEvent extends PacketPlayOutEvent {
 
 	public PacketPlayOutUpdateViewDistanceEvent(Player injectedPlayer, PacketPlayOutViewDistance packet) {
 		super(injectedPlayer);
+
+		Validate.notNull(packet);
 
 		viewDistance = Field.get(packet, "a", int.class);
 	}

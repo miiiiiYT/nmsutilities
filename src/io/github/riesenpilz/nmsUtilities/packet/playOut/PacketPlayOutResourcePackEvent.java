@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet.playOut;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
@@ -36,12 +37,18 @@ public class PacketPlayOutResourcePackEvent extends PacketPlayOutEvent {
 	public PacketPlayOutResourcePackEvent(Player injectedPlayer, PacketPlayOutResourcePackSend packet) {
 		super(injectedPlayer);
 
+		Validate.notNull(packet);
+
 		url = Field.get(packet, "a", String.class);
 		hash = Field.get(packet, "b", String.class);
 	}
 
 	public PacketPlayOutResourcePackEvent(Player injectedPlayer, String url, String hash) {
 		super(injectedPlayer);
+
+		Validate.notNull(url);
+		Validate.notNull(hash);
+
 		this.url = url;
 		this.hash = hash;
 	}
