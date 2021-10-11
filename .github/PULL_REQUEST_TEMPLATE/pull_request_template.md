@@ -1,26 +1,23 @@
----
-name: Feature suggestion
-about: Suggest a feature!
-title: "[FEAT]"
-labels: ''
-assignees: ''
-
----
-
 <!--
-Note: Please search to see if an issue exists that references this feature. If not, you CAN create one first.
+Note: Please search to see if an issue exists that references this bug/feature. If not, you MUST create one firs, if you're requesting a bug fix.
 
 Also, before contributing, read the contributing guidelines at https://github.com/miiiiiYT/nmsutilities/blob/main/CONTIBUTING.md 
 -->
 
-Description of the feature:
+## Type
+<!-- Please mark the type of this pull request by putting an x in the box. -->
+This is a:
+- [ ] Bug fix
+- [ ] Feature suggestion
+
+Description of the bug/feature:
 <!--
-Please describe the bug in a few sentences. If possible, add screenshots.
+Please describe the bug in a few sentences. If possible, add logs or screenshots.
 -->
 
 Issue:
 <!--
-Please mention the relating issue. If there is none, please type N/A.
+Please mention the relating issue. Else, type N/A.
 -->
 
 Proposed changes:
