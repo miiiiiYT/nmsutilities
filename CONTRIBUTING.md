@@ -18,6 +18,7 @@ When creating a pull request, please state the following details:
 - If a merge conflict occurs, please try to fix it yourself. If that isn't possible, leave suggestions to us on how to resolve them.
 - If you are on the discord and want the ```Contributer``` role, state your username + tag.
 Then you can submit the pull request!
+- **If you are referencing an issue that you opened, add `closes #xxxx` at the end of your pull request to auto-close the issue.**
 
 ## 4. Look out for comments
 After submitting the pull request, please look out for comments of the team or other users.
