@@ -2,6 +2,7 @@ package io.github.riesenpilz.nmsUtilities.game;
 
 import org.apache.commons.lang.Validate;
 
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutGameStateEvent;
 import net.minecraft.server.v1_16_R3.PacketPlayOutGameStateChange;
 
 /**

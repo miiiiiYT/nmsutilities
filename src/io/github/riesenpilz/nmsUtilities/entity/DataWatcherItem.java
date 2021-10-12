@@ -8,6 +8,7 @@ import org.apache.commons.lang.Validate;
 
 import com.google.common.collect.ImmutableMap;
 
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutEntityMetadataEvent;
 import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.DataWatcher;
 import net.minecraft.server.v1_16_R3.DataWatcherObject;

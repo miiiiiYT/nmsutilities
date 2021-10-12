@@ -3,6 +3,8 @@ package io.github.riesenpilz.nmsUtilities.entity.player;
 import org.apache.commons.lang.Validate;
 import org.bukkit.block.BlockFace;
 
+import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInBlockDigEvent;
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutPlayerDiggingEvent;
 import net.minecraft.server.v1_16_R3.PacketPlayInBlockDig.EnumPlayerDigType;
 
 /**

@@ -6,6 +6,7 @@ import org.bukkit.GameMode;
 import com.mojang.authlib.GameProfile;
 
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutPlayerInfoEvent;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 import net.minecraft.server.v1_16_R3.PacketPlayOutPlayerInfo;
 
@@ -84,8 +85,8 @@ public class PlayerInfoData {
 		this.displayName = displayName;
 	}
 
-	public PacketPlayOutPlayerInfo.PlayerInfoData getNMS(PacketPlayOutPlayerInfo packet) {
-		return packet.new PlayerInfoData(profile, ping, PacketUtils.toEnumGamemode(gameMode), displayName);
+	public PacketPlayOutPlayerInfo.PlayerInfoData getNMS() {
+		return new PacketPlayOutPlayerInfo().new PlayerInfoData(profile, ping, PacketUtils.toEnumGamemode(gameMode), displayName);
 	}
 
 }

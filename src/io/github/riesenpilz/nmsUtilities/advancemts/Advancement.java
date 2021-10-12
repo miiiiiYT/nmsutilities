@@ -10,6 +10,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.NamespacedKey;
 
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutAdvancementsEvent;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.Advancement.SerializedAdvancement;
 import net.minecraft.server.v1_16_R3.AdvancementDisplay;

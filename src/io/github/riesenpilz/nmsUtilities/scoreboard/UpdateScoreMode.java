@@ -1,5 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.scoreboard;
 
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutScoreboardUpdateScoreEvent;
 import net.minecraft.server.v1_16_R3.ScoreboardServer.Action;
 
 /**

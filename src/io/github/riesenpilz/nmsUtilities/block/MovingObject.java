@@ -8,6 +8,7 @@ import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
 import org.bukkit.util.Vector;
 
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
+import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInUseItemEvent;
 import net.minecraft.server.v1_16_R3.MovingObjectPositionBlock;
 
 /**
@@ -15,24 +16,24 @@ import net.minecraft.server.v1_16_R3.MovingObjectPositionBlock;
  * 
  * @see PacketPlayInUseItemEvent
  */
-public class MovingBlock {
+public class MovingObject {
 	private MovingObjectPositionBlock nms;
 
-	protected MovingBlock(MovingObjectPositionBlock nms) {
+	protected MovingObject(MovingObjectPositionBlock nms) {
 		Validate.notNull(nms);
 		this.nms = nms;
 	}
 
-	public MovingBlock(Vector velocity, BlockFace face, Location location, boolean flag) {
+	public MovingObject(Vector velocity, BlockFace face, Location location, boolean insideBlock) {
 		Validate.notNull(velocity);
 		Validate.notNull(face);
 		Validate.notNull(location);
 		nms = new MovingObjectPositionBlock(PacketUtils.toVec3D(velocity), CraftBlock.blockFaceToNotch(face),
-				PacketUtils.toBlockPosition(location), flag);
+				PacketUtils.toBlockPosition(location), insideBlock);
 	}
 
-	public static MovingBlock getMovingBlockOf(MovingObjectPositionBlock nms) {
-		return new MovingBlock(nms);
+	public static MovingObject getMovingBlockOf(MovingObjectPositionBlock nms) {
+		return new MovingObject(nms);
 	}
 
 	public void setVelocity(Vector velocity) {
@@ -62,6 +63,14 @@ public class MovingBlock {
 
 	public BlockFace getFacing() {
 		return CraftBlock.notchToBlockFace(nms.getDirection());
+	}
+
+	public boolean isInsideBlock() {
+		return nms.d();
+	}
+
+	public void setInsideBlock(boolean insideBlock) {
+		nms = new MovingObjectPositionBlock(nms.getPos(), nms.getDirection(), nms.getBlockPosition(), insideBlock);
 	}
 
 	public MovingObjectPositionBlock getNMS() {

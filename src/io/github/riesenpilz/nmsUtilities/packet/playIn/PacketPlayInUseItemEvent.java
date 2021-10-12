@@ -3,7 +3,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playIn;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
-import io.github.riesenpilz.nmsUtilities.block.MovingBlock;
+import io.github.riesenpilz.nmsUtilities.block.MovingObject;
 import io.github.riesenpilz.nmsUtilities.entity.player.Hand;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
@@ -25,7 +25,7 @@ import net.minecraft.server.v1_16_R3.PacketPlayInUseItem;
  */
 public class PacketPlayInUseItemEvent extends PacketPlayInEvent {
 
-	private MovingBlock block;
+	private MovingObject movingObject;
 
 	/**
 	 * Hand used for the animation.
@@ -37,24 +37,24 @@ public class PacketPlayInUseItemEvent extends PacketPlayInEvent {
 
 		Validate.notNull(packet);
 
-		block = MovingBlock.getMovingBlockOf(packet.c());
+		movingObject = MovingObject.getMovingBlockOf(packet.c());
 		hand = Hand.getHand(packet.b());
 	}
 
-	public PacketPlayInUseItemEvent(Player injectedPlayer, MovingBlock block, Hand hand) {
+	public PacketPlayInUseItemEvent(Player injectedPlayer, MovingObject block, Hand hand) {
 		super(injectedPlayer);
 
 		Validate.notNull(block);
 		Validate.notNull(hand);
 
-		this.block = block;
+		this.movingObject = block;
 		this.hand = hand;
 	}
 
 	@Override
 	public Packet<PacketListenerPlayIn> getNMS() {
 		final PacketPlayInUseItem packet = new PacketPlayInUseItem();
-		Field.set(packet, "a", block.getNMS());
+		Field.set(packet, "a", movingObject.getNMS());
 		Field.set(packet, "b", hand.getNMS());
 		return packet;
 	}

@@ -1,12 +1,11 @@
 package io.github.riesenpilz.nmsUtilities.entity;
 
-import io.github.riesenpilz.nmsUtilities.entity.pathfinder.PathfinderGoalSelector;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftCreature;
 import org.bukkit.entity.Creature;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
 
+import io.github.riesenpilz.nmsUtilities.entity.pathfinder.PathfinderGoalSelector;
 import net.minecraft.server.v1_16_R3.EntityCreature;
 
 /**

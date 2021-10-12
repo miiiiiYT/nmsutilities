@@ -1,5 +1,7 @@
 package io.github.riesenpilz.nmsUtilities.block;
 
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutBlockEntityDataEvent;
+
 /**
  * Only used by packets
  * 

@@ -2,6 +2,7 @@ package io.github.riesenpilz.nmsUtilities.advancemts;
 
 import org.apache.commons.lang.Validate;
 
+import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInAdvancementsEvent;
 import net.minecraft.server.v1_16_R3.PacketPlayInAdvancements;
 
 /**

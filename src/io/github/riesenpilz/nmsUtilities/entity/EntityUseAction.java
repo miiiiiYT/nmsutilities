@@ -2,6 +2,7 @@ package io.github.riesenpilz.nmsUtilities.entity;
 
 import org.apache.commons.lang.Validate;
 
+import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInEntityInteractEvent;
 import net.minecraft.server.v1_16_R3.PacketPlayInUseEntity.EnumEntityUseAction;
 
 /**

@@ -1,5 +1,7 @@
 package io.github.riesenpilz.nmsUtilities.entity.player;
 
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutAnimationEvent;
+
 /**
  * Only used by packets.
  * 

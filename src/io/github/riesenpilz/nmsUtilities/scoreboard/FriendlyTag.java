@@ -1,5 +1,7 @@
 package io.github.riesenpilz.nmsUtilities.scoreboard;
 
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutScoreboardTeamEvent;
+
 /**
  * Only used by packets.
  * 

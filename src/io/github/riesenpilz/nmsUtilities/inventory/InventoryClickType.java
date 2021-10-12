@@ -2,6 +2,8 @@ package io.github.riesenpilz.nmsUtilities.inventory;
 
 import org.apache.commons.lang.Validate;
 
+import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInInventoryClickEvent;
+
 /**
  * Represents {@link net.minecraft.server.v1_16_R3.InventoryClickType}.
  * Only used by packets.

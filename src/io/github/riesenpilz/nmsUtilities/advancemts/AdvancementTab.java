@@ -2,6 +2,8 @@ package io.github.riesenpilz.nmsUtilities.advancemts;
 
 import org.apache.commons.lang.Validate;
 
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutSelectAdvancementTabEvent;
+
 /**
  * Only used by packets.
  * 

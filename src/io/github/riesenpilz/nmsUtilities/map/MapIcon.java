@@ -2,6 +2,7 @@ package io.github.riesenpilz.nmsUtilities.map;
 
 import org.apache.commons.lang.Validate;
 
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutMapDataEvent;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 

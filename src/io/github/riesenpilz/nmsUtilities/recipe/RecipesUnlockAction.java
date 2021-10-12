@@ -2,6 +2,7 @@ package io.github.riesenpilz.nmsUtilities.recipe;
 
 import org.apache.commons.lang.Validate;
 
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutRecipesUnlockEvent;
 import net.minecraft.server.v1_16_R3.PacketPlayOutRecipes;
 
 /**

@@ -2,6 +2,7 @@ package io.github.riesenpilz.nmsUtilities.resourcePack;
 
 import org.apache.commons.lang.Validate;
 
+import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInResourcePackStatusEvent;
 import net.minecraft.server.v1_16_R3.PacketPlayInResourcePackStatus.EnumResourcePackStatus;
 
 /**

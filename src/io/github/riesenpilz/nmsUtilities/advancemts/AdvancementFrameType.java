@@ -2,6 +2,8 @@ package io.github.riesenpilz.nmsUtilities.advancemts;
 
 import org.apache.commons.lang.Validate;
 
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutAdvancementsEvent;
+
 /**
  * Represents {@link net.minecraft.server.v1_16_R3.AdvancementFrameType}. Only
  * used by packets.

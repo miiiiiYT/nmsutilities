@@ -2,6 +2,9 @@ package io.github.riesenpilz.nmsUtilities.entity.player;
 
 import org.apache.commons.lang.Validate;
 
+import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInAbilitiesEvent;
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutPlayerAbilitiesEvent;
+
 /**
  * Represents {@link net.minecraft.server.v1_16_R3.PlayerAbilities}. Only used
  * by packets.

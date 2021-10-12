@@ -34,8 +34,8 @@ public class IOWorker implements AutoCloseable {
 	private final RegionFileCache d;
 	private final Map<ChunkCoordIntPair, IOWorker.a> e = Maps.newLinkedHashMap();
 
-	public IOWorker(File file, boolean flag, String s) {
-		this.d = new RegionFileCache(file, flag);
+	public IOWorker(File folder, boolean sync, String s) {
+		this.d = new RegionFileCache(folder, sync);
 		this.c = new ThreadedMailbox<>(new PairedQueue.a(IOWorker.Priority.values().length), SystemUtils.g(),
 				"IOWorker-" + s);
 	}

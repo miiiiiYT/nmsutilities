@@ -2,6 +2,12 @@ package io.github.riesenpilz.nmsUtilities.entity.player;
 
 import org.apache.commons.lang.Validate;
 
+import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInArmAnimationEvent;
+import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInBlockPlaceEvent;
+import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInEditBookEvent;
+import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInEntityInteractEvent;
+import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInUseItemEvent;
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutOpenBookEvent;
 import net.minecraft.server.v1_16_R3.EnumHand;
 
 /**

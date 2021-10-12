@@ -5,6 +5,9 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
 
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutBlockActionEvent;
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutBlockChangeEvent;
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutPlayerDiggingEvent;
 import io.github.riesenpilz.nmsUtilities.world.ServerWorld;
 import net.minecraft.server.v1_16_R3.Block;
 import net.minecraft.server.v1_16_R3.IBlockData;

@@ -8,6 +8,7 @@ import org.bukkit.NamespacedKey;
 import com.google.gson.JsonObject;
 
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
+import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutAdvancementsEvent;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.CriterionInstance;
 import net.minecraft.server.v1_16_R3.CriterionTriggers;

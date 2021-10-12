@@ -2,6 +2,8 @@ package io.github.riesenpilz.nmsUtilities.block;
 
 import org.apache.commons.lang.Validate;
 
+import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInUpdateCommandBlockEvent;
+import net.minecraft.server.v1_16_R3.TileEntityCommand;
 import net.minecraft.server.v1_16_R3.TileEntityCommand.Type;
 
 /**

@@ -1,6 +1,9 @@
 package io.github.riesenpilz.nmsUtilities.packet;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
+import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -146,8 +149,10 @@ import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutUpdateViewD
 import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutUpdateViewPositionEvent;
 import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutVehicleMoveEvent;
 import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutWorldBorderInitializeEvent;
+import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import net.minecraft.server.v1_16_R3.*;
@@ -159,6 +164,17 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutRelEntityM
 import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
 
 public class Injections implements Listener {
+
+	public static void inject() {
+		@SuppressWarnings("deprecation")
+		final @Nullable ServerConnection serverConnection = MinecraftServer.getServer().getServerConnection();
+		@SuppressWarnings({ "unchecked" })
+		List<NetworkManager> connectedChannels = Field.get(serverConnection, "connectedChannels", List.class);
+		@SuppressWarnings("unchecked")
+		List<ChannelFuture> listeningChannels = Field.get(serverConnection, "listeningChannels", List.class);
+		connectedChannels.get(0).channel.getClass();
+
+	}
 
 	private void injectPlayer(Player player) {
 		final ChannelDuplexHandler channelDuplexHandler = new ChannelDuplexHandler() {
@@ -190,9 +206,7 @@ public class Injections implements Listener {
 
 	private void removePlayer(Player player) {
 		final Channel channel = player.getPlayerConnection().networkManager.channel;
-		channel.eventLoop().submit(() -> {
-			channel.pipeline().remove(player.getName());
-		});
+		channel.eventLoop().submit(() -> channel.pipeline().remove(player.getName()));
 	}
 
 	private boolean readIn(Player player1, ChannelHandlerContext ctx, Object msg, ChannelDuplexHandler handler)

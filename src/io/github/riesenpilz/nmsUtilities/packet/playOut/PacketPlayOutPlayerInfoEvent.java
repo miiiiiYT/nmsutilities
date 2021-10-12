@@ -87,7 +87,7 @@ public class PacketPlayOutPlayerInfoEvent extends PacketPlayOutEvent {
 		final List<PacketPlayOutPlayerInfo.PlayerInfoData> nms = Field.get(packet, "b", List.class);
 		nms.clear();
 		for (PlayerInfoData playerInfoData : playerInfoDatas)
-			nms.add(playerInfoData.getNMS(packet));
+			nms.add(playerInfoData.getNMS());
 		return packet;
 	}
 
