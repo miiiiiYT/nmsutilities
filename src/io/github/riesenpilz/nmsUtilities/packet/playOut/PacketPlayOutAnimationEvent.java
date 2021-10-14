@@ -3,7 +3,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playOut;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
-import io.github.riesenpilz.nmsUtilities.entity.player.PlayerAnimation;
+import io.github.riesenpilz.nmsUtilities.entity.livingEntity.player.PlayerAnimation;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;

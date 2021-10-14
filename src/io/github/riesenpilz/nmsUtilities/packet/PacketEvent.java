@@ -26,6 +26,7 @@ public abstract class PacketEvent extends Event {
 
 	public PacketEvent(Player injectedPlayer, PacketType packetType) {
 		super(true);
+
 		Validate.notNull(injectedPlayer);
 		Validate.notNull(packetType);
 		this.injectedPlayer = injectedPlayer;
@@ -45,8 +46,8 @@ public abstract class PacketEvent extends Event {
 		return injectedPlayer;
 	}
 
-	public io.github.riesenpilz.nmsUtilities.entity.player.Player getPlayer() {
-		return io.github.riesenpilz.nmsUtilities.entity.player.Player.getPlayerOf(injectedPlayer);
+	public io.github.riesenpilz.nmsUtilities.entity.livingEntity.player.Player getPlayer() {
+		return io.github.riesenpilz.nmsUtilities.entity.livingEntity.player.Player.getPlayerOf(injectedPlayer);
 	}
 
 	public abstract Packet<?> getNMS();

@@ -9,7 +9,7 @@ public abstract class PacketInEvent extends PacketEvent {
 	}
 
 	public void sendToServer() {
-		new PacketConnection(io.github.riesenpilz.nmsUtilities.entity.player.Player.getPlayerOf(getBukkit()))
+		new PacketConnection(io.github.riesenpilz.nmsUtilities.entity.livingEntity.player.Player.getPlayerOf(getBukkit()))
 				.sendPacketToServer(this);
 	}
 }

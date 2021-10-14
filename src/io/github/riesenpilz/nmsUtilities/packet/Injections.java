@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.google.common.collect.ImmutableMap;
 
-import io.github.riesenpilz.nmsUtilities.entity.player.Player;
+import io.github.riesenpilz.nmsUtilities.entity.livingEntity.player.Player;
 import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInAbilitiesEvent;
 import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInActionEvent;
 import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInAdvancementsEvent;

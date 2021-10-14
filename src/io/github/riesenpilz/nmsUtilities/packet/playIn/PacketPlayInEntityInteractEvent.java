@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import io.github.riesenpilz.nmsUtilities.entity.EntityUseAction;
-import io.github.riesenpilz.nmsUtilities.entity.player.Hand;
+import io.github.riesenpilz.nmsUtilities.entity.livingEntity.player.Hand;
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;

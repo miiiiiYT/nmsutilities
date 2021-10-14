@@ -18,11 +18,13 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.structure.Mirror;
 import org.bukkit.block.structure.UsageMode;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Pose;
 import org.bukkit.util.Vector;
 
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.BlockPropertyStructureMode;
+import net.minecraft.server.v1_16_R3.EntityPose;
 import net.minecraft.server.v1_16_R3.EntityTypes;
 import net.minecraft.server.v1_16_R3.EnumBlockMirror;
 import net.minecraft.server.v1_16_R3.EnumBlockRotation;
@@ -38,6 +40,7 @@ import net.minecraft.server.v1_16_R3.ResourceKey;
 import net.minecraft.server.v1_16_R3.SectionPosition;
 import net.minecraft.server.v1_16_R3.SoundEffect;
 import net.minecraft.server.v1_16_R3.Vec3D;
+import net.minecraft.server.v1_16_R3.Vector3f;
 
 public class PacketUtils {
 
@@ -253,9 +256,20 @@ public class PacketUtils {
 		Validate.notNull(item);
 		return Field.getConstant(Material.class, "byId", Material[].class)[Item.getId(item)];
 	}
+
 	@SuppressWarnings("deprecation")
 	public static Item toItem(Material material) {
 		Validate.notNull(material);
 		return Item.getById(material.getId());
+	}
+
+	public static EntityPose toEntityPose(Pose pose) {
+		Validate.notNull(pose);
+		return EntityPose.valueOf(pose.name());
+	}
+
+	public static Vector3f toVector3f(Vector headRotation) {
+		Validate.notNull(headRotation);
+		return new Vector3f((float) headRotation.getX(), (float) headRotation.getY(), (float) headRotation.getZ());
 	}
 }

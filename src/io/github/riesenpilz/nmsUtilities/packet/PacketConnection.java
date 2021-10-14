@@ -1,6 +1,6 @@
 package io.github.riesenpilz.nmsUtilities.packet;
 
-import io.github.riesenpilz.nmsUtilities.entity.player.Player;
+import io.github.riesenpilz.nmsUtilities.entity.livingEntity.player.Player;
 
 public class PacketConnection {
 	private final Player player;

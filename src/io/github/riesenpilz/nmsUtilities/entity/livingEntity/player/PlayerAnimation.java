@@ -1,4 +1,4 @@
-package io.github.riesenpilz.nmsUtilities.entity.player;
+package io.github.riesenpilz.nmsUtilities.entity.livingEntity.player;
 
 import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutAnimationEvent;
 

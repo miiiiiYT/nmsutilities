@@ -5,7 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.block.BlockData;
-import io.github.riesenpilz.nmsUtilities.entity.player.DigType;
+import io.github.riesenpilz.nmsUtilities.entity.livingEntity.player.DigType;
 import io.github.riesenpilz.nmsUtilities.packet.HasBlockPosition;
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;

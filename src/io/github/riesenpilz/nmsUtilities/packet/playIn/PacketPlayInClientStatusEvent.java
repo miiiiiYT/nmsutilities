@@ -3,7 +3,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playIn;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
-import io.github.riesenpilz.nmsUtilities.entity.player.ClientStatus;
+import io.github.riesenpilz.nmsUtilities.entity.livingEntity.player.ClientStatus;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
 import net.minecraft.server.v1_16_R3.PacketPlayInClientCommand;

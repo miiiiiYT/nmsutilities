@@ -8,6 +8,6 @@ public abstract class PacketOutEvent extends PacketEvent {
 		super(injectedPlayer, packetType);
 	}
 	public void sendToClient() {
-		new PacketConnection(io.github.riesenpilz.nmsUtilities.entity.player.Player.getPlayerOf(getBukkit())).sendPacketToClient(this);
+		new PacketConnection(io.github.riesenpilz.nmsUtilities.entity.livingEntity.player.Player.getPlayerOf(getBukkit())).sendPacketToClient(this);
 	}
 }

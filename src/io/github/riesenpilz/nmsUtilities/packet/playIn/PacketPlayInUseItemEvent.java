@@ -4,7 +4,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import io.github.riesenpilz.nmsUtilities.block.MovingObject;
-import io.github.riesenpilz.nmsUtilities.entity.player.Hand;
+import io.github.riesenpilz.nmsUtilities.entity.livingEntity.player.Hand;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;

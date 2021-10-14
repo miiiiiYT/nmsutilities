@@ -14,7 +14,7 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
 import org.bukkit.event.block.BlockBreakEvent;
 
-import io.github.riesenpilz.nmsUtilities.entity.player.Player;
+import io.github.riesenpilz.nmsUtilities.entity.livingEntity.player.Player;
 import io.github.riesenpilz.nmsUtilities.inventory.ItemStack;
 import io.github.riesenpilz.nmsUtilities.nbt.NBTBase;
 import io.github.riesenpilz.nmsUtilities.nbt.NBTTag;

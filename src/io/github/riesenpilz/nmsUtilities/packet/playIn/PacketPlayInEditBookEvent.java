@@ -3,7 +3,7 @@ package io.github.riesenpilz.nmsUtilities.packet.playIn;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
-import io.github.riesenpilz.nmsUtilities.entity.player.Hand;
+import io.github.riesenpilz.nmsUtilities.entity.livingEntity.player.Hand;
 import io.github.riesenpilz.nmsUtilities.inventory.ItemStack;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
