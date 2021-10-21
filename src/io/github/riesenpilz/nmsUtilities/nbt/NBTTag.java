@@ -118,7 +118,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>> 
 	}
 
 	// BYTE
-	public void setByte(String key, byte value) {
+	public void set(String key, byte value) {
 		set(key, new NBTTagByte(value));
 	}
 
@@ -132,7 +132,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>> 
 	}
 
 	// SHORT
-	public void setShort(String key, short value) {
+	public void set(String key, short value) {
 		set(key, new NBTTagShort(value));
 	}
 
@@ -146,7 +146,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>> 
 	}
 
 	// INT
-	public void setInt(String key, int value) {
+	public void set(String key, int value) {
 		set(key, new NBTTagInt(value));
 	}
 
@@ -160,7 +160,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>> 
 	}
 
 	// LONG
-	public void setLong(String key, long value) {
+	public void set(String key, long value) {
 		set(key, new NBTTagLong(value));
 	}
 
@@ -174,7 +174,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>> 
 	}
 
 	// FLOAT
-	public void setFloat(String key, float value) {
+	public void set(String key, float value) {
 		set(key, new NBTTagFloat(value));
 	}
 
@@ -188,7 +188,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>> 
 	}
 
 	// DOUBLE
-	public void setDouble(String key, double value) {
+	public void set(String key, double value) {
 		set(key, new NBTTagDouble(value));
 	}
 
@@ -202,7 +202,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>> 
 	}
 
 	// BYTE_ARRAY
-	public void setByteArray(String key, byte[] value) {
+	public void set(String key, byte[] value) {
 		set(key, new NBTTagByteArray(value));
 	}
 
@@ -215,7 +215,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>> 
 	}
 
 	// STRING
-	public void setString(String key, String value) {
+	public void set(String key, String value) {
 		set(key, new NBTTagString(value));
 	}
 
@@ -228,9 +228,6 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>> 
 	}
 
 	// NBT_TAG_LIST
-	public void setNBTTagList(String key, NBTTagList value) {
-		set(key, value);
-	}
 
 	public NBTTagList getNBTTagList(String key) {
 		return ((NBTTagList) get(key));
@@ -248,9 +245,6 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>> 
 	}
 
 	// NBT_TAG
-	public void setNBTTag(String key, NBTTag value) {
-		set(key, value);
-	}
 
 	public NBTTag getNBTTag(String key) {
 		return ((NBTTag) get(key));
@@ -268,7 +262,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>> 
 	}
 
 	// INT_ARRAY
-	public void setIntArray(String key, int[] value) {
+	public void set(String key, int[] value) {
 		set(key, new NBTTagIntArray(value));
 	}
 
@@ -281,7 +275,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>> 
 	}
 
 	// LONG_ARRAY
-	public void setLongArray(String key, long[] value) {
+	public void set(String key, long[] value) {
 		set(key, new NBTTagLongArray(value));
 	}
 
@@ -294,7 +288,7 @@ public class NBTTag extends NBTBase implements Iterable<Entry<String, NBTBase>> 
 	}
 
 	// BOOLEAN
-	public void setBoolean(String key, boolean value) {
+	public void set(String key, boolean value) {
 		set(key, new NBTTagByte(value ? (byte) 1 : (byte) 0));
 	}
 

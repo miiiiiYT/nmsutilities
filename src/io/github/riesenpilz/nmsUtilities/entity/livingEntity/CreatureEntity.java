@@ -7,7 +7,7 @@ import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
 
 import io.github.riesenpilz.nmsUtilities.entity.DataWatcherItem;
 import io.github.riesenpilz.nmsUtilities.entity.pathfinder.PathfinderGoalSelector;
-import io.github.riesenpilz.nmsUtilities.packet.ByteBuilder;
+import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import net.minecraft.server.v1_16_R3.EntityCreature;
 
 /**
@@ -46,33 +46,8 @@ public class CreatureEntity extends LivingEntity {
 	}
 	// DataWatcher (DW)
 
-	public static DataWatcherItem<Byte> getDWMobStates(byte mobStates) {
-		return new DataWatcherItem<>(14, mobStates);
+	public static DataWatcherItem<Byte> getDWMobStates(boolean NoAI, boolean leftHanded, boolean agressive) {
+		return new DataWatcherItem<>(14, PacketUtils.toBitSet(NoAI, leftHanded, agressive));
 	}
 
-	public static class DWHandStatesBuilder extends ByteBuilder {
-		private boolean NoAI;
-		private boolean leftHanded;
-		private boolean agressive;
-
-		public DWHandStatesBuilder setNoAI(boolean noAI) {
-			NoAI = noAI;
-
-			return this;
-		}
-
-		public DWHandStatesBuilder setLeftHanded(boolean leftHanded) {
-			this.leftHanded = leftHanded;
-			return this;
-		}
-
-		public DWHandStatesBuilder setAgressive(boolean agressive) {
-			this.agressive = agressive;
-			return this;
-		}
-
-		public byte build() {
-			return super.build(NoAI, leftHanded, agressive);
-		}
-	}
 }

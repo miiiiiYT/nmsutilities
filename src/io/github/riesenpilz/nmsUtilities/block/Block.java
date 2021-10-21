@@ -188,7 +188,7 @@ public class Block {
 	public void setNBTTag(@Nullable NBTTag tag) {
 		final NBTTag allNBTTags = getChunk().getAllNBTTags();
 		final NBTTag blockTags = allNBTTags.getOrDefNBTTag("block", new NBTTag());
-		blockTags.setNBTTag(getLocation().toString(), tag);
+		blockTags.set(getLocation().toString(), tag);
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class Block {
 		if (getNBTTag().isNBTTagList("drops"))
 			for (final NBTBase nbtItemStack : getNBTTag().getNBTTagList("drops"))
 				if (ItemStack.isItemStackNBT(nbtItemStack))
-					drops.add(ItemStack.getItemStack((NBTTag) nbtItemStack));
+					drops.add(ItemStack.getItemStackOf((NBTTag) nbtItemStack));
 		return drops;
 	}
 

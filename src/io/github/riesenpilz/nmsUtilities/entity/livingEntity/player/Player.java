@@ -5,7 +5,7 @@ import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import io.github.riesenpilz.nmsUtilities.entity.DataWatcherItem;
 import io.github.riesenpilz.nmsUtilities.entity.livingEntity.LivingEntity;
 import io.github.riesenpilz.nmsUtilities.nbt.NBTTag;
-import io.github.riesenpilz.nmsUtilities.packet.ByteBuilder;
+import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInSettingsEvent;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
@@ -60,57 +60,10 @@ public class Player extends LivingEntity {
 	 * @param states
 	 * @return
 	 */
-	public static DataWatcherItem<Byte> getDWSkin(byte skin) {
-		return new DataWatcherItem<>(16, skin);
-	}
-
-	public static class DWSkinBuilder extends ByteBuilder {
-		private boolean cape;
-		private boolean jacket;
-		private boolean leftSleeve;
-		private boolean rightSleeve;
-		private boolean leftPants;
-		private boolean rightPantsLeg;
-		private boolean hat;
-
-		public DWSkinBuilder setCape(boolean cape) {
-			this.cape = cape;
-			return this;
-		}
-
-		public DWSkinBuilder setJacket(boolean jacket) {
-			this.jacket = jacket;
-			return this;
-		}
-
-		public DWSkinBuilder setLeftSleeve(boolean leftSleeve) {
-			this.leftSleeve = leftSleeve;
-			return this;
-		}
-
-		public DWSkinBuilder setRightSleeve(boolean rightSleeve) {
-			this.rightSleeve = rightSleeve;
-			return this;
-		}
-
-		public DWSkinBuilder setLeftPants(boolean leftPants) {
-			this.leftPants = leftPants;
-			return this;
-		}
-
-		public DWSkinBuilder setRightPantsLeg(boolean rightPantsLeg) {
-			this.rightPantsLeg = rightPantsLeg;
-			return this;
-		}
-
-		public DWSkinBuilder setHat(boolean hat) {
-			this.hat = hat;
-			return this;
-		}
-
-		public byte build() {
-			return super.build(cape, jacket, leftSleeve, rightSleeve, leftPants, rightPantsLeg, hat);
-		}
+	public static DataWatcherItem<Byte> getDWSkin(boolean cape, boolean jacket, boolean leftSleeve, boolean rightSleeve,
+			boolean leftPantsLag, boolean rightPantsLeg, boolean hat) {
+		return new DataWatcherItem<>(16,
+				PacketUtils.toBitSet(cape, jacket, leftSleeve, rightSleeve, leftPantsLag, rightPantsLeg, hat));
 	}
 
 	public static DataWatcherItem<Byte> getDWMainHand(Hand mainHand) {

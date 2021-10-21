@@ -44,6 +44,21 @@ import net.minecraft.server.v1_16_R3.Vector3f;
 
 public class PacketUtils {
 
+	public static byte toBitSet(boolean... booleans) {
+		Validate.isTrue(booleans.length <= 8);
+		byte obyte = 0;
+		for (int i = 0; i < booleans.length; i++)
+			obyte += booleans[i] ? 1 << i : 0;
+		return obyte;
+	}
+
+	public static boolean[] toBooleanArray(byte abyte) {
+		boolean[] booleans = new boolean[Byte.SIZE];
+		for (int i = 0; i < booleans.length; i++)
+			booleans[i] = (abyte & 1 << i) == 1 << i;
+		return booleans;
+	}
+
 	public static Location toLocation(BlockPosition pos, @Nullable World world) {
 		Validate.notNull(pos);
 		return new Location(world, pos.getX(), pos.getY(), pos.getZ());

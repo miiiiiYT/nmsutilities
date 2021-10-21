@@ -4,13 +4,13 @@ import org.bukkit.craftbukkit.v1_16_R3.entity.CraftArmorStand;
 import org.bukkit.util.Vector;
 
 import io.github.riesenpilz.nmsUtilities.entity.DataWatcherItem;
-import io.github.riesenpilz.nmsUtilities.packet.ByteBuilder;
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import net.minecraft.server.v1_16_R3.EntityArmorStand;
 import net.minecraft.server.v1_16_R3.Vector3f;
 
 /**
- * Represents a {@link org.bukkit.entity.ArmorStand}.<p>
+ * Represents a {@link org.bukkit.entity.ArmorStand}.
+ * <p>
  * <i> Note that armor stands with the invisible flag from the base entity class
  * set also cannot be attacked or damaged, except for by the void.</i>
  */
@@ -35,35 +35,9 @@ public class ArmorStand extends LivingEntity {
 	}
 
 	// DataWatcher (DW)
-	public static DataWatcherItem<Byte> getDWArmorStandStates(byte armorStandStates) {
-		return new DataWatcherItem<>(14, armorStandStates);
-	}
-
-	public static class DWArmorStandStatesBuilder extends ByteBuilder {
-		private boolean small;
-		private boolean arms;
-		private boolean noBasePlate;
-		private boolean marker;
-
-		public void setSmall(boolean small) {
-			this.small = small;
-		}
-
-		public void setArms(boolean arms) {
-			this.arms = arms;
-		}
-
-		public void setNoBasePlate(boolean noBasePlate) {
-			this.noBasePlate = noBasePlate;
-		}
-
-		public void setMarker(boolean marker) {
-			this.marker = marker;
-		}
-
-		public byte build() {
-			return super.build(small, arms, noBasePlate, marker);
-		}
+	public static DataWatcherItem<Byte> getDWArmorStandStates(boolean small, boolean arms, boolean noBasePlate,
+			boolean marker) {
+		return new DataWatcherItem<>(14, PacketUtils.toBitSet(small, arms, noBasePlate, marker));
 	}
 
 	public static DataWatcherItem<Vector3f> getDWHeadRotation(Vector headRotation) {

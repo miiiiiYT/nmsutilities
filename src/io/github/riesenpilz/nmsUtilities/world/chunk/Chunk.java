@@ -43,7 +43,7 @@ public class Chunk {
 		Validate.isTrue(bukkitChunk.isLoaded(), "Chunk have to be loaded to access the NBT tag.");
 		NBTTag entities = new NBTTag();
 		for (Entity entity : getEntities())
-			entities.setNBTTag(entity.getUniqueId().toString(), WorldEntity.getWorldEntity(entity).getNBTTag());
+			entities.set(entity.getUniqueId().toString(), WorldEntity.getWorldEntity(entity).getNBTTag());
 		NBTTag tag = nbtTags.containsKey(bukkitChunk) ? nbtTags.get(bukkitChunk) : new NBTTag();
 		tag.set("entities", entities);
 		return tag;
@@ -71,7 +71,7 @@ public class Chunk {
 	}
 
 	public void setNBTTag(NBTTag tag) {
-		getNBTTag().setNBTTag("chunk", tag);
+		getNBTTag().set("chunk", tag);
 	}
 
 	public void removeNBTTag() {

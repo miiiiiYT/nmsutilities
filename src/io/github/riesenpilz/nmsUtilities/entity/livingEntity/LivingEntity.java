@@ -10,7 +10,6 @@ import org.bukkit.craftbukkit.v1_16_R3.entity.CraftLivingEntity;
 import io.github.riesenpilz.nmsUtilities.entity.DataWatcherItem;
 import io.github.riesenpilz.nmsUtilities.entity.WorldEntity;
 import io.github.riesenpilz.nmsUtilities.entity.livingEntity.player.Hand;
-import io.github.riesenpilz.nmsUtilities.packet.ByteBuilder;
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.EntityLiving;
@@ -45,33 +44,10 @@ public class LivingEntity extends WorldEntity {
 	 * @param handStates
 	 * @return
 	 */
-	public static DataWatcherItem<Byte> getDWHandStates(byte handStates) {
-		return new DataWatcherItem<>(7, handStates);
-	}
-
-	public static class DWHandStatesBuilder extends ByteBuilder {
-		private boolean handActive;
-		private Hand activeHand;
-		private boolean inRiptideSpinAttack;
-
-		public DWHandStatesBuilder setHandActive(boolean handActive) {
-			this.handActive = handActive;
-			return this;
-		}
-
-		public DWHandStatesBuilder setActiveHand(Hand activeHand) {
-			this.activeHand = activeHand;
-			return this;
-		}
-
-		public DWHandStatesBuilder setInRiptideSpinAttack(boolean inRiptideSpinAttack) {
-			this.inRiptideSpinAttack = inRiptideSpinAttack;
-			return this;
-		}
-
-		public byte build() {
-			return super.build(handActive, activeHand == Hand.MAIN_HAND ? false : true, inRiptideSpinAttack);
-		}
+	public static DataWatcherItem<Byte> getDWHandStates(boolean handActive, Hand activeHand,
+			boolean inRiptideSpinAttack) {
+		return new DataWatcherItem<>(7,
+				PacketUtils.toBitSet(handActive, activeHand == Hand.MAIN_HAND ? false : true, inRiptideSpinAttack));
 	}
 
 	public static DataWatcherItem<Float> getDWHealth(float health) {

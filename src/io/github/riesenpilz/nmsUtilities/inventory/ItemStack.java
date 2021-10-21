@@ -22,12 +22,13 @@ import io.github.riesenpilz.nmsUtilities.nbt.NBTTag;
 import io.github.riesenpilz.nmsUtilities.nbt.NBTTagList;
 import io.github.riesenpilz.nmsUtilities.nbt.NBTType;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
+import net.minecraft.server.v1_16_R3.NBTTagCompound;
 
 /**
  * Represents a {@link net.minecraft.server.v1_16_R3.ItemStack}
  *
  */
-public class ItemStack {
+public class ItemStack implements Cloneable {
 	private net.minecraft.server.v1_16_R3.ItemStack nms;
 
 	protected ItemStack(@Nullable org.bukkit.inventory.ItemStack bukkit) {
@@ -68,7 +69,7 @@ public class ItemStack {
 	/**
 	 * Sets the nbtTag of the itemStack where all the data is stored.<br>
 	 * <i>If you want to change the count and the material too, use
-	 * {@link ItemStack#getItemStack(NBTTag)}</i>
+	 * {@link ItemStack#getItemStackOf(NBTTag)}</i>
 	 * 
 	 * @param nbtTag the tag to set.
 	 */
@@ -89,23 +90,19 @@ public class ItemStack {
 	 */
 	public void setEnchanted(boolean glow) {
 		if (glow && !nms.hasEnchantments())
-			getTag().setNBTTagList("ench", new NBTTagList());
+			getTag().set("ench", new NBTTagList());
 		else if (!glow && getNMS().hasEnchantments())
 			getNMS().removeTag("ench");
 	}
 
 	/**
 	 * Saves the itemStack to an NBTTag. You can load it again with
-	 * {@link ItemStack#getItemStack(NBTTag)}
+	 * {@link ItemStack#getItemStackOf(NBTTag)}
 	 * 
 	 * @return an NBTTag with the tags, material and count of the itemStack
 	 */
 	public NBTTag toNBTTag() {
-		NBTTag tag = new NBTTag();
-		tag.setNBTTag("tag", getTag());
-		tag.setString("id", getBukkit().getType().name());
-		tag.setInt("count", getBukkit().getAmount());
-		return tag;
+		return NBTTag.getNBTTagOf(nms.save(new NBTTagCompound()));
 	}
 
 	public void setMaterial(Material material) {
@@ -126,11 +123,9 @@ public class ItemStack {
 		return getBukkit().getType();
 	}
 
-	public static ItemStack getItemStack(NBTTag nbtTag) {
-		ItemStack itemStack = new ItemStack(Material.getMaterial(nbtTag.getString("id")));
-		itemStack.getNMS().setCount(nbtTag.getInt("count"));
-		itemStack.setTag(nbtTag.getNBTTag("tag"));
-		return itemStack;
+	public static ItemStack getItemStackOf(NBTTag nbtTag) {
+		Validate.notNull(nbtTag);
+		return getItemStackOf(net.minecraft.server.v1_16_R3.ItemStack.a(nbtTag.getNMS()));
 	}
 
 	public ItemMeta getItemMeta() {
@@ -163,11 +158,11 @@ public class ItemStack {
 
 	public void setSkullTexture(String url) {
 		Validate.isTrue(getMaterial().equals(Material.PLAYER_HEAD));
-		
+
 		GameProfile profile = new GameProfile(UUID.randomUUID(), null);
 		byte[] encodedData = base64.encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
 		profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
-		
+
 		SkullMeta headMeta = (SkullMeta) getItemMeta();
 		Field.set(headMeta, "profile", profile);
 		setItemMeta(headMeta);
@@ -179,7 +174,7 @@ public class ItemStack {
 		GameProfile profile = Field.get((SkullMeta) getItemMeta(), "profile", GameProfile.class);
 		Collection<Property> properties = profile.getProperties().get("textures");
 		Property property = Iterables.getFirst(properties, null);
-		
+
 		Validate.notNull(property, "Skull doesn't has a texture");
 		byte[] decodedData = base64.decode(property.getValue().getBytes());
 		return new String(decodedData).substring("{textures:{SKIN:{url:\"".length() - 1, "\"}}}".length() - 1);
@@ -190,7 +185,12 @@ public class ItemStack {
 			return false;
 		NBTTag nbtTagItemStack = (NBTTag) nbtItemStack;
 		return nbtTagItemStack.hasKeyWithValueType("id", NBTType.INT)
-				&& nbtTagItemStack.hasKeyWithValueType("count", NBTType.INT)
+				&& nbtTagItemStack.hasKeyWithValueType("Count", NBTType.INT)
 				&& nbtTagItemStack.hasKeyWithValueType("tag", NBTType.NBT_TAG);
+	}
+
+	@Override
+	public ItemStack clone() {
+		return getItemStackOf(nms.cloneItemStack());
 	}
 }

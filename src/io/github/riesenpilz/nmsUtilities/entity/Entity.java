@@ -61,7 +61,7 @@ public abstract class Entity {
 			@Override
 			public NBTTag saveData() {
 				final NBTTag nbtTag = NBTTag.getNBTTagOf(nms.save(new NBTTagCompound()));
-				nbtTag.setBoolean("hi", true);
+				nbtTag.set("hi", true);
 				return nbtTag;
 			}
 

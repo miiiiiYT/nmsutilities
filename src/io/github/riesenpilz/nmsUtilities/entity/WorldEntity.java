@@ -14,7 +14,6 @@ import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
 import org.bukkit.entity.Pose;
 
 import io.github.riesenpilz.nmsUtilities.nbt.NBTTag;
-import io.github.riesenpilz.nmsUtilities.packet.ByteBuilder;
 import io.github.riesenpilz.nmsUtilities.packet.PacketUtils;
 import io.github.riesenpilz.nmsUtilities.world.ServerWorld;
 import io.github.riesenpilz.nmsUtilities.world.chunk.Chunk;
@@ -135,63 +134,10 @@ public class WorldEntity {
 	}
 
 	// DataWatcher (DW)
-	public static DataWatcherItem<Byte> getDWStates(byte states) {
-		return new DataWatcherItem<>(0, states);
-	}
-
-	public static class DWStatesBuilder extends ByteBuilder {
-		private boolean onFire;
-		private boolean crouching;
-		private boolean unused;
-		private boolean sprinting;
-		private boolean swimming;
-		private boolean invisable;
-		private boolean glowing;
-		private boolean elytraFlying;
-
-		public DWStatesBuilder setOnFire(boolean onFire) {
-			this.onFire = onFire;
-			return this;
-		}
-
-		public DWStatesBuilder setCrouching(boolean crouching) {
-			this.crouching = crouching;
-			return this;
-		}
-
-		public DWStatesBuilder setUnused(boolean unused) {
-			this.unused = unused;
-			return this;
-		}
-
-		public DWStatesBuilder setSprinting(boolean sprinting) {
-			this.sprinting = sprinting;
-			return this;
-		}
-
-		public DWStatesBuilder setSwimming(boolean swimming) {
-			this.swimming = swimming;
-			return this;
-		}
-
-		public DWStatesBuilder setInvisable(boolean invisable) {
-			this.invisable = invisable;
-			return this;
-		}
-
-		public DWStatesBuilder setGlowing(boolean glowing) {
-			this.glowing = glowing;
-			return this;
-		}
-
-		public DWStatesBuilder setElytraFlying(boolean elytraFlying) {
-			this.elytraFlying = elytraFlying;
-			return this;
-		}
-
-		public byte build() {
-			return super.build(onFire, crouching, unused, sprinting, swimming, invisable, glowing, elytraFlying);
-		}
+	public static DataWatcherItem<Byte> getDWStates(boolean onFire, boolean crouching, boolean sprinting,
+			boolean swimming, boolean invisable, boolean elytraFlying) {
+		return new DataWatcherItem<>(0,
+				PacketUtils.toBitSet(onFire, crouching, false, sprinting, swimming, invisable, elytraFlying));
 	}
 
 	public static DataWatcherItem<Integer> getDWAirTicks(int airTicks) {
