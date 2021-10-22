@@ -5,6 +5,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import io.github.riesenpilz.nmsUtilities.bStats.Metrics;
 import io.github.riesenpilz.nmsUtilities.block.BlockEvents;
 import io.github.riesenpilz.nmsUtilities.entity.EntityEvents;
 import io.github.riesenpilz.nmsUtilities.entity.WorldEntity;
@@ -26,6 +27,8 @@ public class Main extends JavaPlugin {
 		pluginManager.registerEvents(new EntityEvents(), this);
 		pluginManager.registerEvents(new Injections(), this);
 		ServerWorld.init();
+
+		new Metrics(plugin, 13101);
 	}
 
 	public void onDisable() {
