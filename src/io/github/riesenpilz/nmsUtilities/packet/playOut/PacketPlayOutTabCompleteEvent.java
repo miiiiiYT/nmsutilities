@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 
 import com.mojang.brigadier.suggestion.Suggestions;
 
+import io.github.riesenpilz.nmsUtilities.packet.playIn.PacketPlayInTabCompleteEvent;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketListenerPlayOut;
@@ -27,7 +28,10 @@ import net.minecraft.server.v1_16_R3.PacketPlayOutTabComplete;
  */
 public class PacketPlayOutTabCompleteEvent extends PacketPlayOutEvent {
 
-	private int transactionID;
+	/**
+	 * @see PacketPlayInTabCompleteEvent
+	 */
+	private int transactionId;
 	private Suggestions suggestions;
 
 	public PacketPlayOutTabCompleteEvent(Player injectedPlayer, PacketPlayOutTabComplete packet) {
@@ -35,21 +39,21 @@ public class PacketPlayOutTabCompleteEvent extends PacketPlayOutEvent {
 
 		Validate.notNull(packet);
 
-		transactionID = Field.get(packet, "a", int.class);
+		transactionId = Field.get(packet, "a", int.class);
 		suggestions = Field.get(packet, "b", Suggestions.class);
 	}
 
-	public PacketPlayOutTabCompleteEvent(Player injectedPlayer, int transactionID, Suggestions suggestions) {
+	public PacketPlayOutTabCompleteEvent(Player injectedPlayer, int transactionId, Suggestions suggestions) {
 		super(injectedPlayer);
 
 		Validate.notNull(suggestions);
 
-		this.transactionID = transactionID;
+		this.transactionId = transactionId;
 		this.suggestions = suggestions;
 	}
 
-	public int getTransactionID() {
-		return transactionID;
+	public int getTransactionId() {
+		return transactionId;
 	}
 
 	public Suggestions getSuggestions() {
@@ -58,7 +62,7 @@ public class PacketPlayOutTabCompleteEvent extends PacketPlayOutEvent {
 
 	@Override
 	public Packet<PacketListenerPlayOut> getNMS() {
-		return new PacketPlayOutTabComplete(transactionID, suggestions);
+		return new PacketPlayOutTabComplete(transactionId, suggestions);
 	}
 
 	@Override

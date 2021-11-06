@@ -150,6 +150,7 @@ import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutUpdateViewP
 import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutVehicleMoveEvent;
 import io.github.riesenpilz.nmsUtilities.packet.playOut.PacketPlayOutWorldBorderInitializeEvent;
 import io.github.riesenpilz.nmsUtilities.reflections.Field;
+import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelFuture;
@@ -172,8 +173,23 @@ public class Injections implements Listener {
 		List<NetworkManager> connectedChannels = Field.get(serverConnection, "connectedChannels", List.class);
 		@SuppressWarnings("unchecked")
 		List<ChannelFuture> listeningChannels = Field.get(serverConnection, "listeningChannels", List.class);
-		connectedChannels.get(0).channel.getClass();
+		for (NetworkManager manager : connectedChannels) {
+			manager.channel.pipeline().addBefore("packet_handler", manager.spoofedUUID.toString(),
+					new ChannelDuplexHandler() {
+						@Override
+						public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+//							if (!Injections.this.readIn(manager.spoofedUUID, ctx, msg, this))
+								super.channelRead(ctx, msg);
+						}
 
+						@Override
+						public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise)
+								throws Exception {
+//							if (!Injections.this.readOut(manager.spoofedUUID, msg))
+								super.write(ctx, msg, promise);
+						}
+					});
+		}
 	}
 
 	private void injectPlayer(Player player) {

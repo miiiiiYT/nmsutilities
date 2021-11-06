@@ -53,10 +53,23 @@ public class BlockEvents implements Listener {
 			return;
 
 		HashMap<Block, NBTTag> newLocations = new HashMap<>();
-		for (org.bukkit.block.Block block : e.getBlocks()) {
-			final Block block1 = Block.getBlockOf(block);
-			newLocations.put(Block.getBlockOf(block.getRelative(e.getDirection())), block1.getNBTTag());
-			block1.removeNBTTag();
+		for (org.bukkit.block.Block bukkit : e.getBlocks()) {
+			switch (bukkit.getPistonMoveReaction()) {
+			case BREAK:
+				Block block1 = Block.getBlockOf(bukkit);
+				block1.removeNBTTag();
+				break;
+			case MOVE:
+			case PUSH_ONLY:
+				block1 = Block.getBlockOf(bukkit);
+				newLocations.put(Block.getBlockOf(bukkit.getRelative(e.getDirection())), block1.getNBTTag());
+				block1.removeNBTTag();
+				break;
+			case BLOCK:
+			case IGNORE:
+			default:
+				break;
+			}
 		}
 		for (Entry<Block, NBTTag> entry : newLocations.entrySet())
 			entry.getKey().setNBTTag(entry.getValue());
@@ -68,11 +81,23 @@ public class BlockEvents implements Listener {
 			return;
 
 		HashMap<Block, NBTTag> newLocations = new HashMap<>();
-		for (org.bukkit.block.Block block : e.getBlocks()) {
-			final Block block1 = Block.getBlockOf(block);
-			newLocations.put(Block.getBlockOf(block.getRelative(e.getDirection())), block1.getNBTTag());
-			block1.removeNBTTag();
-		}
+		for (org.bukkit.block.Block bukkit : e.getBlocks())
+			switch (bukkit.getPistonMoveReaction()) {
+			case BREAK:
+				Block block1 = Block.getBlockOf(bukkit);
+				block1.removeNBTTag();
+				break;
+			case MOVE:
+				block1 = Block.getBlockOf(bukkit);
+				newLocations.put(Block.getBlockOf(bukkit.getRelative(e.getDirection())), block1.getNBTTag());
+				block1.removeNBTTag();
+				break;
+			case BLOCK:
+			case IGNORE:
+			case PUSH_ONLY:
+			default:
+				break;
+			}
 		for (Entry<Block, NBTTag> entry : newLocations.entrySet())
 			entry.getKey().setNBTTag(entry.getValue());
 	}

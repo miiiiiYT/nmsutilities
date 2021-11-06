@@ -12,7 +12,8 @@ import net.minecraft.server.v1_16_R3.PacketPlayInTabComplete;
  * https://wiki.vg/Protocol#Tab-Complete_.28serverbound.29
  * <p>
  * Sent when the client needs to tab-complete a minecraft:ask_server suggestion
- * type.
+ * type.<i>Note: the first char is always a "/". So you can only tab-complete
+ * commands.</i>
  * <p>
  * Packet ID: 0x06<br>
  * State: Play<br>
@@ -32,7 +33,7 @@ public class PacketPlayInTabCompleteEvent extends PacketPlayInEvent {
 
 	/**
 	 * All text behind the cursor without the / (e.g. to the left of the cursor in
-	 * left-to-right languages like English). (32500 chars)
+	 * left-to-right languages like English). (32500 chars max)
 	 */
 	private String toComplete;
 
